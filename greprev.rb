@@ -1,6 +1,6 @@
 #!/usr/bin/ruby
 
-# Version 2010.10.2
+# Version 2010.2.10
 # License: GNU GPLv2
 # Copyright: Renato Silva
 
