@@ -1,0 +1,12 @@
+#!/bin/bash
+
+[ -z "$1" ] && echo "Usage: $0 PPK_FILE" && exit
+
+file=~/`basename $0`.tmp
+echo -n "Password: "
+read -s pwd
+echo
+
+echo $pwd | puttygen -P -q -O private-openssh $1 -o $file
+ssh-add $file
+rm $file
