@@ -1,6 +1,6 @@
-#!/usr/bin/ruby
+#!/usr/bin/env ruby
 
-# Version 2010.2.10
+# Version 2012.1.17
 # License: GNU GPLv2
 # Copyright: Renato Silva
 
