@@ -1,18 +1,8 @@
 #!/bin/bash
 
-# Home Directory Cleaner 2012.6.12
+# Home Directories Cleaner 2012.9.8
 # Copyright (c) 2012 Renato Silva
 # GNU GPLv2 licensed
-
-# For running this on sudo and gksu do the following:
-# sudo() { command sudo "$@"; command sudo homeclean --root; }
-# gksu() { command gksu "$@"; command sudo homeclean --root; }
-
-case "$1" in
-    "--help") echo "Usage: $0 [--root]" && exit;;
-    "--root") home=~root;;
-           *) home=~
-esac
 
 files=(
     ".*.log"
@@ -20,6 +10,8 @@ files=(
     ".thumbnails"
 )
 
-for file in "${files[@]}"; do
-    rm -rfv "$home"/$file
+for home in /home/* /root; do
+    for file in "${files[@]}"; do
+        rm -rfv "$home"/$file
+    done
 done
