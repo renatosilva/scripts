@@ -26,13 +26,14 @@ fi
 
 # Wait for current speech
 try=0
+time=$(date +%X)
 lock="$TEMP/ivona-speak.lock.txt"
 while ! ( set -C; echo "$text" > "$lock") 2> /dev/null; do
     sleep 1
     try=$(($try + 1))
     if [[ "$try" = "60" ]]; then
         log="/c/Users/$USERNAME/Desktop/speak.failed.log"
-        echo -e "Speak failed: $text\r" >> "$log"
+        echo -e "$time: $text\r" >> "$log"
         exit
     fi
 done
