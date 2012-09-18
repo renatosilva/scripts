@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# IVONA Speak 2012.9.9
+# IVONA Speak 2012.9.18
 # Copyright (c) 2012 Renato Silva
 # GNU GPLv2 licensed
 
@@ -16,6 +16,9 @@ if [ "$1" = "--chat" ]; then # Speak a chat
 
     # URLs
     text=$(echo "$text" | sed -r s/"\w{3,5}:\\/\\/\\S+"/"(URL)"/g)
+
+    # Catch remaining arguments
+    text="$text ${@:4}"
 
 elif [ ! -z "$2" ]; then # Speak title and text
     text="$1: ${@:2}"
