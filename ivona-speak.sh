@@ -7,7 +7,7 @@
 if [ "$1" = "--chat" ]; then # Speak a chat
     # Someone to someone
     nick="^([^:,> ]{1,16})"
-    text="$2: "$(echo "$3" | sed -r s/"$nick:"/"to \\1:"/)
+    text="$2: "$(echo "$3" | sed -r s/"$nick:\s+(\S)"/"to \\1: \\2"/)
     text=$(echo "$text" | sed -r s/"$nick: to "/"\\1 to "/)
 
     # Actions
