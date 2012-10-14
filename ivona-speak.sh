@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# IVONA Speak 2012.9.18
+# IVONA Speak 2012.10.14
 # Copyright (c) 2012 Renato Silva
 # GNU GPLv2 licensed
 
@@ -43,5 +43,5 @@ done
 
 # Lock acquired, speak
 trap "rm $lock" EXIT
-"$(dirname "$0")/IVONA Reader" -o "$lock" -p -q
+"IVONA Reader" -o "$lock" -p -q
 sleep $(((${#text}/14) + 1))
