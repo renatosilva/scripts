@@ -12,7 +12,7 @@ check() {
     for cmd in $(echo "$cmds" | sed -E s/", and ([^,])"/" \\1"/ | sed s/","//g); do
         cd "$branch"
         bzr $cmd | grep -v "parent"
-        cd ..
+        cd - > /dev/null
     done
 }
 
