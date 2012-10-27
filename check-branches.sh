@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Check branches 2012.10.21
+# Check branches 2012.10.27
 # Copyright (c) 2012 Renato Silva
 # GNU GPLv2 licensed
 
@@ -9,6 +9,15 @@
 
 check() {
     branch=$(echo "$0" | sed s/".bzr"//)
+    if [ "$cmds" != "$def_cmds" ]; then        
+        echo "branch: $branch"        
+        for cmd in $cmds; do
+            cd "$branch"
+            bzr $cmd
+            cd - > /dev/null
+        done        
+        return
+    fi
     for cmd in $(echo "$cmds" | sed -E s/", and ([^,])"/" \\1"/ | sed s/","//g); do
         cd "$branch"
         bzr $cmd | grep -v "parent"
