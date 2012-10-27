@@ -57,7 +57,6 @@ alias ls='ls --color=auto --show-control-chars'
 alias msgrep='msgrep --binary-files=text -d skip --color=auto'
 alias msls='msls -bhAC --more --color=auto --recent --streams'
 
-unset HISTFILE
 export LESSHISTFILE="-"
 export PS1="\[\e]0;$MSYSTEM \007\e[38;05;117m\]\W\[\e[0m\] \$ "
 cd "$USERPROFILE/Desktop"
