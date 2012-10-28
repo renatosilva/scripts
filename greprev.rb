@@ -1,8 +1,8 @@
 #!/usr/bin/env ruby
 
-# Version 2012.1.17
-# License: GNU GPLv2
-# Copyright: Renato Silva
+# Grep Revision 2012.1.17
+# Copyright (C) 2010, 2012 Renato Silva
+# GNU GPLv2 licensed
 
 if not ARGV[0]
     puts "Usage: #{File.basename($0)} <pattern>"
