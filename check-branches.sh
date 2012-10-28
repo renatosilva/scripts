@@ -31,6 +31,7 @@ def_cmds="diff, status, and missing"
 [ -z "$1" ] && root="."
 [ -z "$cmds" ] && cmds="$def_cmds"
 export -f check
+export def_cmds
 export cmds
 
 if [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
