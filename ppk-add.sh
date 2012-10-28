@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # PPK Add 2012.10.28
-# Copyright (c) 2012 Renato Silva
+# Copyright (c) 2010, 2012 Renato Silva
 # GNU GPLv2 licensed
 
 # This program adds a PuTTY private key to the OpenSSH authenticator agent.
