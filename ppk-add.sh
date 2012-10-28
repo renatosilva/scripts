@@ -16,4 +16,3 @@ echo
 
 echo $pwd | puttygen -P -q -O private-openssh $1 -o $file
 ssh-add $file
-
