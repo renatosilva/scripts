@@ -1,3 +1,9 @@
+#!/usr/bin/env ruby
+
+# CSV Transformation 2012.10.28
+# Copyright (c) 2009, 2012 Renato Silva
+# GNU GPLv2 licensed
+
 i = File.open(ARGV[0], 'r')  
 o = File.open(ARGV[1], 'w')
 
