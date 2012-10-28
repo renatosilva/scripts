@@ -1,4 +1,4 @@
-#!/usr/bin/ruby
+#!/usr/bin/env ruby
 
 # License: GNU GPLv2
 # Copyright: Renato Silva
