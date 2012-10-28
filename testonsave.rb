@@ -1,7 +1,8 @@
 #!/usr/bin/env ruby
 
-# License: GNU GPLv2
-# Copyright: Renato Silva
+# Eclipse Test On Save 2012.10.28
+# Copyright (c) 2009, 2012 Renato Silva
+# GNU GPLv2 licensed
 
 if ARGV[1] == nil
     usage = "Usage: #{File.basename($0)} <eclipse home> <class> [additional classpath]"
