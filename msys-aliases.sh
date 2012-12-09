@@ -1,6 +1,16 @@
-# MinGW MSYS Aliases 2012.10.27
+# MinGW MSYS Aliases 2012.12.9
 # Copyright (c) 2012 Renato Silva
 # GNU GPLv2 licensed
+
+find() {
+    command find "$@" 2> /dev/null
+}
+
+bzr() {
+    [ "$1" = "uncommit" ] && echo "Este comando está desabilitado." && return
+    [ "$1" = "commit" ]   && printf "Você verificou a versão? " && read ok && [ "$ok" != "sim" ] && echo "Cancelado." && return
+    command bzr "$@"
+}
 
 packages() {
     # List packages
@@ -51,12 +61,10 @@ packages() {
 }
 
 alias update='mingw-get update && mingw-get upgrade 2> /dev/null'
+alias edit='notepad++'
 
 alias grep='grep --color=auto'
 alias ls='ls --color=auto --show-control-chars'
+
 alias msgrep='msgrep --binary-files=text -d skip --color=auto'
 alias msls='msls -bhAC --more --color=auto --recent --streams'
-
-export LESSHISTFILE="-"
-export PS1="\[\e]0;$MSYSTEM \007\e[38;05;117m\]\W\[\e[0m\] \$ "
-cd "$USERPROFILE/Desktop"
