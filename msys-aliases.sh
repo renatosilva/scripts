@@ -7,8 +7,8 @@ find() {
 }
 
 bzr() {
-    [ "$1" = "uncommit" ] && echo "Este comando está desabilitado." && return
-    [ "$1" = "commit" ]   && printf "Você verificou a versão? " && read ok && [ "$ok" != "sim" ] && echo "Cancelado." && return
+    [ "$1" = "uncommit" ] && echo "This command is disabled." && return
+    [ "$1" = "commit" ]   && printf "Is the version up to date? " && read ok && [ "$ok" != "yes" ] && echo "Canceled." && return
     command bzr "$@"
 }
 
