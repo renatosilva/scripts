@@ -1,9 +1,13 @@
-# MinGW MSYS Aliases 2012.12.9
+# MinGW MSYS Aliases 2012.12.10
 # Copyright (c) 2012 Renato Silva
 # GNU GPLv2 licensed
 
 find() {
     command find "$@" 2> /dev/null
+}
+
+grep() {
+    command grep "$@" 2> /dev/null
 }
 
 bzr() {
