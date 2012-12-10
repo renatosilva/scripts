@@ -64,11 +64,11 @@ packages() {
     echo "No package found at search index $2"
 }
 
-alias update='mingw-get update && mingw-get upgrade 2> /dev/null'
-alias edit='notepad++'
+alias update="mingw-get update && mingw-get upgrade 2> /dev/null"
+alias edit="notepad++"
 
-alias grep='grep --color=auto'
-alias ls='ls --color=auto --show-control-chars'
+alias grep="grep --color=auto"
+alias ls="ls --color=auto --show-control-chars"
 
-alias msgrep='msgrep --binary-files=text -d skip --color=auto'
-alias msls='msls -bhAC --more --color=auto --recent --streams'
+alias msgrep="msgrep --binary-files=text -d skip --color=auto"
+alias msls="msls -bhAC --more --color=auto --recent --streams"
