@@ -10,7 +10,7 @@ if [[ -n "$shutdown_happening" ]]; then
     non_reboot_shutdown=$(echo "$shutdown_happening" | grep -i "<data>desligado</data>")
     # Wait for phone sync if not rebooting
     [[ -n "$non_reboot_shutdown" ]] && delay=120
-    mintty -w full bash backup.sh "$delay"
+    mintty -w full bash backup "$delay"
 fi;
 
 # Cleanup recent files list from Word Viewer
