@@ -4,10 +4,13 @@
 # Copyright (c) 2012 Renato Silva
 # GNU GPLv2 licensed
 
-# If not rebooting, backup and wait for phone sync
-shutdown=$(wevtutil qe system //c:1 //f:xml //q:"*[System[(EventID=1074) and TimeCreated[timediff(@SystemTime) <= 60000]]]")
-non_reboot_shutdown=$(echo "$shutdown" | grep -i "<data>desligado</data>")
-[[ -n "$non_reboot_shutdown" ]] && backup.sh 120
+# Backup on shutdown
+shutdown_happening=$(wevtutil qe system //c:1 //rd:true //f:xml //q:"*[System[(EventID=1074) and TimeCreated[timediff(@SystemTime) <= 60000]]]")
+if [[ -n "$shutdown_happening" ]]; then
+    non_reboot_shutdown=$(echo "$shutdown_happening" | grep -i "<data>desligado</data>")
+    # If not rebooting, backup and wait for phone sync
+    [[ -n "$non_reboot_shutdown" ]] && backup.sh 120
+fi;
 
 # Cleanup recent files list from Word Viewer
 filename="$TEMP/winclean.$(date +%s.%N).reg"
