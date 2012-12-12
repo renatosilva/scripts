@@ -16,9 +16,9 @@ fi;
 # Cleanup recent files list from Word Viewer
 filename="$TEMP/winclean.$(date +%s.%N).reg"
 trap "rm -r $filename" EXIT
-echo "Windows Registry Editor Version 5.00
+echo 'Windows Registry Editor Version 5.00
 [HKEY_CURRENT_USER\Software\Microsoft\Office\11.0\Wordview\Data]
-"Settings"=-" > "$filename"
+"Settings"=-' > "$filename"
 regedit //s "$filename"
 
 # Cleanup WMP junk
