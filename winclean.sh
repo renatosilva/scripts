@@ -8,8 +8,9 @@
 shutdown_happening=$(wevtutil qe system //c:1 //rd:true //f:xml //q:"*[System[(EventID=1074) and TimeCreated[timediff(@SystemTime) <= 60000]]]")
 if [[ -n "$shutdown_happening" ]]; then
     non_reboot_shutdown=$(echo "$shutdown_happening" | grep -i "<data>desligado</data>")
-    # If not rebooting, backup and wait for phone sync
-    [[ -n "$non_reboot_shutdown" ]] && backup.sh 120
+    # Wait for phone sync if not rebooting
+    [[ -n "$non_reboot_shutdown" ]] && delay=120
+    backup.sh "$delay"
 fi;
 
 # Cleanup recent files list from Word Viewer
