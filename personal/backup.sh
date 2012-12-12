@@ -12,7 +12,7 @@ name="Documentos e programas"
 [[ -e "$target" ]] || { echo "Target device not found."; sleep 5; exit 1; }
 
 temp="$TEMP/backup.$(date +%s.%N)"
-trap "rm -r $temp" EXIT
+trap "rm -rf $temp" EXIT
 mkdir -p "$temp"
 notes="$temp/Anotações"
 favorites="$temp/Favoritos"
