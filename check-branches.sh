@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Check branches 2012.10.27
+# Check branches 2012.12.12
 # Copyright (c) 2012 Renato Silva
 # GNU GPLv2 licensed
 
@@ -41,5 +41,5 @@ if [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
 fi
 
 find "$root" -name ".bzr" -type d -exec bash -c check '{}' \;
-echo "Terminado."
+echo "Finished."
 sleep 3
