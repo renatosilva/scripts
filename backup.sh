@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Backup 2012.12.13
+# Backup 2012.12.14
 # Copyright (c) 2012 Renato Silva
 # GNU GPLv2 licensed
 
@@ -28,6 +28,7 @@ cp "$tools/defraggler/defraggler.ini" "$configs"
 cp "$tools/ccleaner/ccleaner.ini" "$configs"
 cp "$tools/recuva/recuva.ini" "$configs"
 cp "$tools/speccy/speccy.ini" "$configs"
+cp -r "$APPDATA/IVONA 2 Voice" "$configs"
 
 password=$(cat /dados/documentos/chaves/renatosilva.backup)
 7z a "$temp/$name $(date '+%-d.%-m.%Y %-Hh%M').7z" -p"$password" -xr!desktop.ini -mhe "/dados/documentos" "/dados/programas" "$favorites" "$notes" "$configs"
