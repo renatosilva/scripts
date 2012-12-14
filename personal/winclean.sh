@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Windows Cleanup 2012.12.12
+# Windows Cleanup 2012.12.13
 # Copyright (c) 2012 Renato Silva
 # GNU GPLv2 licensed
 
@@ -22,7 +22,9 @@ echo 'Windows Registry Editor Version 5.00
 regedit //s "$filename"
 
 # Cleanup WMP junk
-find "/dados/música" -iname "*.jpg" -delete
+reg_data=$(reg query 'HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders' //v 'My Music')
+music=$(echo "$reg_data" | awk -F'REG_SZ[[:space:]]*' 'NF>1{print $2}')
+[[ -d "$music" ]] && find "$music" -iname "*.jpg" -delete
 
 # Let CCleaner do its job
 /windows/programs/ferramentas/ccleaner/ccleaner.exe //auto
