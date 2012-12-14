@@ -27,4 +27,6 @@ music=$(echo "$reg_data" | awk -F'REG_SZ[[:space:]]*' 'NF>1{print $2}')
 [[ -d "$music" ]] && find "$music" -iname "*.jpg" -delete
 
 # Let CCleaner do its job
-/windows/programs/ferramentas/ccleaner/ccleaner.exe //auto
+reg_data=$(reg query 'HKEY_LOCAL_MACHINE\SOFTWARE\Piriform\CCleaner' //ve)
+ccleaner_dir=$(echo "$reg_data" | awk -F'REG_SZ[[:space:]]*' 'NF>1{print $2}')
+"$ccleaner_dir/ccleaner.exe" //auto
