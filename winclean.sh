@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Windows Cleanup 2012.12.15
+# Windows Cleanup 2012.12.17
 # Copyright (c) 2012 Renato Silva
 # GNU GPLv2 licensed
 
@@ -12,6 +12,12 @@ shutdown_happening=$(wevtutil qe system //c:1 //rd:true //f:xml //q:"*[System[(E
 non_reboot_shutdown=$(echo "$shutdown_happening" | grep -i "<data>desligado</data>")
 [[ -n "$non_reboot_shutdown" ]] && delay=120
 mintty -w full bash backup "$delay"
+
+# Firefox bookmarks cleanup: remove unorganized and descriptions
+database=("$APPDATA/Mozilla/Firefox/profiles/"*"/places.sqlite")
+sqlite "$database" "delete from moz_bookmarks where parent = (select folder_id from moz_bookmarks_roots where root_name = 'unfiled')"
+sqlite "$database" "delete from moz_items_annos where id in (select i.id from moz_bookmarks b, moz_items_annos i where b.id = i.item_id and b.type = 1
+    and title != '' and title not in ('Favoritos do dispositivo móvel', 'Favoritos recentes', 'Mais visitados', 'Tags recentes', 'Histórico', 'Downloads', 'Tags'))"
 
 # Cleanup recent files list from Word Viewer
 filename="$TEMP/winclean.$(date +%s.%N).reg"
