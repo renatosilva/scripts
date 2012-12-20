@@ -4,8 +4,8 @@
 # Copyright (c) 2012 Renato Silva
 # GNU GPLv2 licensed
 
-delay="$1"
-target="$2"
+target="$1"
+delay="$2"
 name="Documentos e programas"
 [[ -z "$delay" ]] && delay="0"
 [[ -z "$target" ]] && target="/dados/backup"
