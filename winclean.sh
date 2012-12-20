@@ -4,14 +4,14 @@
 # Copyright (c) 2012 Renato Silva
 # GNU GPLv2 licensed
 
-# Run only on shutdown
+# Run only on shutdown or --force
 shutdown_happening=$(wevtutil qe system //c:1 //rd:true //f:xml //q:"*[System[(EventID=1074) and TimeCreated[timediff(@SystemTime) <= 60000]]]")
-[[ -z "$shutdown_happening" ]] && exit
+[[ -z "$shutdown_happening" && "$1" != "--force" ]] && exit
 
-# Run backup, wait for phone sync if not rebooting
+# Run backup on shutdown, wait for phone sync if not rebooting
 non_reboot_shutdown=$(echo "$shutdown_happening" | grep -i "<data>desligado</data>")
 [[ -n "$non_reboot_shutdown" ]] && delay=120
-mintty -w full bash backup --default "$delay"
+[[ -n "$shutdown_happening" ]] && mintty -w full bash backup --default "$delay"
 
 # Firefox bookmarks cleanup: remove unorganized and descriptions
 database=("$APPDATA/Mozilla/Firefox/profiles/"*"/places.sqlite")
