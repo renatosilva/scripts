@@ -8,7 +8,7 @@ target="$1"
 delay="$2"
 name="Documentos e programas"
 [[ -z "$delay" ]] && delay="0"
-[[ -z "$target" ]] && target="/dados/backup"
+[[ -z "$target" || "$target" = "--default" ]] && target="/dados/backup"
 [[ -e "$target" ]] || { echo "Target device not found."; sleep 5; exit 1; }
 
 # Sticky notes and favorites
