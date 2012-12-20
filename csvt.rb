@@ -1,13 +1,18 @@
 #!/usr/bin/env ruby
 
-# CSV Transformation 2012.12.15
+# CSV Transformation 2012.12.20
 # Copyright (c) 2009, 2012 Renato Silva
 # GNU GPLv2 licensed
+
+if not ARGV[2]
+    puts "Usage: #{File.basename($0)} <csv file> <output file> <template file>"
+    exit
+end
 
 csv = File.open(ARGV[0], 'r')
 out = File.open(ARGV[2], 'rb').read
 row_pattern = /(.*<csv:row>(.*)<\/csv:row>)/
-row_template=out[row_pattern, 1]
+row_template = out[row_pattern, 1]
 
 csv.each_line do |line|    
     row = out[row_pattern, 2]
