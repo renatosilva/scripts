@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Windows Cleanup 2012.12.17
+# Windows Cleanup 2012.12.20
 # Copyright (c) 2012 Renato Silva
 # GNU GPLv2 licensed
 
@@ -11,7 +11,7 @@ shutdown_happening=$(wevtutil qe system //c:1 //rd:true //f:xml //q:"*[System[(E
 # Run backup, wait for phone sync if not rebooting
 non_reboot_shutdown=$(echo "$shutdown_happening" | grep -i "<data>desligado</data>")
 [[ -n "$non_reboot_shutdown" ]] && delay=120
-mintty -w full bash backup "$delay"
+mintty -w full bash backup --default "$delay"
 
 # Firefox bookmarks cleanup: remove unorganized and descriptions
 database=("$APPDATA/Mozilla/Firefox/profiles/"*"/places.sqlite")
