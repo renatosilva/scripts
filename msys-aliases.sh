@@ -1,4 +1,4 @@
-# MinGW MSYS Aliases 2012.12.10
+# MinGW MSYS Aliases 2012.12.21
 # Copyright (c) 2012 Renato Silva
 # GNU GPLv2 licensed
 
@@ -14,6 +14,30 @@ bzr() {
     [ "$1" = "uncommit" ] && echo "This command is disabled." && return
     [ "$1" = "commit" ]   && printf "Is the version up to date? " && read ok && [ "$ok" != "yes" ] && echo "Canceled." && return
     command bzr "$@"
+}
+
+sqlite() {
+    if [[ -z "${@:2}" ]]; then
+        command sqlite "$@"
+        return
+    fi
+
+    args=("$@")
+    db="${args[${#args[@]}-2]}"
+    sql="${args[${#args[@]}-1]}"
+    [[ ! -f "$sql" ]] && encoding=$(command sqlite "$db" "pragma encoding")
+    
+    if [[ -z "$encoding" ]]; then
+        command sqlite "$@"
+        return
+    fi
+    
+    args=()
+    for arg in "$@"; do
+        arg=$(iconv -f ISO-8859-1 -t "$encoding" <<< "$arg")
+        args+=("$arg")
+    done
+    command sqlite "${args[@]}" | iconv -f "$encoding" -t ISO-8859-1
 }
 
 packages() {
