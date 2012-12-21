@@ -32,7 +32,7 @@ cp "$tools/speccy/speccy.ini" "$configs"
 cp "$APPDATA/IVONA 2 Voice/"*".lex" "$configs"
 
 # Startup shortcuts
-startup="$configs/inicializar"
+startup="$configs/Inicializar"
 mkdir "$startup"
 cp -r "$APPDATA/Microsoft/Windows/Start Menu/Programs/Startup/"* "$startup"
 
