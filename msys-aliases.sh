@@ -1,13 +1,13 @@
-# MinGW MSYS Aliases 2012.12.21
+# MinGW MSYS Aliases 2012.12.23
 # Copyright (c) 2012 Renato Silva
 # GNU GPLv2 licensed
 
 find() {
-    command find "$@" 2> /dev/null
+    { command find "$@" 2>&1 >&3 | command grep -v 'Permission denied'; } 3>&1
 }
 
 grep() {
-    command grep "$@" 2> /dev/null
+    { command grep "$@" 2>&1 >&3 | command grep -v 'Permission denied'; } 3>&1
 }
 
 bzr() {
