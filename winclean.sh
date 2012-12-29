@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Windows Cleanup 2012.12.20
+# Windows Cleanup 2012.12.29
 # Copyright (c) 2012 Renato Silva
 # GNU GPLv2 licensed
 
@@ -19,7 +19,7 @@ sqlite "$database" "delete from moz_bookmarks where parent = (select folder_id f
 sqlite "$database" "delete from moz_items_annos where id in (select i.id from moz_bookmarks b, moz_items_annos i where b.id = i.item_id and b.type = 1
     and title != '' and title not in ('Favoritos do dispositivo móvel', 'Favoritos recentes', 'Mais visitados', 'Tags recentes', 'Histórico', 'Downloads', 'Tags'))"
 
-# Cleanup recent files list from Word Viewer
+# Clean up recent files list from Word Viewer
 filename="$TEMP/winclean.$(date +%s.%N).reg"
 trap "rm -r $filename" EXIT
 echo 'Windows Registry Editor Version 5.00
@@ -27,7 +27,7 @@ echo 'Windows Registry Editor Version 5.00
 "Settings"=-' > "$filename"
 regedit //s "$filename"
 
-# Cleanup WMP junk
+# Clean up WMP junk
 reg_data=$(reg query 'HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders' //v 'My Music')
 music=$(echo "$reg_data" | awk -F'REG_SZ[[:space:]]*' 'NF>1{print $2}')
 [[ -d "$music" ]] && find "$music" -iname "*.jpg" -delete
