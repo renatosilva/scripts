@@ -32,6 +32,9 @@ reg_data=$(reg query 'HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersio
 music=$(echo "$reg_data" | awk -F'REG_SZ[[:space:]]*' 'NF>1{print $2}')
 [[ -d "$music" ]] && find "$music" -iname "*.jpg" -delete
 
+# Clean up bash history
+echo > ~/.bash_history
+
 # Let CCleaner do its job
 reg_data=$(reg query 'HKEY_LOCAL_MACHINE\SOFTWARE\Piriform\CCleaner' //ve)
 ccleaner_dir=$(echo "$reg_data" | awk -F'REG_SZ[[:space:]]*' 'NF>1{print $2}')
