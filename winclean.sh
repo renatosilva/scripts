@@ -33,7 +33,9 @@ music=$(echo "$reg_data" | awk -F'REG_SZ[[:space:]]*' 'NF>1{print $2}')
 [[ -d "$music" ]] && find "$music" -iname "*.jpg" -delete
 
 # Clean up bash history
-echo > ~/.bash_history
+rm -f ~/.bash_history
+touch ~/.bash_history
+attrib +h ~/.bash_history
 
 # Let CCleaner do its job
 reg_data=$(reg query 'HKEY_LOCAL_MACHINE\SOFTWARE\Piriform\CCleaner' //ve)
