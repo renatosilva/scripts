@@ -8,6 +8,7 @@ local=(
     "greprev"
     "speak"
     "numpass"
+    "randpass"
     "tz-brazil"
     "winclean"
 )
