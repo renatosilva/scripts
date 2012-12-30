@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Backup 2012.12.20
+# Backup 2012.12.30
 # Copyright (c) 2012 Renato Silva
 # GNU GPLv2 licensed
 
@@ -9,7 +9,7 @@ delay="$2"
 name="Documentos e programas"
 [[ -z "$delay" ]] && delay="0"
 [[ -z "$target" || "$target" = "--default" ]] && target="/dados/backup"
-[[ -e "$target" ]] || { echo "Target device not found."; sleep 5; exit 1; }
+[[ -e "$target" ]] || { echo "Target $target not found."; sleep 5; exit 1; }
 
 # Sticky notes and favorites
 temp="$TEMP/backup.$(date +%s.%N)"
