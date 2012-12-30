@@ -31,10 +31,11 @@ cp "$tools/recuva/recuva.ini" "$configs"
 cp "$tools/speccy/speccy.ini" "$configs"
 cp "$APPDATA/IVONA 2 Voice/"*".lex" "$configs"
 
-# Startup shortcuts
+# Shortcuts
 startup="$configs/Inicializar"
 mkdir "$startup"
 cp "$APPDATA/Microsoft/Windows/Start Menu/Programs/Startup/"* "$startup"
+cp -r "$APPDATA/Microsoft/Windows/Start Menu/Programs/Ferramentas" "$configs"
 
 # Registry favorites
 key='HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Applets\Regedit\Favorites'
