@@ -34,7 +34,7 @@ cp "$APPDATA/IVONA 2 Voice/"*".lex" "$configs"
 # Startup shortcuts
 startup="$configs/Inicializar"
 mkdir "$startup"
-cp -r "$APPDATA/Microsoft/Windows/Start Menu/Programs/Startup/"* "$startup"
+cp "$APPDATA/Microsoft/Windows/Start Menu/Programs/Startup/"* "$startup"
 
 # Registry favorites
 key='HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Applets\Regedit\Favorites'
