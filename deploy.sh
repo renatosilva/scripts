@@ -1,20 +1,20 @@
 #!/bin/bash
 
-local=(
+scripts=(
     "backup"
     "check-branches"
     "check-brst-commits"
     "csvt"
     "greprev"
-    "speak"
     "numpass"
     "randpass"
+    "speak"
     "tz-brazil"
     "winclean"
 )
 
 from=$(dirname "$0")
-for script in "${local[@]}"; do
+for script in "${scripts[@]}"; do
     cp -v "$from"/*"$script"* "/local/$script"
 done
 
