@@ -16,5 +16,5 @@ scripts=(
 )
 
 from=$(dirname "$0")
-for script in "${scripts[@]}"; do cp -v "$from"/*"$script"* "/local/$script"; done
+for script in "${scripts[@]}"; do cp -v "$from"/*"$script"* "/local/bin/$script"; done
 cp -v "$from/msys-aliases.sh" "/etc/profile.d/aliases.sh"
