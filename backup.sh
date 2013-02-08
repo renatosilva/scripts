@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# Backup 2012.12.30
-# Copyright (c) 2012 Renato Silva
+# Backup 2013.2.8
+# Copyright (c) 2012, 2013 Renato Silva
 # GNU GPLv2 licensed
 
 target="$1"
@@ -42,7 +42,7 @@ key='HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Applets\Regedit
 data=$(reg query "$key" //s | sed -E s/'^\s+'// | sed s/'\\'/'\\\\\\\\'/g | awk -F'[[:space:]]*REG_SZ[[:space:]]*' 'NF>1{print "\"" $1 "\"=\"" $2 "\""}')
 echo -e "Windows Registry Editor Version 5.00\n\n[$key]\n$data\n" | unix2dos > "$configs/regedit.reg"
 
-password=$(cat /dados/documentos/chaves/renatosilva.backup)
+password=$(cat /dados/documentos/privado/chaves/renatosilva.backup)
 7z a "$temp/$name $(date '+%-d.%-m.%Y %-Hh%M').7z" -p"$password" -xr!desktop.ini -mhe "/dados/documentos" "/dados/programas" "$favorites" "$notes" "$configs"
 rm "$target/$name "*.7z 2> /dev/null || echo "First backup in this device."
 mv "$temp/"*.7z "$target"
