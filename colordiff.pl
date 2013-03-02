@@ -6,6 +6,7 @@
 #             colourful output                                         #
 #                                                                      #
 # Copyright (C)2002-2012 Dave Ewart (davee@sungate.co.uk)              #
+#              2013 Renato Silva (br.renatosilva@gmail.com)            #
 #                                                                      #
 ########################################################################
 #                                                                      #
@@ -435,7 +436,13 @@ foreach (@inputstream) {
         }
     }
     elsif ($diff_type eq 'diffu') {
-        if (/^-/) {
+        if (/^--- /) {
+            print "$colour{darkyellow}";
+        }
+        elsif (/^\+\+\+ /) {
+            print "$colour{darkyellow}";
+        }
+        elsif (/^-/) {
             print "$file_old";
         }
         elsif (/^\+/) {
