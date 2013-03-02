@@ -4,6 +4,7 @@ scripts=(
     "backup"
     "check-branches"
     "check-brst-commits"
+    "colordiff"
     "csvt"
     "dosconv"
     "greprev"
