@@ -36,12 +36,12 @@ sqlite() {
     db="${args[${#args[@]}-2]}"
     sql="${args[${#args[@]}-1]}"
     [[ ! -f "$sql" ]] && encoding=$(command sqlite "$db" "pragma encoding")
-    
+
     if [[ -z "$encoding" ]]; then
         command sqlite "$@"
         return
     fi
-    
+
     args=()
     for arg in "$@"; do
         arg=$(iconv -f ISO-8859-1 -t "$encoding" <<< "$arg")
