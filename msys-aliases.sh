@@ -1,5 +1,5 @@
-# MinGW MSYS Aliases 2012.12.23
-# Copyright (c) 2012 Renato Silva
+# MinGW MSYS Aliases 2013.3.3
+# Copyright (c) 2012, 2013 Renato Silva
 # GNU GPLv2 licensed
 
 find() {
@@ -11,8 +11,18 @@ grep() {
 }
 
 bzr() {
-    [ "$1" = "uncommit" ] && echo "This command is disabled." && return
-    [ "$1" = "commit" ]   && printf "Is the version up to date? " && read ok && [ "$ok" != "yes" ] && echo "Canceled." && return
+    case "$1" in
+        "commit")
+            printf "Is the version up to date? "
+            read answer
+            if [ "$answer" != "yes" ]; then
+                echo "Canceled."
+                return
+            fi;;
+        "uncommit")
+            echo "This command is disabled."
+            return;;
+    esac
     command bzr "$@"
 }
 
