@@ -22,6 +22,9 @@ bzr() {
         "uncommit")
             echo "This command is disabled."
             return;;
+        "diff")
+            command bzr "$@" | colordiff
+            return;;
     esac
     command bzr "$@"
 }
@@ -101,6 +104,7 @@ packages() {
 alias update="mingw-get update && mingw-get upgrade 2> /dev/null"
 alias edit="notepad++"
 
+alias diff="colordiff"
 alias grep="grep --color=auto"
 alias ls="ls --color=auto --show-control-chars"
 
