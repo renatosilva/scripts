@@ -104,6 +104,7 @@ packages() {
 alias update="mingw-get update && mingw-get upgrade 2> /dev/null"
 alias edit="notepad++"
 
+alias type="type -a"
 alias diff="colordiff"
 alias grep="grep --color=auto"
 alias ls="ls --color=auto --show-control-chars"
