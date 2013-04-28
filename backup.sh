@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Backup 2013.2.23
+# Backup 2013.4.28
 # Copyright (c) 2012, 2013 Renato Silva
 # GNU GPLv2 licensed
 
@@ -30,6 +30,15 @@ cp "$tools/ccleaner/ccleaner.ini" "$configs"
 cp "$tools/recuva/recuva.ini" "$configs"
 cp "$tools/speccy/speccy.ini" "$configs"
 cp "$APPDATA/IVONA 2 Voice/"*".lex" "$configs"
+
+# Scheduled tasks
+tasks="$configs/Tarefas"
+mkdir "$tasks"
+for file in "$SYSTEMROOT/System32/Tasks/Usuário/"*; do
+    [[ -f "$file" ]] || continue
+    taskname=$(basename "$file")
+    cp "$file" "$tasks/$taskname.xml"
+done
 
 # Shortcuts
 startup="$configs/Inicializar"
