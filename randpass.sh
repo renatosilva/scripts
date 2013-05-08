@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Random Passowrd 2013.1.13
+# Random Password 2013.5.7
 # Copyright (c) 2012, 2013 Renato Silva
 # GNU GPLv2 licensed
 
