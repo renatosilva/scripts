@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Backup 2013.4.28
+# Backup 2013.6.20
 # Copyright (c) 2012, 2013 Renato Silva
 # GNU GPLv2 licensed
 
@@ -24,7 +24,7 @@ cp -r "$USERPROFILE/Favorites" "$favorites"
 tools="/c/programs/ferramentas"
 configs="$temp/Configurações"
 mkdir -p "$configs"
-cp ~/.profile ~/.inputrc ~/.wgetrc ~/.minttyrc "$configs"
+cp ~/.profile ~/.inputrc ~/.wgetrc ~/.minttyrc ~/.vimrc "$configs"
 cp "$tools/defraggler/defraggler.ini" "$configs"
 cp "$tools/ccleaner/ccleaner.ini" "$configs"
 cp "$tools/recuva/recuva.ini" "$configs"
