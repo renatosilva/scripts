@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# Windows Cleanup 2012.12.29
-# Copyright (c) 2012 Renato Silva
+# Windows Cleanup 2013.8.25
+# Copyright (c) 2012, 2013 Renato Silva
 # GNU GPLv2 licensed
 
 # Run only on shutdown or --force
@@ -10,7 +10,7 @@ shutdown_happening=$(wevtutil qe system //c:1 //rd:true //f:xml //q:"*[System[(E
 
 # Run backup on shutdown, wait for phone sync if not rebooting
 non_reboot_shutdown=$(echo "$shutdown_happening" | grep -i "<data>desligado</data>")
-[[ -n "$non_reboot_shutdown" ]] && delay=120
+[[ -n "$non_reboot_shutdown" ]] && delay=180
 [[ -n "$shutdown_happening" ]] && mintty -w full bash backup --default "$delay"
 
 # Firefox bookmarks cleanup: remove unorganized and descriptions
