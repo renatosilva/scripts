@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Backup 2013.9.22
+# Backup 2013.9.23
 # Copyright (c) 2012, 2013 Renato Silva
 # GNU GPLv2 licensed
 
@@ -64,4 +64,4 @@ mv "$temp/"*.7z "$target"
 
 [[ "$sounds" = "yes" ]] && play_sound tada
 sleep $((3 + delay))
-[[ "$sounds" = "yes" && "$delay" != "0" ]] && play_sound chimes
+[[ "$sounds" = "yes" && "$delay" != "0" ]] && play_sound notify
