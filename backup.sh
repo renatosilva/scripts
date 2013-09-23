@@ -1,13 +1,19 @@
 #!/bin/bash
 
-# Backup 2013.6.20
+# Backup 2013.9.22
 # Copyright (c) 2012, 2013 Renato Silva
 # GNU GPLv2 licensed
 
+play_sound() {
+    powershell.exe -c "(New-Object Media.SoundPlayer \"C:/Windows/Media/$1.wav\").PlaySync();" < NUL
+}
+
 target="$1"
 delay="$2"
+sounds="$3"
 name="Documentos e programas"
 [[ -z "$delay" ]] && delay="0"
+[[ "$sounds" = "--sounds" ]] && sounds="yes"
 [[ -z "$target" || "$target" = "--default" ]] && target="/dados/backup"
 [[ -e "$target" ]] || { echo "Target $target not found."; sleep 5; exit 1; }
 
@@ -55,4 +61,7 @@ password=$(cat /dados/documentos/privado/chaves/renatosilva.backup)
 7z a "$temp/$name $(date '+%-d.%-m.%Y %-Hh%M').7z" -p"$password" -xr!desktop.ini -mhe "/dados/documentos" "/dados/programas" "$favorites" "$notes" "$configs"
 rm "$target/$name "*.7z 2> /dev/null || echo "First backup in this device."
 mv "$temp/"*.7z "$target"
+
+[[ "$sounds" = "yes" ]] && play_sound tada
 sleep $((3 + delay))
+[[ "$sounds" = "yes" && "$delay" != "0" ]] && play_sound chimes
