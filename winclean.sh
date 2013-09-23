@@ -10,7 +10,7 @@ shutdown_happening=$(wevtutil qe system //c:1 //rd:true //f:xml //q:"*[System[(E
 
 # Run backup on shutdown, wait for phone sync if not rebooting
 non_reboot_shutdown=$(echo "$shutdown_happening" | grep -i "<data>desligado</data>")
-[[ -n "$non_reboot_shutdown" ]] && delay=180
+[[ -n "$non_reboot_shutdown" ]] && delay="$1"
 [[ -n "$shutdown_happening" ]] && mintty -w full bash backup --default "$delay" --sounds
 
 # Firefox bookmarks cleanup: remove unorganized and descriptions
