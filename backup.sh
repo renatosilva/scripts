@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Backup 2013.9.23
+# Backup 2013.9.25
 # Copyright (c) 2012, 2013 Renato Silva
 # GNU GPLv2 licensed
 
@@ -10,10 +10,11 @@ play_sound() {
 
 target="$1"
 delay="$2"
-sounds="$3"
+delay_message="$3"
+silent="$4"
 name="Documentos e programas"
 [[ -z "$delay" ]] && delay="0"
-[[ "$sounds" = "--sounds" ]] && sounds="yes"
+[[ "$silent" != "--silent" ]] && silent="no"
 [[ -z "$target" || "$target" = "--default" ]] && target="/dados/backup"
 [[ -e "$target" ]] || { echo "Target $target not found."; sleep 5; exit 1; }
 
@@ -57,11 +58,21 @@ key='HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Applets\Regedit
 data=$(reg query "$key" //s | sed -E s/'^\s+'// | sed s/'\\'/'\\\\\\\\'/g | awk -F'[[:space:]]*REG_SZ[[:space:]]*' 'NF>1{print "\"" $1 "\"=\"" $2 "\""}')
 echo -e "Windows Registry Editor Version 5.00\n\n[$key]\n$data\n" | unix2dos > "$configs/regedit.reg"
 
+# Generating compressed file
 password=$(cat /dados/documentos/privado/chaves/renatosilva.backup)
 7z a "$temp/$name $(date '+%-d.%-m.%Y %-Hh%M').7z" -p"$password" -xr!desktop.ini -mhe "/dados/documentos" "/dados/programas" "$favorites" "$notes" "$configs"
 rm "$target/$name "*.7z 2> /dev/null || echo "First backup in this device."
 mv "$temp/"*.7z "$target"
+[[ "$silent" = "no" ]] && play_sound tada
+[[ "$delay" < 1 ]] && { sleep 3; exit 0; }
 
-[[ "$sounds" = "yes" ]] && play_sound tada
-sleep $((3 + delay))
-[[ "$sounds" = "yes" && "$delay" != "0" ]] && play_sound notify
+# Wait for specified delay time
+delay_message="$delay_message... %${#delay}s segundos"
+remaining="$delay"
+while [[ "$remaining" > 0 ]]; do
+    printf "\r$delay_message " "$remaining"
+    remaining=$((remaining - 1))
+    sleep 1
+done
+printf "\r%${#delay_message}s\r" ""
+[[ "$silent" = "no" && "$delay" != "0" ]] && play_sound notify
