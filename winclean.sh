@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Windows Cleanup 2013.9.22
+# Windows Cleanup 2013.9.25
 # Copyright (c) 2012, 2013 Renato Silva
 # GNU GPLv2 licensed
 
@@ -11,7 +11,7 @@ shutdown_happening=$(wevtutil qe system //c:1 //rd:true //f:xml //q:"*[System[(E
 # Run backup on shutdown, wait for phone sync if not rebooting
 non_reboot_shutdown=$(echo "$shutdown_happening" | grep -i "<data>desligado</data>")
 [[ -n "$non_reboot_shutdown" ]] && delay="$1"
-[[ -n "$shutdown_happening" ]] && mintty -w full bash backup --default "$delay" --sounds
+[[ -n "$shutdown_happening" ]] && mintty -w full bash backup --default "$delay" "Esperando pela sincronização do celular"
 
 # Firefox bookmarks cleanup: remove unorganized and descriptions
 database=("$APPDATA/Mozilla/Firefox/profiles/"*"/places.sqlite")
