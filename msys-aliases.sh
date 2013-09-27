@@ -1,4 +1,4 @@
-# MinGW MSYS Aliases 2013.3.3
+# MinGW MSYS Aliases 2013.9.26
 # Copyright (c) 2012, 2013 Renato Silva
 # GNU GPLv2 licensed
 
@@ -79,12 +79,12 @@ packages() {
     fi
 
     # Name search
-    packages=($(mingw-get list | grep ^Package | grep -E "$1" | sed -E s/"Package: (\S*).*"/"\\1"/ | grep -E --color "$1"))
+    packages=($(mingw-get list | grep ^Package | grep -i "$1" | sed -E s/"Package: (\S*).*"/"\\1"/))
     if [ -z "$2" ]; then
         count="0"
         for package in "${packages[@]}"; do
             count=$((count + 1))
-            printf '%#3d %s\n' "$count" "$package"
+            printf '%#3d %s\n' "$count" "$package" | grep -i --color "$1"
         done
         return
     fi
