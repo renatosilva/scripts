@@ -15,7 +15,7 @@ bzr() {
         "commit")
             printf "Is the version up to date? "
             read answer
-            if [ "$answer" != "yes" ]; then
+            if [[ "$answer" != "yes" ]]; then
                 echo "Canceled."
                 return
             fi;;
@@ -55,19 +55,19 @@ sqlite() {
 
 packages() {
     # List packages
-    if [ -z "$1" ]; then
+    if [[ -z "$1" ]]; then
         mingw-get list
         return
     fi
 
     # Extra argument
-    if [ -n "$3" ]; then
+    if [[ -n "$3" ]]; then
         echo "Extra argument: $3"
         return
     fi
 
     # Full search
-    if [ "$2" = "--full" ]; then
+    if [[ "$2" = "--full" ]]; then
         mingw-get list | grep --color -C4 "$1"
         return
     fi
@@ -80,7 +80,7 @@ packages() {
 
     # Name search
     packages=($(mingw-get list | grep ^Package | grep -i "$1" | sed -E s/"Package: (\S*).*"/"\\1"/))
-    if [ -z "$2" ]; then
+    if [[ -z "$2" ]]; then
         count="0"
         for package in "${packages[@]}"; do
             count=$((count + 1))
@@ -93,7 +93,7 @@ packages() {
     count="0"
     for package in "${packages[@]}"; do
         count=$((count + 1))
-        if [ "$count" == "$2" ]; then
+        if [[ "$count" == "$2" ]]; then
             mingw-get show "${packages[$(($2-1))]}"
             return
         fi
