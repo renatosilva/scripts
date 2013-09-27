@@ -61,7 +61,8 @@ packages() {
     fi
 
     # Extra argument
-    if [[ -n "$3" ]]; then
+    if [[ -n "$4" ]] || [[ -n "$3" && "$2" = "--full" ]]; then
+        [[ -n "$4" ]] && shift
         echo "Extra argument: $3"
         return
     fi
@@ -89,12 +90,14 @@ packages() {
         return
     fi
 
-    # Index search
+    # Action by index
+    action="$3"
+    [[ -z "$action" ]] && action="show"
     count="0"
     for package in "${packages[@]}"; do
         count=$((count + 1))
         if [[ "$count" == "$2" ]]; then
-            mingw-get show "${packages[$(($2-1))]}"
+            mingw-get "$action" "${packages[$(($2-1))]}"
             return
         fi
     done
