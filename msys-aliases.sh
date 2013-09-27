@@ -1,4 +1,4 @@
-# MinGW MSYS Aliases 2013.9.26
+# MinGW MSYS Aliases 2013.9.27
 # Copyright (c) 2012, 2013 Renato Silva
 # GNU GPLv2 licensed
 
@@ -97,7 +97,7 @@ packages() {
     for package in "${packages[@]}"; do
         count=$((count + 1))
         if [[ "$count" == "$2" ]]; then
-            mingw-get "$action" "${packages[$(($2-1))]}"
+            mingw-get "$action" "$package"
             return
         fi
     done
