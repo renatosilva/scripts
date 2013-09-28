@@ -97,7 +97,21 @@ packages() {
     for package in "${packages[@]}"; do
         count=$((count + 1))
         if [[ "$count" == "$2" ]]; then
-            mingw-get "$action" "$package"
+            if [[ "$action" != "show" ]]; then
+                mingw-get "$action" "$package"
+                return
+            fi
+            result=$(mingw-get show "$package")
+            components=$(echo "$result" | grep '^Components' | sed s/"Components: "/""/)
+            IFS=", " read -a components <<< "$components"
+            components_info=""
+            for component in "${components[@]}"; do
+                component_version=$(mingw-get show "$package-$component" | grep '^Installed Version' | awk -F'  ' '{print $2}')
+                [[ "$component_version" != "none" ]] && component_info="installed: $component_version" || component_info="not installed"
+                component=$(printf "%-4s" "$component")
+                components_info="$components_info\n    $component is $component_info"
+            done
+            echo "$result" | sed -E s/"^(Components:.*)$"/"\\1$components_info"/
             return
         fi
     done
