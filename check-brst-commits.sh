@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# Check Commit Timezone 2012.10.21
-# Copyright (c) 2012 Renato Silva
+# Check Commit Timezone 2013.10.5
+# Copyright (c) 2012, 2013 Renato Silva
 # GNU GPLv2 licensed
 
 # This program goes recursively through a directory hierarchy searching
@@ -9,8 +9,8 @@
 # within BRT period, for year 2012.
 
 check() {
-    # Standard time from 2012-02-27 to 2012-10-20
-    brt="2012-(02-2[7-9]|0[3-9]-..|10-(0[1-9]|1[0-9]|20))"
+    # Standard time from 2012-02-26 to 2012-10-20
+    brt="2012-(02-2[6-9]|0[3-9]-..|10-(0[1-9]|1[0-9]|20))"
     
     # Friendly branch name
     echo "$0:" | sed s/"\/.bzr"// | sed s/".*\/"//
