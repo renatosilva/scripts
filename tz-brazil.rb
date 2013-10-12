@@ -1,7 +1,8 @@
 #!/usr/bin/env ruby
+# Encoding: UTF-8
 
-# TZ Configuration for Brazil 2012.12.29
-# Copyright (c) 2012 Renato Silva
+# TZ Configuration for Brazil 2013.10.11
+# Copyright (c) 2012, 2013 Renato Silva
 # GNU GPLv2 licensed
 
 # This program prints configuration of TZ environment variable for BRT
