@@ -22,7 +22,7 @@ plugins = Dir[path].find_all do |plugin|
 end
 
 plugins << (Dir[path].find_all do |plugin|
-    plugin =~ /org.junit4/
+    plugin =~ /org.junit_?4/
 end [0] << "/junit.jar")
 
 plugins.map! { |plugin| File::PATH_SEPARATOR + plugin }
