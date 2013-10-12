@@ -1,4 +1,4 @@
-# MinGW MSYS Aliases 2013.9.27
+# MinGW MSYS Aliases 2013.10.12
 # Copyright (c) 2012, 2013 Renato Silva
 # GNU GPLv2 licensed
 
@@ -8,6 +8,10 @@ find() {
 
 grep() {
     { command grep "$@" 2>&1 >&3 | command grep -v 'Permission denied'; } 3>&1
+}
+
+get_component_version() {
+    component_version=$(mingw-get show "$1-$2" | grep '^Installed Version' | awk -F'  ' '{print $2}')
 }
 
 bzr() {
@@ -92,26 +96,48 @@ packages() {
 
     # Action by index
     action="$3"
-    [[ -z "$action" ]] && action="show"
+    [[ -z "$action" ]] && action="this:installed"
     count="0"
     for package in "${packages[@]}"; do
         count=$((count + 1))
         if [[ "$count" == "$2" ]]; then
-            if [[ "$action" != "show" ]]; then
+
+            # Execute specified action
+            if [[ "$action" != "show" && "$action" != "this:installed" ]]; then
                 mingw-get "$action" "$package"
                 return
             fi
-            result=$(mingw-get show "$package")
-            components=$(echo "$result" | grep '^Components' | sed s/"Components: "/""/)
+
+            package_info=$(mingw-get show "$package")
+            components=$(echo "$package_info" | grep '^Components' | sed s/"Components: "/""/)
             IFS=", " read -a components <<< "$components"
+
+            # Show whether the package is installed
+            if [[ "$action" = "this:installed" ]]; then
+                installed=()
+                available=()
+                for component in "${components[@]}"; do
+                    get_component_version "$package" "$component"
+                    [[ "$component_version" != "none" ]] && installed+=("$component") || available+=("$component")
+                done
+                installed=$(echo "${installed[@]}" | sed "s/ /, /g")
+                available=$(echo "${available[@]}" | sed "s/ /, /g")
+                [[ -z "$installed" ]] && installed="none"
+                [[ -z "$available" ]] && available="none"
+                echo "Installed components: $installed"
+                echo "Available components: $available"
+                return
+            fi
+
+            # Show package and component information
             components_info=""
             for component in "${components[@]}"; do
-                component_version=$(mingw-get show "$package-$component" | grep '^Installed Version' | awk -F'  ' '{print $2}')
+                get_component_version "$package" "$component"
                 [[ "$component_version" != "none" ]] && component_info="installed: $component_version" || component_info="not installed"
                 component=$(printf "%-4s" "$component")
                 components_info="$components_info\n    $component is $component_info"
             done
-            echo "$result" | sed -E s/"^(Components:.*)$"/"\\1$components_info"/
+            echo "$package_info" | sed -E s/"^(Components:.*)$"/"\\1$components_info"/
             return
         fi
     done
