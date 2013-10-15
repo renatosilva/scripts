@@ -1,4 +1,4 @@
-# MinGW MSYS Aliases 2013.10.12
+# MinGW MSYS Aliases 2013.10.15
 # Copyright (c) 2012, 2013 Renato Silva
 # GNU GPLv2 licensed
 
@@ -124,6 +124,7 @@ packages() {
                 available=$(echo "${available[@]}" | sed "s/ /, /g")
                 [[ -z "$installed" ]] && installed="none"
                 [[ -z "$available" ]] && available="none"
+                echo "Package: $package"
                 echo "Installed components: $installed"
                 echo "Available components: $available"
                 return
