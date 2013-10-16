@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# Check branches 2012.12.12
-# Copyright (c) 2012 Renato Silva
+# Check branches 2013.10.16
+# Copyright (c) 2012, 2013 Renato Silva
 # GNU GPLv2 licensed
 
 # This program goes recursively through a directory hierarchy
@@ -35,7 +35,7 @@ export def_cmds
 export cmds
 
 if [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
-    echo "Usage: $0 [root [commmand]...]"
+    echo "Usage: $(basename "$0") [root [commmand]...]"
     echo "Without arguments, root is current directory, and commands are $def_cmds."
     exit
 fi

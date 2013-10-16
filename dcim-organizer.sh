@@ -1,10 +1,10 @@
 #!/bin/bash
 
-# DCIM Organizer 2013.10.5
+# DCIM Organizer 2013.10.16
 # Copyright (c) 2013 Renato Silva
 # GNU GPLv2 licensed
 
-[[ -z "$1" ]] && echo "Usage: $0 <directory> [number to start from]" && exit
+[[ -z "$1" ]] && echo "Usage: $(basename "$0") <directory> [number to start from]" && exit
 shopt -s nullglob
 
 rename() {

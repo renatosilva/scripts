@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Check Commit Timezone 2013.10.5
+# Check Commit Timezone 2013.10.16
 # Copyright (c) 2012, 2013 Renato Silva
 # GNU GPLv2 licensed
 
@@ -39,7 +39,7 @@ check() {
 }
 
 if [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
-    echo "Usage: $0 [root]"
+    echo "Usage: $(basename "$0") [root]"
     echo "Without arguments, root is current directory."
     exit
 fi

@@ -1,10 +1,10 @@
 #!/bin/bash
 
-# DNS Dynamic Update 2013.10.5
+# DNS Dynamic Update 2013.10.16
 # Copyright (c) 2013 Renato Silva
 # GNU GPLv2 licensed
 
-[[ -z "$3" ]] && echo "Usage: $0 <hostname> <email> <password file>" && exit
+[[ -z "$3" ]] && echo "Usage: $(basename "$0") <hostname> <email> <password file>" && exit
 
 interval=$((60*30))
 while true; do
