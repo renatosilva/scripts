@@ -17,6 +17,7 @@ scripts=(
     "greprev"
     "networkmeter-reset"
     "numpass"
+    "packages"
     "randpass"
     "runcrt"
     "ivona-speak"
