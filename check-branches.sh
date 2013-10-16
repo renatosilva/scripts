@@ -9,13 +9,13 @@
 
 check() {
     branch=$(echo "$0" | sed s/".bzr"//)
-    if [ "$cmds" != "$def_cmds" ]; then        
-        echo "branch: $branch"        
+    if [ "$cmds" != "$def_cmds" ]; then
+        echo "branch: $branch"
         for cmd in $cmds; do
             cd "$branch"
             bzr $cmd
             cd - > /dev/null
-        done        
+        done
         return
     fi
     for cmd in $(echo "$cmds" | sed -E s/", and ([^,])"/" \\1"/ | sed s/","//g); do
