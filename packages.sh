@@ -4,6 +4,13 @@
 # Copyright (c) 2012, 2013 Renato Silva
 # GNU GPLv2 licensed
 
+if [[ "$1" = "-h" || "$1" = "--help" ]]; then
+    echo "Usage: $(basename "$0") [pattern [--full]]"
+    echo "       $(basename "$0") [pattern [index [action]]]"
+    echo "Without arguments, will output the same as mingw-get list."
+    exit
+fi
+
 get_component_version() {
     component_version=$(mingw-get show "$1-$2" | grep '^Installed Version' | awk -F'  ' '{print $2}')
 }
