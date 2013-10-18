@@ -18,6 +18,7 @@ scripts=(
     "networkmeter-reset"
     "numpass"
     "packages"
+    "parse-options"
     "randpass"
     "runcrt"
     "ivona-speak"

@@ -1,56 +1,42 @@
 #!/bin/bash
 
-description="
-    Parse Options Prototype 2013.10.16
-    Copyright (c) 2013 Renato Silva
-    GNU GPLv2 licensed
-
-    This script is supposed to parse command line arguments in a way that,
-    even though its implementation is not trivial, it should be easy and
-    smooth to use. This script is supposed to be sourced or embedded into
-    the target client script. This is a prototype, the main step missing
-    being the support for option descriptions in automated help text.
-    Here is an example of what it would look like using this script:
-
-    Client script foo.sh:
-        options=(v=verbose r=recursive input-file=? quick)
-        source parse-options
-        parse_options \"\$@\"
-
-        echo \"input file is \$inputfile\"
-        [[ -n \"\$verbose\" ]] && echo \"this shall be verbose\"
-        echo \"\${arguments[0]}\" # Non-option arguments, if any
-
-    Now calling the script:
-        $ foo.sh -vr --quick
-        $ foo.sh --help
-        $ foo.sh -v --input-file /path/to/file -r extra arguments"
-
-show_option_help() {
-    printf "%4s%-20s%s\n" " " "$1" "Option description not implemented."
-    printf "%24s%s\n\n" " " "This is second line of option description."
-}
-
-show_help() {
-
-    indentation="4"
-    echo -e "$description\n\nOptions:"
-
-    for option in "${options[@]}"; do
-        option_var=${option#*=}
-        option_name=${option%=$option_var}
-
-        if [[ "$option_var" = "$option_name" ]]; then
-            show_option_help "--$option_var"
-
-        elif [[ "$option_var" = "?" ]]; then
-            show_option_help "--$option_name=PARAM"
-
-        else
-            show_option_help "-$option_name, --$option_var"
-        fi
-    done
-}
+## Parse Options 2013.10.17
+## Copyright (c) 2013 Renato Silva
+## GNU GPLv2 licensed
+##
+## This script is supposed to parse command line arguments in a way that,
+## even though its implementation is not trivial, it should be easy and
+## smooth to use. For using this script, simply document your target script
+## using double-hash comments, like this:
+##
+##     ## Program Name v1.0
+##     ## Copyright (C) Someone
+##     ##
+##     ## This program does something. Options:
+##     ##
+##     ##     --boolean, -b        This option will get stored as boolean=yes.
+##     ##                          Long version must come first.
+##     ##
+##     ##     --another-boolean    This will get stored as anotherboolean=yes.
+##     ##
+##     ##     ---some-value=VALUE  This will get stored as somevalue=<value>,
+##     ##                          equal sign can be replaced with space.
+##     ##
+##     ##     --help, -h           All client scripts have this by default,
+##     ##                          it shows this double-hash documentation.
+##
+## The above comments work both as source code documentation and as help
+## text, as well as define the options supported by your script. Parsing
+## of the options from such documentation is quite slow, but at least there
+## is not any duplication of the options specification.
+##
+## After writing your documentation, you simply source this script. Then all
+## command line options will get parsed into the corresponding variables,
+## as described above. You can then check their values for reacting to them.
+##
+## In fact, this script is an example of itself. You are seeing this help
+## message either because you are reading the source code, or you have called
+## the script in command line with the --help option.
 
 parse_options() {
 
@@ -59,7 +45,18 @@ parse_options() {
     local option_value
 
     arguments=()
-    options+=(h=help)
+    options=(h=help)
+    documentation=$(grep "^##" "$0" | sed -r "s/## ?//")
+
+    while read -r line; do
+        case "$line" in
+            --*," "-*)  option=$(echo "$line" | awk -F'(--|, -| )'  '{ print $3"="$2 }') ;;
+            --*=*)      option=$(echo "$line" | awk -F'(--|=| )'    '{ print $2"=?" }') ;;
+            --*" "*)    option=$(echo "$line" | awk -F'(--| )'      '{ print $2 }') ;;
+            *)          continue ;;
+        esac
+        options+=("$option")
+    done <<< "$documentation"
 
     for option in "${options[@]}"; do
         option_var=${option#*=}
@@ -123,7 +120,7 @@ parse_options() {
         fi
 
         if [[ -n "$help" ]]; then
-            show_help
+            echo "$documentation"
             exit
         fi
     done
@@ -147,18 +144,4 @@ parse_options() {
     done
 }
 
-options=(
-    f=foo
-    b=bar
-    foobar
-    log-level=?
-)
-
 parse_options "$@"
-[[ -n "$foo"      ]] && echo "foo was specified"
-[[ -n "$bar"      ]] && echo "bar was specified"
-[[ -n "$foobar"   ]] && echo "foobar was specified"
-[[ -n "$loglevel" ]] && echo "log-level was specified as [$loglevel]"
-for argument in "${arguments[@]}"; do
-    echo "Argument: [$argument]"
-done
