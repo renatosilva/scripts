@@ -9,10 +9,8 @@
 ## of the contained Bazaar branches for synchronization status and pending work.
 ## In other words, the Bazaar commands missing and status. Usage and options:
 ##
-##     @script.name [options]
+##     @script.name [options] [root directory if not current]
 ##
-##     --root=DIRECTORY   The top directory from where to search for Bazaar
-##                        branches. Current directory is assumed if omitted.
 ##     --status-only, -s  Will not perform the missing command, only status one.
 ##
 
@@ -40,5 +38,5 @@ source parse-options || exit 1
 export -f print_name
 export -f check
 
-find "${root:-.}" -name ".bzr" -type d -exec bash -c check '{}' \;
+find "${arguments[0]:-.}" -name ".bzr" -type d -exec bash -c check '{}' \;
 sleep 3
