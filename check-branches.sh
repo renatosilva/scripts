@@ -15,7 +15,7 @@
 ##
 
 print_name() {
-    local branch_name="$(basename "$(readlink -f "$1")")"
+    local branch_name="$(basename "$(readlink -m "$1")")"
     printf "%$2s" "--- $branch_name: " | colordiff 2> /dev/null | sed "s/--- //"
 }
 
