@@ -1,21 +1,45 @@
 #!/bin/bash
 
-# Backup 2013.9.25
-# Copyright (c) 2012, 2013 Renato Silva
-# GNU GPLv2 licensed
+##
+##     Backup 2013.10.19
+##     Copyright (c) 2012, 2013 Renato Silva
+##     GNU GPLv2 licensed
+##
+## This is my personal backup script on Windows. You may use it as inspiration
+## for writing your own, since it is not really reusable out of the box.
+## Output is a password protected, 7-Zip compressed file which is going to
+## replace any previous backup on target directory. Backup will include:
+##
+##     * Sticky notes
+##     * Scheduled tasks
+##     * Registry favorites
+##     * IE favorites
+##     * Startup and some other shortcuts
+##     * Settings from Piriform utilities and IVONA
+##
+## Usage: @script.name [options], where options are:
+##
+##     --name=FILENAME       Backup filename, will have date and time appended.
+##                           Any previous backup with same name will be deleted.
+##     --target=DIR          Customize the directory where to store the backup.
+##     --delay=SECONDS       How much time to wait after backup is complete,
+##                           will produce a countdown on command line.
+##     --delay-message=TEXT  What message to show for the countdown.
+##     --silent, -s          Whether to play a sound when backup is complete
+##                           and after delay time.
+##     --help, -h            This help text.
+##
 
 play_sound() {
     powershell.exe -c "(New-Object Media.SoundPlayer \"C:/Windows/Media/$1.wav\").PlaySync();" < NUL
 }
 
-target="$1"
-delay="$2"
-delay_message="$3"
-silent="$4"
-name="Documentos e programas"
+source parse-options || exit 1
+
 [[ -z "$delay" ]] && delay="0"
-[[ "$silent" != "--silent" ]] && silent="no"
-[[ -z "$target" || "$target" = "--default" ]] && target="/dados/backup"
+[[ -z "$delay_message" ]] && delay_message="Esperando"
+[[ -z "$name" ]] && name="Documentos e programas"
+[[ -z "$target" ]] && target="/dados/backup"
 [[ -e "$target" ]] || { echo "Target $target not found."; sleep 5; exit 1; }
 
 # Sticky notes and favorites
@@ -63,7 +87,7 @@ password=$(cat /dados/documentos/privado/chaves/renatosilva.backup)
 7z a "$temp/$name $(date '+%-d.%-m.%Y %-Hh%M').7z" -p"$password" -xr!desktop.ini -mhe "/dados/documentos" "/dados/programas" "$favorites" "$notes" "$configs"
 rm "$target/$name "*.7z 2> /dev/null || echo "First backup in this device."
 mv "$temp/"*.7z "$target"
-[[ "$silent" = "no" ]] && play_sound tada
+[[ -z "$silent" ]] && play_sound tada
 [[ "$delay" < 1 ]] && { sleep 3; exit 0; }
 
 # Wait for specified delay time
@@ -75,4 +99,4 @@ while [[ "$remaining" > 0 ]]; do
     sleep 1
 done
 printf "\r%${#delay_message}s\r" ""
-[[ "$silent" = "no" && "$delay" != "0" ]] && play_sound notify
+[[ -z "$silent" && "$delay" != "0" ]] && play_sound notify
