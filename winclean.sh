@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Windows Cleanup 2013.10.12
+# Windows Cleanup 2013.10.19
 # Copyright (c) 2012, 2013 Renato Silva
 # GNU GPLv2 licensed
 
@@ -39,5 +39,5 @@ ccleaner_dir=$(echo "$reg_data" | awk -F'REG_SZ[[:space:]]*' 'NF>1{print $2}')
 
 # Run backup on shutdown, wait for phone sync if not rebooting
 non_reboot_shutdown=$(echo "$shutdown_happening" | grep -i "<data>desligado</data>")
-[[ -n "$non_reboot_shutdown" ]] && delay="$1"
-[[ -n "$shutdown_happening" ]] && mintty -w full bash backup --default "$delay" "Esperando pela sincronização do celular"
+[[ -n "$non_reboot_shutdown" ]] && delay=${1#*=}
+[[ -n "$shutdown_happening" ]] && mintty -w full bash backup --delay="${delay:-0}" --delay-message="Esperando pela sincronização do celular"
