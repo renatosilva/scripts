@@ -1,6 +1,6 @@
 #!/bin/bash
 
-## Parse Options 2013.10.18
+## Parse Options 2013.10.19
 ## Copyright (c) 2013 Renato Silva
 ## GNU GPLv2 licensed
 ##
@@ -46,7 +46,10 @@ parse_options() {
 
     arguments=()
     options=(h=help)
-    documentation=$(grep "^##" "$0" | sed -r "s/## ?//")
+
+    documentation="$(grep "^##" "$0")(no-trim)"
+    documentation=$(echo "$documentation" | sed -r "s/## ?//")
+    documentation=${documentation%(no-trim)}
 
     while read -r line; do
         case "$line" in
