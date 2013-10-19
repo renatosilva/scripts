@@ -86,13 +86,13 @@ parse_options() {
             if [[ "$option" = "$known_option_name" ]]; then
                 option_value="yes"
                 known_option_var=$(echo "$known_option_var" | tr "-" "_")
-                eval $known_option_var="$option_value"
+                eval export $known_option_var="$option_value"
                 break
 
             elif [[ "$option" = -$known_option_name && "$known_option_var" != "?" ]]; then
                 option_value="yes"
                 known_option_var=$(echo "$known_option_var" | tr "-" "_")
-                eval $known_option_var="$option_value"
+                eval export $known_option_var="$option_value"
                 break
 
             elif [[ "$option" = -$known_option_name && "$known_option_var" = "?" ]]; then
@@ -103,13 +103,13 @@ parse_options() {
                 fi
                 OPTIND=$((OPTIND + 1))
                 known_option_var=$(echo "$known_option_name" | tr "-" "_")
-                eval $known_option_var="$option_value"
+                eval export $known_option_var="$option_value"
                 break
 
             elif [[ "$option" = -$known_option_name=* && "$known_option_var" = "?" ]]; then
                 option_value=${option#*=}
                 known_option_var=$(echo "$known_option_name" | tr "-" "_")
-                eval $known_option_var="$option_value"
+                eval export $known_option_var="$option_value"
                 break
 
             elif [[ "$option" = -$known_option_name=* && "$known_option_var" != "?" ]]; then
@@ -148,6 +148,7 @@ parse_options() {
         fi
         shift
     done
+    export arguments options
 }
 
 parse_options "$@"
