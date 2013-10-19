@@ -1,6 +1,6 @@
 #!/bin/bash
 
-## Parse Options 2013.10.17
+## Parse Options 2013.10.18
 ## Copyright (c) 2013 Renato Silva
 ## GNU GPLv2 licensed
 ##
@@ -17,9 +17,9 @@
 ##     ##     --boolean, -b        This option will get stored as boolean=yes.
 ##     ##                          Long version must come first.
 ##     ##
-##     ##     --another-boolean    This will get stored as anotherboolean=yes.
+##     ##     --another-boolean    This will get stored as another_boolean=yes.
 ##     ##
-##     ##     ---some-value=VALUE  This will get stored as somevalue=<value>,
+##     ##     ---some-value=VALUE  This will get stored as some_value=<value>,
 ##     ##                          equal sign can be replaced with space.
 ##     ##
 ##     ##     --help, -h           All client scripts have this by default,
@@ -79,13 +79,13 @@ parse_options() {
 
             if [[ "$option" = "$known_option_name" ]]; then
                 option_value="yes"
-                known_option_var=$(echo "$known_option_var" | tr -d "-")
+                known_option_var=$(echo "$known_option_var" | tr "-" "_")
                 eval $known_option_var="$option_value"
                 break
 
             elif [[ "$option" = -$known_option_name && "$known_option_var" != "?" ]]; then
                 option_value="yes"
-                known_option_var=$(echo "$known_option_var" | tr -d "-")
+                known_option_var=$(echo "$known_option_var" | tr "-" "_")
                 eval $known_option_var="$option_value"
                 break
 
@@ -96,13 +96,13 @@ parse_options() {
                     exit 1
                 fi
                 OPTIND=$((OPTIND + 1))
-                known_option_var=$(echo "$known_option_name" | tr -d "-")
+                known_option_var=$(echo "$known_option_name" | tr "-" "_")
                 eval $known_option_var="$option_value"
                 break
 
             elif [[ "$option" = -$known_option_name=* && "$known_option_var" = "?" ]]; then
                 option_value=${option#*=}
-                known_option_var=$(echo "$known_option_name" | tr -d "-")
+                known_option_var=$(echo "$known_option_name" | tr "-" "_")
                 eval $known_option_var="$option_value"
                 break
 
