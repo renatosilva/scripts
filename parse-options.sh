@@ -12,8 +12,10 @@
 ##     ## Program Name v1.0
 ##     ## Copyright (C) Someone
 ##     ##
-##     ## This program does something. Options:
+##     ## This program does something. Usage:
+##     ##     @#script.name [option]
 ##     ##
+##     ## Options:
 ##     ##     --boolean, -b        This option will get stored as boolean=yes.
 ##     ##                          Long version must come first.
 ##     ##
@@ -28,7 +30,8 @@
 ## The above comments work both as source code documentation and as help
 ## text, as well as define the options supported by your script. Parsing
 ## of the options from such documentation is quite slow, but at least there
-## is not any duplication of the options specification.
+## is not any duplication of the options specification. The string @#script.name
+## will be replaced with the actual script name.
 ##
 ## After writing your documentation, you simply source this script. Then all
 ## command line options will get parsed into the corresponding variables,
@@ -48,7 +51,7 @@ parse_options() {
     options=(h=help)
 
     documentation="$(grep "^##" "$0")(no-trim)"
-    documentation=$(echo "$documentation" | sed -r "s/## ?//")
+    documentation=$(echo "$documentation" | sed -r "s/## ?//" | sed -r "s/@script.name/$(basename "$0")/g" | sed "s/@#/@/g")
     documentation=${documentation%(no-trim)}
 
     while read -r line; do
