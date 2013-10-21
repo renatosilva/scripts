@@ -16,16 +16,17 @@
 ##     ##     @#script.name [option]
 ##     ##
 ##     ## Options:
-##     ##     --boolean, -b        This option will get stored as boolean=yes.
-##     ##                          Long version must come first.
+##     ##     -h, --help              All client scripts have this by default,
+##     ##                             it shows this double-hash documentation.
 ##     ##
-##     ##     --another-boolean    This will get stored as another_boolean=yes.
+##     ##     -o, --option            This option will get stored as option=yes.
+##     ##                             Long version is mandatory and must be
+##     ##                             specified after short version.
 ##     ##
-##     ##     --some-value=VALUE   This will get stored as some_value=<value>,
-##     ##                          equal sign can be replaced with space.
+##     ##         --some-boolean      This will get stored as some_boolean=yes.
 ##     ##
-##     ##     --help, -h           All client scripts have this by default,
-##     ##                          it shows this double-hash documentation.
+##     ##         --some-value=VALUE  This will get stored as some_value=VALUE,
+##     ##                             equal sign can be replaced with space.
 ##
 ## The above comments work both as source code documentation and as help
 ## text, as well as define the options supported by your script. Parsing
@@ -56,7 +57,7 @@ parse_options() {
 
     while read -r line; do
         case "$line" in
-            --*," "-*)  option=$(echo "$line" | awk -F'(--|, -| )'  '{ print $3"="$2 }') ;;
+            -*," "--*)  option=$(echo "$line" | awk -F'(-|, --| )'  '{ print $2"="$3 }') ;;
             --*=*)      option=$(echo "$line" | awk -F'(--|=| )'    '{ print $2"=?" }') ;;
             --*" "*)    option=$(echo "$line" | awk -F'(--| )'      '{ print $2 }') ;;
             *)          continue ;;
