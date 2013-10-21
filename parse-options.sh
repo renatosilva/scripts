@@ -1,6 +1,6 @@
 #!/bin/bash
 
-## Parse Options 2013.10.19
+## Parse Options 2013.10.20
 ## Copyright (c) 2013 Renato Silva
 ## GNU GPLv2 licensed
 ##
@@ -86,13 +86,13 @@ parse_options() {
             if [[ "$option" = "$known_option_name" ]]; then
                 option_value="yes"
                 known_option_var=$(echo "$known_option_var" | tr "-" "_")
-                eval export $known_option_var="$option_value"
+                eval "export $known_option_var=\"$option_value\""
                 break
 
             elif [[ "$option" = -$known_option_name && "$known_option_var" != "?" ]]; then
                 option_value="yes"
                 known_option_var=$(echo "$known_option_var" | tr "-" "_")
-                eval export $known_option_var="$option_value"
+                eval "export $known_option_var=\"$option_value\""
                 break
 
             elif [[ "$option" = -$known_option_name && "$known_option_var" = "?" ]]; then
@@ -103,13 +103,13 @@ parse_options() {
                 fi
                 OPTIND=$((OPTIND + 1))
                 known_option_var=$(echo "$known_option_name" | tr "-" "_")
-                eval export $known_option_var="$option_value"
+                eval "export $known_option_var=\"$option_value\""
                 break
 
             elif [[ "$option" = -$known_option_name=* && "$known_option_var" = "?" ]]; then
                 option_value=${option#*=}
                 known_option_var=$(echo "$known_option_name" | tr "-" "_")
-                eval export $known_option_var="$option_value"
+                eval "export $known_option_var=\"$option_value\""
                 break
 
             elif [[ "$option" = -$known_option_name=* && "$known_option_var" != "?" ]]; then
