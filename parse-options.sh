@@ -1,6 +1,6 @@
 #!/bin/bash
 
-## Parse Options 2013.10.20
+## Parse Options 2013.10.21
 ## Copyright (c) 2013 Renato Silva
 ## GNU GPLv2 licensed
 ##
@@ -21,7 +21,7 @@
 ##     ##
 ##     ##     --another-boolean    This will get stored as another_boolean=yes.
 ##     ##
-##     ##     ---some-value=VALUE  This will get stored as some_value=<value>,
+##     ##     --some-value=VALUE   This will get stored as some_value=<value>,
 ##     ##                          equal sign can be replaced with space.
 ##     ##
 ##     ##     --help, -h           All client scripts have this by default,
