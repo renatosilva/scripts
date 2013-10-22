@@ -1,6 +1,6 @@
 #!/bin/bash
 
-## Parse Options 2013.10.21
+## Parse Options 2013.10.22
 ## Copyright (c) 2013 Renato Silva
 ## GNU GPLv2 licensed
 ##
@@ -20,8 +20,8 @@
 ##     ##                             it shows this double-hash documentation.
 ##     ##
 ##     ##     -o, --option            This option will get stored as option=yes.
-##     ##                             Long version is mandatory and must be
-##     ##                             specified after short version.
+##     ##                             Long version is mandatory, and can be
+##     ##                             specified before or after short version.
 ##     ##
 ##     ##         --some-boolean      This will get stored as some_boolean=yes.
 ##     ##
@@ -81,6 +81,7 @@ parse_options() {
         while read -r line; do
             case "$line" in
                 -*," "--*)  option=$(echo "$line" | awk -F'(-|, --| )'  '{ print $2"="$3 }') ;;
+                --*," "-*)  option=$(echo "$line" | awk -F'(--|, -| )'  '{ print $3"="$2 }') ;;
                 --*=*)      option=$(echo "$line" | awk -F'(--|=| )'    '{ print $2"=?" }') ;;
                 --*" "*)    option=$(echo "$line" | awk -F'(--| )'      '{ print $2 }') ;;
                 *)          continue ;;
