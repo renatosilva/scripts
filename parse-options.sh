@@ -49,7 +49,18 @@ parse_options() {
 
     local short_option_vars
     local short_options
+    local documentation
+    local next_is_value
+    local argument
+
+    local option
+    local option_name
     local option_value
+    local option_var
+
+    local known_option
+    local known_option_name
+    local known_option_var
 
     arguments=()
     options=(h=help)
@@ -135,7 +146,6 @@ parse_options() {
         fi
     done
 
-    local next_is_value=""
     for argument in "$@"; do
         if [[ "$argument" = -* ]]; then
             for known_option in "${options[@]}"; do
