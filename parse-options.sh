@@ -26,7 +26,10 @@
 ##     ##         --some-boolean      This will get stored as some_boolean=yes.
 ##     ##
 ##     ##         --some-value=VALUE  This will get stored as some_value=VALUE,
-##     ##                             equal sign can be replaced with space.
+##     ##                             where VALUE is the actual value specified.
+##     ##                             The equal sign is optional and can be
+##     ##                             replaced with blank space. Short version
+##     ##                             is not available in this format.
 ##
 ## The above comments work both as source code documentation and as help
 ## text, as well as define the options supported by your script. Parsing
