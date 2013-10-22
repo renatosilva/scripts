@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Check Commit Timezone 2013.10.16
+# Check Commit Timezone 2013.10.22
 # Copyright (c) 2012, 2013 Renato Silva
 # GNU GPLv2 licensed
 
@@ -30,7 +30,11 @@ check() {
     brt_2013="2013-(02-(1[7-9]|2[0-9])|0[3-9]-..|10-(0[1-9]|1[0-9]))"
 
     # Friendly branch name
-    echo "$0:" | sed s/"\/.bzr"// | sed s/".*\/"//
+    normal_color="\e[0m"
+    magenta_color="\e[0;35m"
+    branch="$(dirname "$0")"
+    branch_name="$(basename "$(readlink -m "$branch")")"
+    printf "${magenta_color}%s:${normal_color}\n" "$branch_name"
 
     # Catch DST commits out of DST period
     for brt in "$brt_2012" "$brt_2013"; do
