@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ##
-##     Check Branches 2013.10.19
+##     Check Branches 2013.10.22
 ##     Copyright (c) 2012, 2013 Renato Silva
 ##     GNU GPLv2 licensed
 ##
@@ -15,12 +15,14 @@
 ##
 
 print_name() {
+    local normal_color="\e[0m"
+    local green_color="\e[0;32m"
     local branch_name="$(basename "$(readlink -m "$1")")"
-    printf "%$2s" "--- $branch_name: " | colordiff 2> /dev/null | sed "s/--- //"
+    printf "${green_color}%$2s${normal_color} " "$branch_name:"
 }
 
 check() {
-    branch=$(echo "$0" | sed s/".bzr"//)
+    branch="$(dirname "$0")"
     cd "$branch"
     if [ -n "$status_only" ]; then
         print_name "$branch"
