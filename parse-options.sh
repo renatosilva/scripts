@@ -44,6 +44,20 @@
 ## In fact, this script is an example of itself. You are seeing this help
 ## message either because you are reading the source code, or you have called
 ## the script in command line with the --help option.
+##
+## For better speed, you may want to define the options in source code yourself,
+## so they do not need to be parsed from the documentation. The side effect is
+## that when changing them, you will need to update both the documentation and
+## the source code. You define the options statically like this:
+##
+##     options=(o=option some-boolean some-value=?)
+##
+
+parse_documentation() {
+    documentation="$(grep "^##" "$(which "$0")")(no-trim)"
+    documentation=$(echo "$documentation" | sed -r "s/## ?//" | sed -r "s/@script.name/$(basename "$0")/g" | sed "s/@#/@/g")
+    documentation=${documentation%(no-trim)}
+}
 
 parse_options() {
 
@@ -62,22 +76,21 @@ parse_options() {
     local known_option_name
     local known_option_var
 
+    if [[ -z ${options+defined} ]]; then
+        parse_documentation
+        while read -r line; do
+            case "$line" in
+                -*," "--*)  option=$(echo "$line" | awk -F'(-|, --| )'  '{ print $2"="$3 }') ;;
+                --*=*)      option=$(echo "$line" | awk -F'(--|=| )'    '{ print $2"=?" }') ;;
+                --*" "*)    option=$(echo "$line" | awk -F'(--| )'      '{ print $2 }') ;;
+                *)          continue ;;
+            esac
+            options+=("$option")
+        done <<< "$documentation"
+    fi
+
+    options+=(h=help)
     arguments=()
-    options=(h=help)
-
-    documentation="$(grep "^##" "$(which "$0")")(no-trim)"
-    documentation=$(echo "$documentation" | sed -r "s/## ?//" | sed -r "s/@script.name/$(basename "$0")/g" | sed "s/@#/@/g")
-    documentation=${documentation%(no-trim)}
-
-    while read -r line; do
-        case "$line" in
-            -*," "--*)  option=$(echo "$line" | awk -F'(-|, --| )'  '{ print $2"="$3 }') ;;
-            --*=*)      option=$(echo "$line" | awk -F'(--|=| )'    '{ print $2"=?" }') ;;
-            --*" "*)    option=$(echo "$line" | awk -F'(--| )'      '{ print $2 }') ;;
-            *)          continue ;;
-        esac
-        options+=("$option")
-    done <<< "$documentation"
 
     for option in "${options[@]}"; do
         option_var=${option#*=}
@@ -141,6 +154,7 @@ parse_options() {
         fi
 
         if [[ -n "$help" ]]; then
+            [[ -z "$documentation" ]] && parse_documentation
             echo "$documentation"
             exit
         fi
