@@ -1,26 +1,33 @@
 #!/bin/bash
 
-# Check Commit Timezone 2013.10.22
-# Copyright (c) 2012, 2013 Renato Silva
-# GNU GPLv2 licensed
-
-# This program goes recursively through a directory hierarchy searching
-# for Bazaar branches containing wrong commit dates with BRST timezone
-# within BRT period, for years 2012 and 2013.
-
-# Please note that this program will not look into the first hour of BRT
-# period, which is when clock is adjusted backward one hour at midnight.
-# For example, if a commit timestamp states 2013-02-16 23:30 -02:00, this
-# script has no means to tell if it was really within BRST period (the "first"
-# 23:30) or rather within BRT period (the "second" 23:30) with a wrong timezone
-# indicator (-02:00 instead of -03:00).
-
-# This is both because the script does not look into parts of a single day,
-# and because even in that case, it is currently unknown if Bazaar is able
-# to tell the exact UTC time, so that such a verification could be performed
-# (in the previous example, first 23:30 would be represented by 01:30 UTC,
-# while second one would show as 02:30 UTC, thus allowing to determinate if
-# the timezone indicator is correct).
+##
+##     Check Commit Timezone 2013.10.23
+##     Copyright (c) 2012, 2013 Renato Silva
+##     GNU GPLv2 licensed
+##
+## Usage:
+##     @script.name [options] [root directory if not current]
+##
+##     -h, --help  This help text.
+##
+## This program goes recursively through a directory hierarchy searching
+## for Bazaar branches containing wrong commit dates with BRST timezone
+## within BRT period, for years 2012 and 2013.
+##
+## Please note that this program will not look into the first hour of BRT
+## period, which is when clock is adjusted backward one hour at midnight.
+## For example, if a commit timestamp states 2013-02-16 23:30 -02:00, this
+## script has no means to tell if it was really within BRST period (the "first"
+## 23:30) or rather within BRT period (the "second" 23:30) with a wrong timezone
+## indicator (-02:00 instead of -03:00).
+##
+## This is both because the script does not look into parts of a single day,
+## and because even in that case, it is currently unknown if Bazaar is able
+## to tell the exact UTC time, so that such a verification could be performed
+## (in the previous example, first 23:30 would be represented by 01:30 UTC,
+## while second one would show as 02:30 UTC, thus allowing to determinate if
+## the timezone indicator is correct).
+##
 
 check() {
     # Standard time from 2012-02-26 to 2012-10-20
@@ -42,13 +49,6 @@ check() {
     done
 }
 
-if [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
-    echo "Usage: $(basename "$0") [root]"
-    echo "Without arguments, root is current directory."
-    exit
-fi
-
-root="$1"
-[ -z "$1" ] && root="."
+source parse-options || exit 1
 export -f check
-find "$root" -name ".bzr" -type d -exec bash -c check '{}' \;
+find "${arguments[0]:-.}" -name ".bzr" -type d -exec bash -c check '{}' \;
