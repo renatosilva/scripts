@@ -85,11 +85,13 @@ parse_options() {
         parse_documentation
         while read -r line; do
             case "$line" in
-                -*," "--*)  option=$(echo "$line" | awk -F'(-|, --| )'  '{ print $2"="$3 }') ;;
-                --*," "-*)  option=$(echo "$line" | awk -F'(--|, -| )'  '{ print $3"="$2 }') ;;
-                --*=*)      option=$(echo "$line" | awk -F'(--|=| )'    '{ print $2"=?" }') ;;
-                --*" "*)    option=$(echo "$line" | awk -F'(--| )'      '{ print $2 }') ;;
-                *)          continue ;;
+                "-h, --help"*)  continue ;;
+                "--help, -h"*)  continue ;;
+                -*," "--*)      option=$(echo "$line" | awk -F'(-|, --| )'  '{ print $2"="$3 }') ;;
+                --*," "-*)      option=$(echo "$line" | awk -F'(--|, -| )'  '{ print $3"="$2 }') ;;
+                --*=*)          option=$(echo "$line" | awk -F'(--|=| )'    '{ print $2"=?" }') ;;
+                --*" "*)        option=$(echo "$line" | awk -F'(--| )'      '{ print $2 }') ;;
+                *)              continue ;;
             esac
             options+=("$option")
         done <<< "$documentation"
