@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ##
-##     Backup 2013.10.19
+##     Backup 2013.10.23
 ##     Copyright (c) 2012, 2013 Renato Silva
 ##     GNU GPLv2 licensed
 ##
@@ -17,17 +17,19 @@
 ##     * Startup and some other shortcuts
 ##     * Settings from Piriform utilities and IVONA
 ##
-## Usage: @script.name [options], where options are:
+## Usage:
+##     @script.name [options]
 ##
-##     --name=FILENAME       Backup filename, will have date and time appended.
-##                           Any previous backup with same name will be deleted.
-##     --target=DIR          Customize the directory where to store the backup.
-##     --delay=SECONDS       How much time to wait after backup is complete,
-##                           will produce a countdown on command line.
-##     --delay-message=TEXT  What message to show for the countdown.
-##     --silent, -s          Whether to play a sound when backup is complete
-##                           and after delay time.
-##     --help, -h            This help text.
+##         --delay=SECONDS       How much time to wait after backup is complete,
+##                               will produce a countdown on command line.
+##         --delay-message=TEXT  What message to show for the countdown.
+##         --name=FILENAME       Backup file name, will have date and time
+##                               appended. Any previous backup with same name
+##                               will be deleted, right before saving new one.
+##     -s, --silent              Whether to play a sound when backup is complete
+##                               and after delay time.
+##         --target=DIR          Custom directory where to store the backup.
+##     -h, --help                This help text.
 ##
 
 play_sound() {
