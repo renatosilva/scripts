@@ -8,7 +8,8 @@
 ## Usage:
 ##     @script.name [options] [root directory if not current]
 ##
-##     -h, --help  This help text.
+##         --no-color  Disable colors in output.
+##     -h, --help      This help text.
 ##
 ## This program goes recursively through a directory hierarchy searching
 ## for Bazaar branches containing wrong commit dates with BRST timezone
@@ -37,8 +38,6 @@ check() {
     brt_2013="2013-(02-(1[7-9]|2[0-9])|0[3-9]-..|10-(0[1-9]|1[0-9]))"
 
     # Friendly branch name
-    normal_color="\e[0m"
-    magenta_color="\e[0;35m"
     branch="$(dirname "$0")"
     branch_name="$(basename "$(readlink -m "$branch")")"
     printf "${magenta_color}%s:${normal_color}\n" "$branch_name"
@@ -51,4 +50,11 @@ check() {
 
 source parse-options || exit 1
 export -f check
+
+# Colorize text if standard output is a terminal and colors have not been disabled
+if [[ -t 1 && -z "$no_color" ]]; then
+    export normal_color="\e[0m"
+    export magenta_color="\e[0;35m"
+fi
+
 find "${arguments[0]:-.}" -name ".bzr" -type d -exec bash -c check '{}' \;
