@@ -11,8 +11,10 @@
 ##
 ##     @script.name [options] [root directory if not current]
 ##
-##     --no-color         Disable colors in output.
-##     --status-only, -s  Will not perform the missing command, only status one.
+##         --no-color     Disable colors in output.
+##     -s, --status-only  Will not perform the missing command, only status one.
+##     -h, --help         This help text.
+##
 ##
 
 print_name() {
