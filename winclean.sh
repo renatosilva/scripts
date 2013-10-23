@@ -1,12 +1,17 @@
 #!/bin/bash
 
-# Windows Cleanup 2013.10.19
+# Windows Cleanup 2013.10.23
 # Copyright (c) 2012, 2013 Renato Silva
 # GNU GPLv2 licensed
 
 # Run only on shutdown or --force
 shutdown_happening=$(wevtutil qe system //c:1 //rd:true //f:xml //q:"*[System[(EventID=1074) and TimeCreated[timediff(@SystemTime) <= 60000]]]")
 [[ -z "$shutdown_happening" && "$1" != "--force" ]] && exit
+
+# Clean up bash history
+rm -f ~/.bash_history
+touch ~/.bash_history
+attrib +h ~/.bash_history
 
 # Firefox bookmarks cleanup: remove unorganized and descriptions
 database=("$APPDATA/Mozilla/Firefox/profiles/"*"/places.sqlite")
@@ -26,11 +31,6 @@ regedit //s "$filename"
 reg_data=$(reg query 'HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders' //v 'My Music')
 music=$(echo "$reg_data" | awk -F'REG_SZ[[:space:]]*' 'NF>1{print $2}')
 [[ -d "$music" ]] && find "$music" -iname "*.jpg" -delete
-
-# Clean up bash history
-rm -f ~/.bash_history
-touch ~/.bash_history
-attrib +h ~/.bash_history
 
 # Let CCleaner do its job
 reg_data=$(reg query 'HKEY_LOCAL_MACHINE\SOFTWARE\Piriform\CCleaner' //ve)
