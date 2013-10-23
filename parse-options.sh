@@ -1,6 +1,6 @@
 #!/bin/bash
 
-## Parse Options 2013.10.22
+## Parse Options 2013.10.23
 ## Copyright (c) 2013 Renato Silva
 ## GNU GPLv2 licensed
 ##
@@ -52,6 +52,11 @@
 ##
 ##     options=(o=option some-boolean some-value=?)
 ##
+
+show_error() {
+    echo "Error: $1." >&2
+    echo "See --help for usage and options." >&2
+}
 
 parse_documentation() {
     documentation="$(grep "^##" "$(which "$0")")(no-trim)"
@@ -127,7 +132,7 @@ parse_options() {
             elif [[ "$option" = -$known_option_name && "$known_option_var" = "?" ]]; then
                 eval option_value="\$$OPTIND"
                 if [[ -z "$option_value" || "$option_value" = -* ]]; then
-                    echo "You must specify a value for --$known_option_name."
+                    show_error "you must specify a value for --$known_option_name"
                     exit 1
                 fi
                 OPTIND=$((OPTIND + 1))
@@ -143,14 +148,15 @@ parse_options() {
 
             elif [[ "$option" = -$known_option_name=* && "$known_option_var" != "?" ]]; then
                 option_value=${option#*=}
-                echo "Error: --$known_option_name does not accept a value."
+                show_error "--$known_option_name does not accept a value, you specified \`$option_value'"
                 exit 1
             fi
         done
 
         if [[ -z "$option_value" ]]; then
-            option=$(echo $option | sed "s/\?//")
-            echo "Unrecognized option: -$option."
+            option=${option%%=*}
+            [[ "$option" = \?* ]] && option=${option#*\?}
+            show_error "unrecognized option -$option"
             exit 1
         fi
 
