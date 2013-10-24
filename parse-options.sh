@@ -1,6 +1,6 @@
 #!/bin/bash
 
-## Parse Options 2013.10.23
+## Parse Options 2013.10.24
 ## Copyright (c) 2013 Renato Silva
 ## GNU GPLv2 licensed
 ##
@@ -87,7 +87,7 @@ parse_options() {
             case "$line" in
                 "-h, --help"*)  continue ;;
                 "--help, -h"*)  continue ;;
-                -*," "--*)      option=$(echo "$line" | awk -F'(-|, --| )'  '{ print $2"="$3 }') ;;
+                -*," "--*)      option=$(echo "$line" | awk -F'(^-|, --| )'  '{ print $2"="$3 }') ;;
                 --*," "-*)      option=$(echo "$line" | awk -F'(--|, -| )'  '{ print $3"="$2 }') ;;
                 --*=*)          option=$(echo "$line" | awk -F'(--|=| )'    '{ print $2"=?" }') ;;
                 --*" "*)        option=$(echo "$line" | awk -F'(--| )'      '{ print $2 }') ;;
