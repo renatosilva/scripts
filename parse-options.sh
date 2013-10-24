@@ -81,6 +81,7 @@ parse_options() {
     local known_option_name
     local known_option_var
 
+    # Parse known options from documentation
     if [[ -z ${options+defined} ]]; then
         parse_documentation
         while read -r line; do
@@ -100,6 +101,7 @@ parse_options() {
     options+=(h=help)
     arguments=()
 
+    # Prepare known options
     for option in "${options[@]}"; do
         option_var=${option#*=}
         option_name=${option%=$option_var}
@@ -111,26 +113,31 @@ parse_options() {
         fi
     done
 
+    # Parse the provided options
     while getopts ":${short_options}-:" option; do
         option="${option}${OPTARG}"
         option_value=""
 
+        # Set the corresponding variable for known options
         for known_option in "${options[@]}" "${short_option_vars[@]}"; do
             known_option_var=${known_option#*=}
             known_option_name=${known_option%=$known_option_var}
 
+            # Short option
             if [[ "$option" = "$known_option_name" ]]; then
                 option_value="yes"
                 known_option_var=$(echo "$known_option_var" | tr "-" "_")
                 eval "export $known_option_var=\"$option_value\""
                 break
 
+            # Long option
             elif [[ "$option" = -$known_option_name && "$known_option_var" != "?" ]]; then
                 option_value="yes"
                 known_option_var=$(echo "$known_option_var" | tr "-" "_")
                 eval "export $known_option_var=\"$option_value\""
                 break
 
+            # Long option with value in next parameter
             elif [[ "$option" = -$known_option_name && "$known_option_var" = "?" ]]; then
                 eval option_value="\$$OPTIND"
                 if [[ -z "$option_value" || "$option_value" = -* ]]; then
@@ -142,12 +149,14 @@ parse_options() {
                 eval "export $known_option_var=\"$option_value\""
                 break
 
+            # Long option with value after equal sign
             elif [[ "$option" = -$known_option_name=* && "$known_option_var" = "?" ]]; then
                 option_value=${option#*=}
                 known_option_var=$(echo "$known_option_name" | tr "-" "_")
                 eval "export $known_option_var=\"$option_value\""
                 break
 
+            # Long option with unnecessary value
             elif [[ "$option" = -$known_option_name=* && "$known_option_var" != "?" ]]; then
                 option_value=${option#*=}
                 show_error "--$known_option_name does not accept a value, you specified \`$option_value'"
@@ -155,6 +164,7 @@ parse_options() {
             fi
         done
 
+        # Unknown option
         if [[ -z "$option_value" ]]; then
             option=${option%%=*}
             [[ "$option" = \?* ]] && option=${option#*\?}
@@ -162,6 +172,7 @@ parse_options() {
             exit 1
         fi
 
+        # Help option
         if [[ -n "$help" ]]; then
             [[ -z "$documentation" ]] && parse_documentation
             echo "$documentation"
@@ -169,6 +180,7 @@ parse_options() {
         fi
     done
 
+    # Detect regular arguments
     for argument in "$@"; do
         if [[ "$argument" = -* ]]; then
             for known_option in "${options[@]}"; do
