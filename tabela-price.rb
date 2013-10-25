@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 # Encoding: ISO-8859-1
 
-# Amortização Price  2013.10.24
+# Amortização Price  2013.10.25
 # Copyright (c) 2013 Renato Silva
 # Licenciado sob os termos da GNU GPLv2
 
@@ -13,12 +13,12 @@ if [ "--help", "-h", nil ].include? ARGV[0] then puts "
     possível prever como certos adiantamentos irão alterar o pagamento do
     empréstimo, especialmente o quão antecipadamente ele poderá ser quitado.\n
 Modo de usar: #{File.basename($0)} <arquivo de entrada>\n
-O arquivo de entrada deve estar no seguinte formato:
-    taxa: <taxa de juros>
-    parcelas: <número de parcelas>
-    saldo: <saldo devedor inicial>
-    inicio: <mês e ano da primeira parcela no formato mm/aaaa>
-    adiantamento mm/aaaa: <valor do adiantamento para este mês e ano>\n\n"
+O arquivo de entrada deve ser um texto ISO-8859-1, no seguinte formato:
+    Taxa: <taxa de juros>
+    Parcelas: <número de parcelas>
+    Saldo: <saldo devedor inicial>
+    Início: <mês e ano da primeira parcela no formato mm/aaaa>
+    Adiantamento mm/aaaa: <valor do adiantamento para este mês e ano>\n\n"
     exit
 end
 
@@ -29,18 +29,23 @@ parcelas, taxa, saldo = 0
 adiantamentos = {}
 
 File.readlines(nome_do_arquivo).each do |linha|
+    linha.force_encoding("ISO-8859-1")
     chave, valor = linha.strip.split(":").each { |coluna| coluna.strip! }
     next if [ chave, valor ].include? nil
 
+    chave.downcase!
     chave.slice!(/adiantamento\s+/)
-    valor.sub!(",", ".")
-    valor.slice!("%")
 
-    case chave.strip
+    valor.slice!(/R\$\s*/i)
+    valor.slice!(/\s*%/)
+    valor.gsub!(".", "")
+    valor.sub!(",", ".")
+
+    case chave
         when "parcelas"       then parcelas = valor.to_i
         when "taxa"           then taxa = 1 + (valor.to_f / 100)
         when "saldo"          then saldo = valor.to_f
-        when "inicio"         then $inicio = valor
+        when "início"         then $inicio = valor
         when /\d+\/\d+/       then adiantamentos[chave] = valor.to_f
     end
 end
@@ -52,7 +57,7 @@ class Numeric
         (self * 100).round.to_f / 100
     end
     def reais
-        ("R$ %.2f" % self).sub(".", ",")
+        ("R$ %.2f" % self).sub(".", ",").gsub(/(\d)(\d{3}[,$])/, "\\1.\\2")
     end
     def data
         mes_ini, ano_ini = $inicio.split("/")
@@ -65,14 +70,14 @@ end
 
 amortizacao = 0
 prestacao = ((saldo * (taxa - 1)) / (1 - (1 / taxa ** parcelas))).moeda
-puts "#\tData\t\tSaldo devedor\tAmortizado"
+printf "%3s%11s%18s%16s\n", "#", "Data", "Saldo devedor", "Amortizado"
 
 (1..parcelas).each do |parcela|
     amortizacao = prestacao + (adiantamentos[parcela.data] or 0);
     saldo = (saldo * taxa).moeda
 
     amortizacao = saldo if amortizacao > saldo
-    puts "#{parcela}\t#{parcela.data}\t\t#{saldo.reais}\t#{amortizacao.reais}"
+    printf "%3s%11s%18s%16s\n", parcela, parcela.data, saldo.reais, amortizacao.reais
 
     break if amortizacao == saldo
     saldo -= amortizacao
