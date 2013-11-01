@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ##
-##     Backup 2013.10.23
+##     Backup 2013.11.1
 ##     Copyright (c) 2012, 2013 Renato Silva
 ##     GNU GPLv2 licensed
 ##
@@ -13,9 +13,9 @@
 ##     * Sticky notes
 ##     * Scheduled tasks
 ##     * Registry favorites
-##     * IE favorites
-##     * Startup and some other shortcuts
+##     * Firefox bookmarks, search plugins and custom website stylesheets
 ##     * Settings from Piriform utilities and IVONA
+##     * Startup and some other shortcuts
 ##
 ## Usage:
 ##     @script.name [options]
@@ -44,14 +44,12 @@ source parse-options || exit 1
 [[ -z "$target" ]] && target="/dados/backup"
 [[ -e "$target" ]] || { echo "Target $target not found."; sleep 5; exit 1; }
 
-# Sticky notes and favorites
+# Sticky notes
 temp="$TEMP/backup.$(date +%s.%N)"
 trap "rm -rf $temp" EXIT
 mkdir -p "$temp"
 notes="$temp/Anotações"
-favorites="$temp/Favoritos"
 cp -r "$APPDATA/Microsoft/Sticky Notes" "$notes"
-cp -r "$USERPROFILE/Favorites" "$favorites"
 
 # Application settings
 tools="/c/programs/ferramentas"
@@ -63,6 +61,14 @@ cp "$tools/ccleaner/ccleaner.ini" "$configs"
 cp "$tools/recuva/recuva.ini" "$configs"
 cp "$tools/speccy/speccy.ini" "$configs"
 cp "$APPDATA/IVONA 2 Voice/"*".lex" "$configs"
+
+# Firefox settings
+profile=("$APPDATA/Mozilla/Firefox/profiles/"*)
+firefox="$configs/Firefox"
+mkdir "$firefox"
+cp -r "$profile/bookmarkbackups" "$firefox"
+cp -r "$profile/searchplugins" "$firefox"
+cp -r "$profile/chrome/userContent.css" "$firefox"
 
 # Scheduled tasks
 tasks="$configs/Tarefas"
@@ -86,7 +92,7 @@ echo -e "Windows Registry Editor Version 5.00\n\n[$key]\n$data\n" | unix2dos > "
 
 # Generating compressed file
 password=$(cat /dados/documentos/privado/chaves/renatosilva.backup)
-7z a "$temp/$name $(date '+%-d.%-m.%Y %-Hh%M').7z" -p"$password" -xr!desktop.ini -mhe "/dados/documentos" "/dados/programas" "$favorites" "$notes" "$configs"
+7z a "$temp/$name $(date '+%-d.%-m.%Y %-Hh%M').7z" -p"$password" -xr!desktop.ini -mhe "/dados/documentos" "/dados/programas" "$notes" "$configs"
 rm "$target/$name "*.7z 2> /dev/null || echo "First backup in this device."
 mv "$temp/"*.7z "$target"
 [[ -z "$silent" ]] && play_sound tada
