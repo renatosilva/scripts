@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Windows Cleanup 2013.10.23
+# Windows Cleanup 2013.11.1
 # Copyright (c) 2012, 2013 Renato Silva
 # GNU GPLv2 licensed
 
@@ -18,6 +18,12 @@ database=("$APPDATA/Mozilla/Firefox/profiles/"*"/places.sqlite")
 sqlite "$database" "delete from moz_bookmarks where parent = (select folder_id from moz_bookmarks_roots where root_name = 'unfiled')"
 sqlite "$database" "delete from moz_items_annos where id in (select i.id from moz_bookmarks b, moz_items_annos i where b.id = i.item_id and b.type = 1
     and title != '' and title not in ('Favoritos do dispositivo móvel', 'Favoritos recentes', 'Mais visitados', 'Tags recentes', 'Histórico', 'Downloads', 'Tags'))"
+
+# Clean up recent files and search history from Notepad++
+npp_config="$APPDATA/Notepad++/config.xml"
+sed -i -E "/^\\s+<File\\s+filename=.*$/d" "$npp_config"
+sed -i -E "/^\\s+<(Find|Replace)\\s+name=.*$/d" "$npp_config"
+unix2dos --quiet "$npp_config"
 
 # Clean up recent files list from Word Viewer
 filename="$TEMP/winclean.$(date +%s.%N).reg"
