@@ -7,7 +7,6 @@ ntfs_link() {
 scripts=(
     "backup"
     "check-branches"
-    "check-brst-commits"
     "colordiff"
     "colornote-backup-clean"
     "csvt"
