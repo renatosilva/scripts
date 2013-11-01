@@ -1,4 +1,4 @@
-# MinGW MSYS Aliases 2013.10.16
+# MinGW MSYS Aliases 2013.11.1
 # Copyright (c) 2012, 2013 Renato Silva
 # GNU GPLv2 licensed
 
@@ -8,6 +8,14 @@ find() {
 
 grep() {
     { command grep "$@" 2>&1 >&3 | command grep -v 'Permission denied'; } 3>&1
+}
+
+diff() {
+    local prefix
+    if [[ -t 1 ]]; then
+        prefix="color"
+    fi
+    command "${prefix}diff" "$@"
 }
 
 bzr() {
@@ -23,7 +31,11 @@ bzr() {
             echo "This command is disabled."
             return;;
         "diff")
-            command bzr "$@" | colordiff
+            if [[ -t 1 ]]; then
+                command bzr "$@" | colordiff
+            else
+                command bzr "$@"
+            fi
             return;;
     esac
     command bzr "$@"
@@ -57,7 +69,6 @@ alias update="mingw-get update && mingw-get upgrade 2> /dev/null"
 alias edit="notepad++"
 
 alias type="type -a"
-alias diff="colordiff"
 alias grep="grep --color=auto"
 alias ls="ls --color=auto --show-control-chars"
 
