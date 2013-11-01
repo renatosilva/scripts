@@ -20,6 +20,20 @@
 ##     -h, --help             This help text.
 ##
 
+saved_size() {
+    size1=$(du -sb "$1" | cut -f1)
+    size2=$(du -sb "$2" | cut -f1)
+    local size_diff_bytes=$((size1 - size2))
+    [[ "$size_diff_bytes" = 0 ]] && return
+    if [[ "$size_diff_bytes" -ge 0 ]]; then
+        saved_or_spent="Saved"
+    else
+        saved_or_spent="Spent"
+    fi
+    local size_diff_kbytes=$(awk -v diff="$size_diff_bytes" 'BEGIN { printf "%.1f", diff / 1024 }')
+    printf "$saved_or_spent ${size_diff_kbytes} KB"
+}
+
 print_name() {
     local branch_name="$(basename "$(readlink -m "$1")")"
     printf "${green_color}%$2s${normal_color} " "$branch_name:"
@@ -39,9 +53,11 @@ check() {
             else
                 rm -f "$branch/$config"
             fi
+            saved=$(saved_size "$branch_old" "$branch")
+            branch_output=$(printf "%-30s%-20s" "$branch_output" "$saved")
             rm -rf "$branch_old"
         else
-            branch_output="Uncommitted changes, ignoring."
+            branch_output=$(printf "%-50s" "Pending status, ignoring.")
         fi
     fi
     if [ -n "$status_only" ]; then
@@ -52,7 +68,7 @@ check() {
         return
     fi
     print_name "$branch" "-35"
-    [[ -n "$purge_uncommits" ]] && printf "%-35s " "$branch_output"
+    [[ -n "$purge_uncommits" ]] && printf "$branch_output "
     cd "$branch"
     bzr missing --line | grep -v "parent"
     [[ -n "$status" ]] && echo "$status"
@@ -60,6 +76,7 @@ check() {
 }
 
 source parse-options || exit 1
+export -f saved_size
 export -f print_name
 export -f check
 
