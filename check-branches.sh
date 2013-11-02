@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ##
-##     Check Branches 2013.11.1
+##     Check Branches 2013.11.2
 ##     Copyright (c) 2012, 2013 Renato Silva
 ##     GNU GPLv2 licensed
 ##
@@ -24,14 +24,21 @@ saved_size() {
     size1=$(du -sb "$1" | cut -f1)
     size2=$(du -sb "$2" | cut -f1)
     local size_diff_bytes=$((size1 - size2))
+    local size_diff
     [[ "$size_diff_bytes" = 0 ]] && return
     if [[ "$size_diff_bytes" -ge 0 ]]; then
         saved_or_spent="Saved"
     else
         saved_or_spent="Spent"
     fi
-    local size_diff_kbytes=$(awk -v diff="$size_diff_bytes" 'BEGIN { printf "%.1f", diff / 1024 }')
-    printf "$saved_or_spent ${size_diff_kbytes} KB"
+    if [[ "$size_diff_bytes" -gt -$((1024**2)) && "$size_diff_bytes" -lt $((1024**2)) ]]; then
+        size_diff=$(awk -v diff="$size_diff_bytes" 'BEGIN { printf "%.1f", diff / 1024 }')
+        size_diff="${size_diff} KB"
+    else
+        size_diff=$(awk -v diff="$size_diff_bytes" 'BEGIN { printf "%.1f", diff / 1024 / 1024 }')
+        size_diff="${size_diff} MB"
+    fi
+    printf "$saved_or_spent $size_diff"
 }
 
 print_name() {
