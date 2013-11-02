@@ -38,7 +38,7 @@ saved_size() {
         size_diff=$(awk -v diff="$size_diff_bytes" 'BEGIN { printf "%.1f", diff / 1024 / 1024 }')
         size_diff="${size_diff} MB"
     fi
-    printf "$saved_or_spent $size_diff"
+    printf "$saved_or_spent ${size_diff#-}"
 }
 
 print_name() {
