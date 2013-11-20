@@ -53,14 +53,15 @@ class Base
         end
         result
     end
-    def length
-        Math.log10(self.value).ceil
+    def length(base=10)
+        Math.log(self.value, base).ceil
     end
     def bitlength
         Math.log2(self.value)
     end
     def to_s
-        "#{@value.to_s.zerofill}=#{@alphabet.zerofill(self.length)}"
+        hexa_alphabet = @alphabet.map { |digit| digit.to_s(16).upcase }
+        "#{@value.to_s.zerofill}=#{hexa_alphabet.zerofill(self.length(16))}"
     end
     attr_accessor :value
     attr_accessor :alphabet
@@ -84,7 +85,7 @@ class EncryptionKey
     def parse_line(line)
         columns=line.split("=")
         base = Base.new(columns[0].to_i)
-        base.alphabet = columns[1].scan_digits(base.length, 10, true)
+        base.alphabet = columns[1].scan_digits(base.length(16), 16, true)
         base
     end
     def to_s
