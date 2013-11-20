@@ -20,7 +20,7 @@ class String
         self.rjust(length, "0")
     end
     def decode64
-        Base64.decode64(self).unpack("U*")
+        Base64.strict_decode64(self).unpack("U*")
     end
 end
 
@@ -29,7 +29,7 @@ class Array
         self.map { |item| item.to_s.zerofill(length) }.join
     end
     def encode64
-        Base64.encode64(self.pack("U*"))
+        Base64.strict_encode64(self.pack("U*"))
     end
 end
 
