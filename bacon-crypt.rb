@@ -121,22 +121,27 @@ class BaseCrypt
     attr_accessor :key
 end
 
-case ARGV[0]
-    when "new-key" then
+if ["--help", "-h", nil].include? ARGV[0] then
+    puts "Base Conversion Cryptography"
+    puts "Usage: #{File.basename($0)} <key file> encode|decode <text> [encoding]"
+    puts "       #{File.basename($0)} <key file> create"
+    exit
+end
+
+case ARGV[1]
+    when "create" then
         bc = BaseCrypt.new
-        file = File.open(ARGV[1], "w")
+        file = File.open(ARGV[0], "w")
         file.puts(bc.key)
         file.close
     when "encode" then
-        bc = BaseCrypt.new(ARGV[1])
+        bc = BaseCrypt.new(ARGV[0])
         puts bc.encode(ARGV[2].bytes)
     when "decode" then
-        bc = BaseCrypt.new(ARGV[1])
+        bc = BaseCrypt.new(ARGV[0])
         decoded = bc.decode(ARGV[2])
         decoded.force_encoding(ARGV[3]) if ARGV[3]
         puts decoded
-    when "--help", "-h", nil then
-        puts "Base Conversion Cryptography"
-        puts "Usage: #{File.basename($0)} encode|decode <key file> <text> [encoding]"
-        puts "       #{File.basename($0)} new-key <file path>"
+    else
+        puts "Unknown action: #{ARGV[1]}"
 end
