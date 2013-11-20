@@ -6,6 +6,7 @@ ntfs_link() {
 
 scripts=(
     "backup"
+    "bacon-crypt"
     "check-branches"
     "colordiff"
     "colornote-backup-clean"
