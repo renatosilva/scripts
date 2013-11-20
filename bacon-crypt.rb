@@ -8,12 +8,15 @@
 require "base64"
 
 class String
-    def scan_digits(base=BiggestBase)
-        self.scan(/(.{#{base.length}}|.{1,#{base.length}}$)/).map { |item| item[0].to_i }
+    def scan_digits(length=BiggestBase.length, digit_base=10, leading_zero=false)
+        offset = leading_zero ? 0 : 1
+        digits = self.scan(/(.{#{length - offset}}|.{1,#{length - offset}}$)/)
+        non_zero = leading_zero ? "" : "1"
+        digits.map { |item| "#{non_zero}#{item[0]}".to_i(digit_base) }
     end
-    def zerofill(base=nil)
-        base=BiggestBase if not base
-        self.rjust(base.length, "0")
+    def zerofill(length=nil)
+        length=BiggestBase.length if not length
+        self.rjust(length, "0")
     end
     def decode64
         Base64.decode64(self).unpack("U*")
@@ -21,8 +24,8 @@ class String
 end
 
 class Array
-    def zerofill(base=nil)
-        self.map { |item| item.to_s.zerofill(base) }.join
+    def zerofill(length=nil)
+        self.map { |item| item.to_s.zerofill(length) }.join
     end
     def encode64
         Base64.encode64(self.pack("U*"))
@@ -52,8 +55,11 @@ class Base
     def length
         Math.log10(self.value).ceil
     end
+    def bitlength
+        Math.log2(self.value)
+    end
     def to_s
-        "#{@value.to_s.zerofill}=#{@alphabet.zerofill(self)}"
+        "#{@value.to_s.zerofill}=#{@alphabet.zerofill(self.length)}"
     end
     attr_accessor :value
     attr_accessor :alphabet
@@ -76,7 +82,9 @@ class EncryptionKey
     end
     def parse_line(line)
         columns=line.split("=")
-        Base.new(columns[0].to_i, columns[1].scan_digits)
+        base = Base.new(columns[0].to_i)
+        base.alphabet = columns[1].scan_digits(base.length, 10, true)
+        base
     end
     def to_s
         "#{@decoded}\n#{@encoded}"
@@ -98,11 +106,17 @@ class BaseCrypt
     def decode(string)
         digits = string.decode64
         integer = @key.encoded.to_10(digits)
-        @key.decoded.to_this(integer).pack("C*")
+        digits = @key.decoded.to_this(integer)
+        to_bytes(digits).pack("C*")
     end
     def to_digits(bytes)
-        # To be implemented
-        bytes
+        bits = bytes.map { |byte| byte.to_s(2).zerofill(8) }.join
+        digits = bits.scan_digits(@key.decoded.bitlength.floor, 2)
+        digits
+    end
+    def to_bytes(digits)
+        bin_digits = digits.map { |digit| digit.to_s(2)[1..-1] }
+        bin_digits.join.scan_digits(8, 2, true)
     end
     attr_accessor :key
 end
