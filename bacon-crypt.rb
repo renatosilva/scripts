@@ -11,7 +11,8 @@ class String
     def scan_digits(base=BiggestBase)
         self.scan(/(.{#{base.length}}|.{1,#{base.length}}$)/).map { |item| item[0].to_i }
     end
-    def zerofill(base=BiggestBase)
+    def zerofill(base=nil)
+        base=BiggestBase if not base
         self.rjust(base.length, "0")
     end
     def decode64
@@ -20,8 +21,8 @@ class String
 end
 
 class Array
-    def zerofill
-        self.map { |item| item.to_s.zerofill }.join
+    def zerofill(base=nil)
+        self.map { |item| item.to_s.zerofill(base) }.join
     end
     def encode64
         Base64.encode64(self.pack("U*"))
@@ -51,6 +52,9 @@ class Base
     def length
         Math.log10(self.value).ceil
     end
+    def to_s
+        "#{@value.to_s.zerofill}=#{@alphabet.zerofill(self)}"
+    end
     attr_accessor :value
     attr_accessor :alphabet
 end
@@ -66,9 +70,16 @@ class EncryptionKey
             @encoded = Base.new(rand(EncodedBases))
         else
             lines = File.readlines(file_path)
-            @decoded = Base.new(lines[0].split[0].to_i, lines[0].split[1].scan_digits)
-            @encoded = Base.new(lines[1].split[0].to_i, lines[1].split[1].scan_digits)
+            @decoded = parse_line(lines[0])
+            @encoded = parse_line(lines[1])
         end
+    end
+    def parse_line(line)
+        columns=line.split("=")
+        Base.new(columns[0].to_i, columns[1].scan_digits)
+    end
+    def to_s
+        "#{@decoded}\n#{@encoded}"
     end
     attr_accessor :decoded
     attr_accessor :encoded
@@ -100,8 +111,7 @@ case ARGV[0]
     when "new-key" then
         bc = BaseCrypt.new
         file = File.open(ARGV[1], "w")
-        file.puts("#{bc.key.decoded.value.to_s.zerofill} #{bc.key.decoded.alphabet.zerofill}")
-        file.puts("#{bc.key.encoded.value.to_s.zerofill} #{bc.key.encoded.alphabet.zerofill}")
+        file.puts(bc.key)
         file.close
     when "encode" then
         bc = BaseCrypt.new(ARGV[1])
