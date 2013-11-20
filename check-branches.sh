@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ##
-##     Check Branches 2013.11.7
+##     Check Branches 2013.11.20
 ##     Copyright (c) 2012, 2013 Renato Silva
 ##     GNU GPLv2 licensed
 ##
@@ -49,12 +49,12 @@ print_name() {
 check() {
     branch="$(dirname "$0")"
     status=$(bzr status "$branch")
+    config=".bzr/branch/branch.conf"
     if [[ -n "$purge_uncommits" ]]; then
         if [[ -z "$status" ]]; then
             branch_old="$branch.$(date +%s.%N).temp"
             mv "$branch" "$branch_old"
             branch_output=$(bzr branch "$branch_old" "$branch" 2>&1)
-            config=".bzr/branch/branch.conf"
             if [[ -f "$branch_old/$config" ]]; then
                 cp "$branch_old/$config" "$branch/$config"
             else
@@ -77,7 +77,8 @@ check() {
     print_name "$branch" "-35"
     [[ -n "$purge_uncommits" ]] && printf "$branch_output "
     cd "$branch"
-    bzr missing --line | grep -v "parent"
+    [[ -f "$config" ]] && parent=$(grep ^parent_location "$config")
+    [[ -n "$parent" ]] && bzr missing --line | grep -v "parent" || echo
     [[ -n "$status" ]] && echo "$status"
     cd - > /dev/null
 }
