@@ -8,8 +8,9 @@
 require "base64"
 
 class String
-    def scan_digits(length=BiggestBase.length, digit_base=10, leading_zero=false)
+    def scan_digits(length=BiggestBase.length, digit_base=10, leading_zero=false, fixed_length=true)
         offset = leading_zero ? 0 : 1
+        length = rand(2..length) if length > 2 and not fixed_length
         digits = self.scan(/(.{#{length - offset}}|.{1,#{length - offset}}$)/)
         non_zero = leading_zero ? "" : "1"
         digits.map { |item| "#{non_zero}#{item[0]}".to_i(digit_base) }
@@ -111,7 +112,7 @@ class BaseCrypt
     end
     def to_digits(bytes)
         bits = bytes.map { |byte| byte.to_s(2).zerofill(8) }.join
-        digits = bits.scan_digits(@key.decoded.bitlength.floor, 2)
+        digits = bits.scan_digits(@key.decoded.bitlength.floor, 2, false, false)
         digits
     end
     def to_bytes(digits)
