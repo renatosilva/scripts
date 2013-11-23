@@ -1,6 +1,6 @@
 #!/bin/bash
 
-## Parse Options 2013.10.24
+## Parse Options 2013.11.23
 ## Copyright (c) 2013 Renato Silva
 ## GNU GPLv2 licensed
 ##
@@ -40,6 +40,7 @@
 ## After writing your documentation, you simply source this script. Then all
 ## command line options will get parsed into the corresponding variables,
 ## as described above. You can then check their values for reacting to them.
+## Regular arguments will be available in the $arguments array.
 ##
 ## In fact, this script is an example of itself. You are seeing this help
 ## message either because you are reading the source code, or you have called
