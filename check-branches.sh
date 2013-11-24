@@ -94,5 +94,5 @@ if [[ -t 1 && -z "$no_color" ]]; then
     export green_color="\e[0;32m"
 fi
 
-find "${arguments[0]:-.}" -name ".bzr" -type d -print0 | xargs -0 -l bash -c check | iconv -f cp850 -t iso-8859-1
+find "${arguments[0]:-.}" -name ".bzr" -type d -print0 | xargs -0 -l -r bash -c check | iconv -f cp850 -t iso-8859-1
 sleep 3
