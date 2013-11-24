@@ -8,19 +8,19 @@
 ##
 ## Usage: @script.name [options], where options are:
 ##
-##         --key=FILE           Use this FILE when performing the actions below.
-##     -c, --create             Create a new cryptography key and save it to the
-##                              file specified by the --key option.
+##         --key=FILE                Use this FILE for the actions below.
+##     -c, --create                  Create a new cryptography key and save it
+##                                   to the file specified by the --key option.
 ##
-##         --encode=STRING      Encode STRING and print the result.
-##         --decode=STRING      Decode STRING and print the result.
+##         --encode=STRING           Encode STRING and print the result.
+##         --decode=STRING           Decode STRING and print the result.
 ##
-##         --encode-file=FILE   Encode FILE and print the result.
-##         --decode-file=FILE   Decode FILE and print the result.
+##         --encode-file=FILE        Encode FILE and save to FILE.bacon.
+##         --decode-file=FILE.bacon  Decode FILE.bacon and save to FILE.
 ##
-##         --encoding=ENCODING  Use the specified ENCODING for FILE or STRING.
-##     -l, --lines              Add line breaks to encoded text.
-##     -h, --help               This help text.
+##         --encoding=ENCODING       Use ENCODING for FILE or STRING.
+##     -l, --lines                   Add line breaks to encoded text.
+##     -h, --help                    This help text.
 ##
 
 require "base64"
@@ -153,6 +153,7 @@ end
 
 finish("--key is required") if not $options[:key]
 finish("cannot decode while creating key") if $options[:create] and ($options[:decode] or $options[:decode_file])
+finish("encoded file must have the bacon extension") if $options[:decode_file] and not $options[:decode_file].end_with?(".bacon")
 
 $options[:encode] = File.open($options[:encode_file], "rb") { |io| io.read } if $options[:encode_file]
 $options[:decode] = File.open($options[:decode_file], "rb") { |io| io.read } if $options[:decode_file]
@@ -167,12 +168,14 @@ end
 if $options[:encode] then
     bc = BaseCrypt.new($options[:key])
     $options[:encode].force_encoding($options[:encoding]) if $options[:encoding]
-    puts bc.encode($options[:encode].bytes)
+    $stdout = File.open("#{$options[:encode_file]}.bacon", "w") if $options[:encode_file]
+    $stdout.puts bc.encode($options[:encode].bytes)
 end
 
 if $options[:decode] then
     bc = BaseCrypt.new($options[:key])
     decoded = bc.decode($options[:decode])
     decoded.force_encoding($options[:encoding]) if $options[:encoding]
+    $stdout = File.open($options[:decode_file].sub(/\.bacon$/, ""), "wb") if $options[:decode_file]
     $stdout.binmode.write(decoded)
 end
