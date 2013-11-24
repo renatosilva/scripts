@@ -2,7 +2,7 @@
 # Encoding: ISO-8859-1
 
 ##
-##     Base Conversion Cryptography 2013.11.23
+##     Base Conversion Cryptography 2013.11.24
 ##     Copyright (c) 2013 Renato Silva
 ##     GNU GPLv2 licensed
 ##
@@ -154,8 +154,8 @@ end
 finish("--key is required") if not $options[:key]
 finish("cannot decode while creating key") if $options[:create] and ($options[:decode] or $options[:decode_file])
 
-$options[:encode] = File.read($options[:encode_file]) if $options[:encode_file]
-$options[:decode] = File.read($options[:decode_file]) if $options[:decode_file]
+$options[:encode] = File.open($options[:encode_file], "rb") { |io| io.read } if $options[:encode_file]
+$options[:decode] = File.open($options[:decode_file], "rb") { |io| io.read } if $options[:decode_file]
 
 if $options[:create] then
     bc = BaseCrypt.new
@@ -174,5 +174,5 @@ if $options[:decode] then
     bc = BaseCrypt.new($options[:key])
     decoded = bc.decode($options[:decode])
     decoded.force_encoding($options[:encoding]) if $options[:encoding]
-    puts decoded
+    $stdout.binmode.write(decoded)
 end
