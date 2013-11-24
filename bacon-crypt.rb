@@ -1,11 +1,29 @@
 #!/usr/bin/env ruby
 # Encoding: ISO-8859-1
 
-# Base Conversion Cryptography 2013.11.20
-# Copyright (c) 2013 Renato Silva
-# GNU GPLv2 licensed
+##
+##     Base Conversion Cryptography 2013.11.23
+##     Copyright (c) 2013 Renato Silva
+##     GNU GPLv2 licensed
+##
+## Usage: @script.name [options], where options are:
+##
+##         --key=FILE           Use this FILE when performing the actions below.
+##     -c, --create             Create a new cryptography key and save it to the
+##                              file specified by the --key option.
+##
+##         --encode=STRING      Encode STRING and print the result.
+##         --decode=STRING      Decode STRING and print the result.
+##
+##         --encode-file=FILE   Encode FILE and print the result.
+##         --decode-file=FILE   Decode FILE and print the result.
+##
+##         --encoding=ENCODING  Use the specified ENCODING for FILE or STRING.
+##     -h, --help               This help text.
+##
 
 require "base64"
+require "parse-options"
 
 class String
     def scan_digits(length=BiggestBase.length, digit_base=10, leading_zero=false, fixed_length=true)
@@ -123,27 +141,33 @@ class BaseCrypt
     attr_accessor :key
 end
 
-if ["--help", "-h", nil].include? ARGV[0] then
-    puts "Base Conversion Cryptography"
-    puts "Usage: #{File.basename($0)} <key file> encode|decode <text> [encoding]"
-    puts "       #{File.basename($0)} <key file> create"
+if $options.empty? then
+    puts $documentation
     exit
 end
 
-case ARGV[1]
-    when "create" then
-        bc = BaseCrypt.new
-        file = File.open(ARGV[0], "w")
-        file.puts(bc.key)
-        file.close
-    when "encode" then
-        bc = BaseCrypt.new(ARGV[0])
-        puts bc.encode(ARGV[2].bytes)
-    when "decode" then
-        bc = BaseCrypt.new(ARGV[0])
-        decoded = bc.decode(ARGV[2])
-        decoded.force_encoding(ARGV[3]) if ARGV[3]
-        puts decoded
-    else
-        puts "Unknown action: #{ARGV[1]}"
+finish("--key is required") if not $options[:key]
+finish("cannot decode while creating key") if $options[:create] and ($options[:decode] or $options[:decode_file])
+
+$options[:encode] = File.read($options[:encode_file]) if $options[:encode_file]
+$options[:decode] = File.read($options[:decode_file]) if $options[:decode_file]
+
+if $options[:create] then
+    bc = BaseCrypt.new
+    file = File.open($options[:key], "w")
+    file.puts(bc.key)
+    file.close
+end
+
+if $options[:encode] then
+    bc = BaseCrypt.new($options[:key])
+    $options[:encode].force_encoding($options[:encoding]) if $options[:encoding]
+    puts bc.encode($options[:encode].bytes)
+end
+
+if $options[:decode] then
+    bc = BaseCrypt.new($options[:key])
+    decoded = bc.decode($options[:decode])
+    decoded.force_encoding($options[:encoding]) if $options[:encoding]
+    puts decoded
 end
