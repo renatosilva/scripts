@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ##
-##     Backup 2013.11.1
+##     Backup 2013.11.23
 ##     Copyright (c) 2012, 2013 Renato Silva
 ##     GNU GPLv2 licensed
 ##
@@ -36,7 +36,7 @@ play_sound() {
     powershell.exe -c "(New-Object Media.SoundPlayer \"C:/Windows/Media/$1.wav\").PlaySync();" < NUL
 }
 
-source parse-options || exit 1
+eval "$(from="$0" parse-options.rb "$@")" || exit 1
 
 [[ -z "$delay" ]] && delay="0"
 [[ -z "$delay_message" ]] && delay_message="Esperando"
