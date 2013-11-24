@@ -1,9 +1,10 @@
 #!/usr/bin/env ruby
 # Encoding: ISO-8859-1
 
-## Parse Options 2013.11.23
-## Copyright (c) 2013 Renato Silva
-## GNU GPLv2 licensed
+##
+##     Parse Options 2013.11.24
+##     Copyright (c) 2013 Renato Silva
+##     GNU GPLv2 licensed
 ##
 ## This script is supposed to parse command line arguments in a way that,
 ## even though its implementation is not trivial, it should be easy and
