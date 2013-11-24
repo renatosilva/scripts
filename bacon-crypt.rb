@@ -19,6 +19,7 @@
 ##         --decode-file=FILE   Decode FILE and print the result.
 ##
 ##         --encoding=ENCODING  Use the specified ENCODING for FILE or STRING.
+##     -l, --lines              Add line breaks to encoded text.
 ##     -h, --help               This help text.
 ##
 
@@ -38,7 +39,7 @@ class String
         self.rjust(length, "0")
     end
     def decode64
-        Base64.strict_decode64(self).unpack("U*")
+        Base64.decode64(self).unpack("U*")
     end
 end
 
@@ -47,7 +48,11 @@ class Array
         self.map { |item| item.to_s.zerofill(length) }.join
     end
     def encode64
-        Base64.strict_encode64(self.pack("U*"))
+        if $options[:lines] then
+            Base64.encode64(self.pack("U*"))
+        else
+            Base64.strict_encode64(self.pack("U*"))
+        end
     end
 end
 
