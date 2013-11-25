@@ -27,7 +27,7 @@
 ##
 
 require "base64"
-require "parse-options"
+require_relative "parse-options"
 
 class String
     def scan_digits(length=BiggestBase.length, digit_base=10, leading_zero=false, fixed_length=true)
