@@ -2,7 +2,7 @@
 # Encoding: ISO-8859-1
 
 ##
-##     Base Conversion Cryptography 2013.11.24
+##     Base Conversion Cryptography 2013.11.25
 ##     Copyright (c) 2013 Renato Silva
 ##     GNU GPLv2 licensed
 ##
@@ -14,6 +14,7 @@
 ##
 ##         --encode=STRING           Encode STRING and print the result.
 ##         --decode=STRING           Decode STRING and print the result.
+##         --decode-text=STRING      Decode STRING and print the result as text.
 ##
 ##         --encode-file=FILE        Encode FILE and save to FILE.bacon.
 ##         --decode-file=FILE.bacon  Decode FILE.bacon and save to FILE.
@@ -155,6 +156,7 @@ finish("--key is required") if not $options[:key]
 finish("cannot decode while creating key") if $options[:create] and ($options[:decode] or $options[:decode_file])
 finish("encoded file must have the bacon extension") if $options[:decode_file] and not $options[:decode_file].end_with?(".bacon")
 
+$options[:decode] = $options[:decode_text] if $options[:decode_text]
 $options[:encode] = File.open($options[:encode_file], "rb") { |io| io.read } if $options[:encode_file]
 $options[:decode] = File.open($options[:decode_file], "rb") { |io| io.read } if $options[:decode_file]
 
@@ -177,5 +179,9 @@ if $options[:decode] then
     decoded = bc.decode($options[:decode])
     decoded.force_encoding($options[:encoding]) if $options[:encoding]
     $stdout = File.open($options[:decode_file].sub(/\.bacon$/, ""), "wb") if $options[:decode_file]
-    $stdout.binmode.write(decoded)
+    if $options[:decode_text] then
+        $stdout.puts(decoded)
+    else
+        $stdout.binmode.write(decoded)
+    end
 end
