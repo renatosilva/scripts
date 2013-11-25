@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# Home Directories Cleaner 2012.9.8
-# Copyright (c) 2012 Renato Silva
+# Home Directories Cleaner 2013.11.25
+# Copyright (c) 2012, 2013 Renato Silva
 # GNU GPLv2 licensed
 
 files=(
@@ -16,7 +16,7 @@ for home in /home/* /root; do
     for file in "${files[@]}"; do
         rm -rfv "$home"/$file
     done
-    
+
     if [[ -d "$home" ]]; then
         cd "$home"
         [[ -f ".cleanrc" ]] && source ".cleanrc"
