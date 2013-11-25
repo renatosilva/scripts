@@ -154,6 +154,8 @@ end
 
 finish("--key is required") if not $options[:key]
 finish("cannot decode while creating key") if $options[:create] and ($options[:decode] or $options[:decode_file])
+finish("cannot specify multiple encoding actions") if [:encode, :encode_file].find_all { |option| not $options[option].nil? }.length > 1
+finish("cannot specify multiple decoding actions") if [:decode, :decode_file, :decode_text].find_all { |option| not $options[option].nil? }.length > 1
 finish("encoded file must have the bacon extension") if $options[:decode_file] and not $options[:decode_file].end_with?(".bacon")
 
 $options[:decode] = $options[:decode_text] if $options[:decode_text]
