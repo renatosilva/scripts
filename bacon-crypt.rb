@@ -19,6 +19,8 @@
 ##         --encode-file=FILE        Encode FILE and save to FILE.bacon.
 ##         --decode-file=FILE.bacon  Decode FILE.bacon and save to FILE.
 ##
+##     -v, --verbose                 Print progress information when encoding or
+##                                   decoding files.
 ##         --encoding=ENCODING       Use ENCODING for FILE or STRING.
 ##     -l, --lines                   Add line breaks to encoded text.
 ##     -h, --help                    This help text.
@@ -40,7 +42,9 @@ class String
         self.rjust(length, "0")
     end
     def decode64
-        Base64.decode64(self).unpack("U*")
+        array = Base64.decode64(self).unpack("U*")
+        Progress.done("Decoded from Base64")
+        array
     end
 end
 
@@ -49,11 +53,28 @@ class Array
         self.map { |item| item.to_s.zerofill(length) }.join
     end
     def encode64
-        if $options[:lines] then
-            Base64.encode64(self.pack("U*"))
-        else
-            Base64.strict_encode64(self.pack("U*"))
+        base64 = $options[:lines].nil? ? Base64.strict_encode64(self.pack("U*")) : Base64.encode64(self.pack("U*"))
+        Progress.done("Encoded to Base64")
+        base64
+    end
+end
+
+class Progress
+    def initialize(message, maximum)
+        @message = message
+        @maximum = maximum
+    end
+    def Progress.done(message)
+        $stderr.puts("#{message}.") if $options[:verbose]
+    end
+    def next(step)
+        return unless $options[:verbose]
+        percentage = (100 * step) / @maximum
+        if percentage != @percentage
+            $stderr.print("\r#{@message}... #{percentage} % ")
+            @percentage = percentage
         end
+        $stderr.print("\r#{" " * (@message.length + 10)}\r") if step == @maximum
     end
 end
 
@@ -67,14 +88,18 @@ class Base
             result << @alphabet[integer % @value]
             integer = integer / @value
         end until integer == 0
+        Progress.done("Converted from base 10")
         result.reverse
     end
     def to_10(digits)
         result = 0
+        progress = Progress.new("Converting to base 10", digits.length)
         digits.reverse.each_with_index do |digit, index|
             digit_value = @alphabet.index(digit)
             result += digit_value * (@value ** index)
+            progress.next(index + 1)
         end
+        Progress.done("Converted to base 10")
         result
     end
     def length(base=10)
@@ -138,11 +163,14 @@ class BaseCrypt
     def to_digits(bytes)
         bits = bytes.map { |byte| byte.to_s(2).zerofill(8) }.join
         digits = bits.scan_digits(@key.decoded.bitlength.floor, 2, false, false)
+        Progress.done("Converted from bytes to digits")
         digits
     end
     def to_bytes(digits)
         bin_digits = digits.map { |digit| digit.to_s(2)[1..-1] }
-        bin_digits.join.scan_digits(8, 2, true)
+        bytes = bin_digits.join.scan_digits(8, 2, true)
+        Progress.done("Converted from digits to bytes")
+        bytes
     end
     attr_accessor :key
 end
