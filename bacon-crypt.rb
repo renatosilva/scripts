@@ -63,18 +63,18 @@ class Progress
     def initialize(message, maximum)
         @message = message
         @maximum = maximum
+        @step = 0
     end
     def Progress.done(message)
         $stderr.puts("#{message}.") if $options[:verbose]
     end
-    def next(step)
+    def next
         return unless $options[:verbose]
-        percentage = (100 * step) / @maximum
-        if percentage != @percentage
-            $stderr.print("\r#{@message}... #{percentage} % ")
-            @percentage = percentage
-        end
-        $stderr.print("\r#{" " * (@message.length + 10)}\r") if step == @maximum
+        @step += 1
+        percentage = (100 * @step) / @maximum
+        previous_percentage = (100 * (@step - 1)) / @maximum
+        $stderr.print("\r#{@message}... #{percentage} % ") if percentage != previous_percentage
+        $stderr.print("\r#{" " * (@message.length + 10)}\r") if @step == @maximum
     end
 end
 
@@ -97,7 +97,7 @@ class Base
         digits.reverse.each_with_index do |digit, index|
             digit_value = @alphabet.index(digit)
             result += digit_value * (@value ** index)
-            progress.next(index + 1)
+            progress.next
         end
         Progress.done("Converted to base 10")
         result
