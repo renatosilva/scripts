@@ -2,7 +2,7 @@
 # Encoding: ISO-8859-1
 
 ##
-##     Base Conversion Cryptography 2013.11.25
+##     Base Conversion Cryptography 2013.11.26
 ##     Copyright (c) 2013 Renato Silva
 ##     GNU GPLv2 licensed
 ##
@@ -200,8 +200,9 @@ end
 if $options[:encode] then
     bc = BaseCrypt.new($options[:key])
     $options[:encode].force_encoding($options[:encoding]) if $options[:encoding]
+    ciphertext = bc.encode($options[:encode].bytes)
     $stdout = File.open("#{$options[:encode_file]}.bacon", "w") if $options[:encode_file]
-    $stdout.puts bc.encode($options[:encode].bytes)
+    $stdout.puts ciphertext
 end
 
 if $options[:decode] then
