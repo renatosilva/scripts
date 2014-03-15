@@ -15,12 +15,12 @@ scripts=(
     "dosconv"
     "dnsdynamic"
     "greprev"
+    "ivona-speak"
     "networkmeter-reset"
     "numpass"
     "packages"
     "randpass"
     "runcrt"
-    "ivona-speak"
     "tz-brazil"
     "winclean"
 )
