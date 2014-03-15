@@ -2,8 +2,8 @@
 # Encoding: ISO-8859-1
 
 ##
-##     Parse Options 2013.11.24
-##     Copyright (c) 2013 Renato Silva
+##     Parse Options 2014.3.15
+##     Copyright (c) 2013, 2014 Renato Silva
 ##     GNU GPLv2 licensed
 ##
 ## This script is supposed to parse command line arguments in a way that,
@@ -56,8 +56,8 @@
 ## This script can be used from Bash scripts as well. If the $from environment
 ## variable is set, that will be assumed as the source Bash script from which to
 ## parse the documentation and the provided options. Then, instead of parsing
-## the options into Ruby variables, it will be generated evaluable export
-## statements for corresponding Bash environment variables. For example:
+## the options into Ruby variables, evaluable export statements will be
+## generated for corresponding Bash environment variables. For example:
 ##
 ##     eval "$(from="$0" @script.name "$@")" || exit 1
 ##
