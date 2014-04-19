@@ -1,8 +1,8 @@
 #!/bin/bash
 
 ##
-##     Backup 2013.11.23
-##     Copyright (c) 2012, 2013 Renato Silva
+##     Backup 2014.4.19
+##     Copyright (c) 2012-2014 Renato Silva
 ##     GNU GPLv2 licensed
 ##
 ## This is my personal backup script on Windows. You may use it as inspiration
@@ -26,6 +26,7 @@
 ##         --name=FILENAME       Backup file name, will have date and time
 ##                               appended. Any previous backup with same name
 ##                               will be deleted, right before saving new one.
+##     -p, --progress            Show backup progress using graphical interface.
 ##     -s, --silent              Whether to play a sound when backup is complete
 ##                               and after delay time.
 ##         --target=DIR          Custom directory where to store the backup.
@@ -91,8 +92,9 @@ data=$(reg query "$key" //s | sed -E s/'^\s+'// | sed s/'\\'/'\\\\\\\\'/g | awk 
 echo -e "Windows Registry Editor Version 5.00\n\n[$key]\n$data\n" | unix2dos > "$configs/regedit.reg"
 
 # Generating compressed file
+[[ -n "$progress" ]] && suffix="G"
 password=$(cat /dados/documentos/privado/chaves/renatosilva.backup)
-7z a "$temp/$name $(date '+%-d.%-m.%Y %-Hh%M').7z" -p"$password" -xr!desktop.ini -mhe "/dados/documentos" "/dados/programas" "$notes" "$configs"
+7z$suffix a "$temp/$name $(date '+%-d.%-m.%Y %-Hh%M').7z" -p"$password" -xr!desktop.ini -mhe "/dados/documentos" "/dados/programas" "$notes" "$configs"
 rm "$target/$name "*.7z 2> /dev/null || echo "First backup in this device."
 mv "$temp/"*.7z "$target"
 [[ -z "$silent" ]] && play_sound tada
