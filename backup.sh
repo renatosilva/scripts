@@ -40,7 +40,7 @@ play_sound() {
 eval "$(from="$0" parse-options.rb "$@")" || exit 1
 
 [[ -z "$delay" ]] && delay="0"
-[[ -z "$delay_message" ]] && delay_message="Esperando"
+[[ -z "$delay_message" ]] && delay_message="Esperando..."
 [[ -z "$name" ]] && name="Documentos e programas"
 [[ -z "$target" ]] && target="/dados/backup"
 [[ -e "$target" ]] || { echo "Target $target not found."; sleep 5; exit 1; }
@@ -101,7 +101,7 @@ mv "$temp/"*.7z "$target"
 [[ "$delay" < 1 ]] && { sleep 3; exit 0; }
 
 # Wait for specified delay time
-delay_message="$delay_message... %${#delay}s segundos"
+delay_message="$delay_message %${#delay}s segundos"
 remaining="$delay"
 while [[ "$remaining" > 0 ]]; do
     printf "\r$delay_message " "$remaining"
