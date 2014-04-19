@@ -21,7 +21,8 @@
 ##     @script.name [options]
 ##
 ##         --delay=SECONDS       How much time to wait after backup is complete,
-##                               will produce a countdown on command line.
+##                               will produce a countdown on command line. Not
+##                               applied if system is currently rebooting.
 ##         --delay-message=TEXT  What message to show for the countdown.
 ##         --name=FILENAME       Backup file name, will have date and time
 ##                               appended. Any previous backup with same name
@@ -39,7 +40,11 @@ play_sound() {
 
 eval "$(from="$0" parse-options.rb "$@")" || exit 1
 
-[[ -z "$delay" ]] && delay="0"
+shutdown_happening=$(wevtutil qe system //c:1 //rd:true //f:xml //q:"*[System[(EventID=1074) and TimeCreated[timediff(@SystemTime) <= 60000]]]")
+non_reboot_shutdown=$(echo "$shutdown_happening" | grep -iE "<data>(desligado|desligar o sistema)</data>")
+[[ -n "$shutdown_happening" && -z "$non_reboot_shutdown" ]] && rebooting="yes"
+
+[[ -z "$delay" || -n "$rebooting" ]] && delay="0"
 [[ -z "$delay_message" ]] && delay_message="Esperando..."
 [[ -z "$name" ]] && name="Documentos e programas"
 [[ -z "$target" ]] && target="/dados/backup"
