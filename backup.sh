@@ -11,6 +11,7 @@
 ## replace any previous backup on target directory. Backup will include:
 ##
 ##     * Sticky notes
+##     * Logoff scripts
 ##     * Scheduled tasks
 ##     * Registry favorites
 ##     * Firefox bookmarks, search plugins and custom website stylesheets
@@ -91,10 +92,9 @@ mkdir "$startup"
 cp "$APPDATA/Microsoft/Windows/Start Menu/Programs/Startup/"* "$startup"
 cp -r "$APPDATA/Microsoft/Windows/Start Menu/Programs/Ferramentas" "$configs"
 
-# Registry favorites
-key='HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Applets\Regedit\Favorites'
-data=$(reg query "$key" //s | sed -E s/'^\s+'// | sed s/'\\'/'\\\\\\\\'/g | awk -F'[[:space:]]*REG_SZ[[:space:]]*' 'NF>1{print "\"" $1 "\"=\"" $2 "\""}')
-echo -e "Windows Registry Editor Version 5.00\n\n[$key]\n$data\n" | unix2dos > "$configs/regedit.reg"
+# Registry favorites and logoff scripts
+reg export 'HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Applets\Regedit\Favorites' "$configs/regedit.reg" > /dev/null
+reg export 'HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Group Policy\Scripts\Logoff\0' "$configs/logoff.reg" > /dev/null
 
 # Generating compressed file
 [[ -n "$progress" ]] && suffix="G"
