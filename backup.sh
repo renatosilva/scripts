@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ##
-##     Backup 2014.4.19
+##     Backup 2014.4.20
 ##     Copyright (c) 2012-2014 Renato Silva
 ##     GNU GPLv2 licensed
 ##
@@ -99,7 +99,9 @@ echo -e "Windows Registry Editor Version 5.00\n\n[$key]\n$data\n" | unix2dos > "
 # Generating compressed file
 [[ -n "$progress" ]] && suffix="G"
 password=$(cat /dados/documentos/privado/chaves/renatosilva.backup)
-7z$suffix a "$temp/$name $(date '+%-d.%-m.%Y %-Hh%M').7z" -p"$password" -xr!desktop.ini -mhe "/dados/documentos" "/dados/programas" "$notes" "$configs"
+tempfile="$temp/$name $(date '+%-d.%-m.%Y %-Hh%M').7z"
+7z$suffix a "$tempfile" -p"$password" -xr!desktop.ini -mhe "/dados/documentos" "/dados/programas" "$notes" "$configs"
+[[ -f "$tempfile" ]] || exit
 rm "$target/$name "*.7z 2> /dev/null || echo "First backup in this device."
 mv "$temp/"*.7z "$target"
 [[ -z "$silent" ]] && play_sound tada
