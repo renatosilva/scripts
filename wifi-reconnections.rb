@@ -1,8 +1,8 @@
 #!/usr/bin/env ruby
 # Encoding: ISO-8859-1
 
-# Wi-Fi Reconnections 2013.10.17
-# Copyright (c) 2013 Renato Silva
+# Wi-Fi Reconnections 2014.4.24
+# Copyright (c) 2013, 2014 Renato Silva
 # GNU GPLv2 licensed
 
 if [nil, "-h", "--help"].include? ARGV[0]
@@ -30,7 +30,9 @@ networks.keys.each do |network|
     networks[network].keys.each do |date|
         info = networks[network][date]
         average_uptime = info[:uptime] / info[:reconnections]
-        hourly_reconnections = info[:reconnections] / (info[:uptime] / 60 / 60)
+        uptime_hours = info[:uptime] / 60 / 60
+        uptime_hours = 1 if uptime_hours < 1
+        hourly_reconnections = info[:reconnections] / uptime_hours
         csv.puts "#{network};#{date};#{hourly_reconnections.round};#{average_uptime.round}"
     end
 end
