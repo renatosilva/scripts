@@ -28,8 +28,6 @@ scripts=(
 from=$(dirname "$0")
 for script in "${scripts[@]}"; do cp -v "$from"/"$script"* "/local/bin/$script"; done
 cp -v "$from/msys-aliases.sh" "/etc/profile.d/aliases.sh"
-cp -v "$from/parse-options.sh" "/local/bin/parse-options"
-cp -v "$from/parse-options.rb" "/local/bin"
 
 cd /local/bin
 for link in bzr python ruby; do ntfs_link "$link" runcrt; done
