@@ -12,13 +12,13 @@ end
 
 csv = File.open(ARGV[0], 'r')
 out = File.open(ARGV[2], 'rb').read
-row_pattern = /(<csv:row(\s*delimiters=['\"]([^'\"]*)['\"])*>(.*)<\/csv:row>)/
+row_pattern = /(([ \t]*)<csv:row(\s*delimiters=['\"]([^'\"]*)['\"])*>(.*)<\/csv:row>)/
 row_template = out[row_pattern, 1]
-delimiters = (ARGV[3] or out[row_pattern, 3])
+delimiters = (ARGV[3] or out[row_pattern, 4])
 delimiters = ";" if delimiters.nil?
 
 csv.each_line do |line|
-    row = out[row_pattern, 4]
+    row = out[row_pattern, 2] + out[row_pattern, 5]
     cols = line.gsub(/\n/, '').split(/\s*[#{delimiters}]\s*/)
     cols.each_with_index { |col, ix| row.gsub!(/\$#{ix + 1}/, col) }
     row.gsub!(/\$\d+/, '')
