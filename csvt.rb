@@ -12,7 +12,7 @@ end
 
 csv = File.open(ARGV[0], 'r')
 out = File.open(ARGV[2], 'rb').read
-row_pattern = /(.*<csv:row(\s*delimiters=['\"]([^'\"]*)['\"])*>(.*)<\/csv:row>)/
+row_pattern = /(<csv:row(\s*delimiters=['\"]([^'\"]*)['\"])*>(.*)<\/csv:row>)/
 row_template = out[row_pattern, 1]
 delimiters = (ARGV[3] or out[row_pattern, 3])
 delimiters = ";" if delimiters.nil?
