@@ -1,8 +1,8 @@
 #!/usr/bin/env ruby
 # Encoding: ISO-8859-1
 
-# Grep Revision 2013.10.11
-# Copyright (C) 2010, 2012, 2013 Renato Silva
+# Grep Revision 2014.6.11
+# Copyright (C) 2010, 2012-2014 Renato Silva
 # GNU GPLv2 licensed
 
 if not ARGV[0]
@@ -14,13 +14,13 @@ last_rev, last_file = nil
 output = []
 
 STDIN.each do |line|
-    rev = line[/^revno: (.*)/, 1]
-    file = line[/^=== .*'(.*)'/, 1]
+    rev = line[/^\s*revno: (.*)/, 1]
+    file = line[/^\s*=== .*'(.*)'/, 1]
 
     last_rev = rev if last_rev == nil or rev != nil
     last_file = file if last_file == nil or file != nil
 
-    if line =~ /^[+\-].*#{ARGV[0]}.*$/i
+    if line =~ /^\s*[+\-].*#{ARGV[0]}.*$/i
         if last_rev != nil
             output << "revision #{last_rev}"
             last_rev = nil
