@@ -1,5 +1,5 @@
-# MinGW MSYS Aliases 2013.11.1
-# Copyright (c) 2012, 2013 Renato Silva
+# MinGW MSYS Aliases 2014.6.15
+# Copyright (c) 2012-2014 Renato Silva
 # GNU GPLv2 licensed
 
 find() {
@@ -41,6 +41,15 @@ bzr() {
     command bzr "$@"
 }
 
+ssh-auth() {
+    [[ -z $(ps | grep ssh-agent) ]] && echo $(ssh-agent) > /tmp/ssh-agent-data.sh
+    [[ -z $SSH_AGENT_PID ]] && source /tmp/ssh-agent-data.sh > /dev/null
+    [[ -z $(ssh-add -l | grep "/home/$(whoami)/.ssh/id_rsa") ]] && ssh-add
+}
+
+ssh() { ssh-auth; command ssh "$@"; }
+scp() { ssh-auth; command scp "$@"; }
+
 sqlite() {
     if [[ -z "${@:2}" ]]; then
         command sqlite "$@"
@@ -66,7 +75,10 @@ sqlite() {
 }
 
 alias update="mingw-get update && mingw-get upgrade 2> /dev/null"
+alias hl="grep -C 1000000000"
 alias edit="notepad++"
+alias igrep="grep -i"
+alias cat="vimcat"
 
 alias type="type -a"
 alias grep="grep --color=auto"
