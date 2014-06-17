@@ -8,6 +8,7 @@ scripts=(
     "backup"
     "bacon-crypt"
     "check-branches"
+    "check-tags"
     "colordiff"
     "colornote-backup-clean"
     "csvt"
