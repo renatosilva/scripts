@@ -1,4 +1,4 @@
-# MinGW MSYS Aliases 2014.6.15
+# MinGW MSYS Aliases 2014.6.19
 # Copyright (c) 2012-2014 Renato Silva
 # GNU GPLv2 licensed
 
@@ -75,9 +75,10 @@ sqlite() {
 }
 
 alias update="mingw-get update && mingw-get upgrade 2> /dev/null"
-alias hl="grep -C 1000000000"
+alias hl="grep -C 1000000"
+alias hli="hl -i"
 alias edit="notepad++"
-alias igrep="grep -i"
+alias grepi="grep -i"
 alias cat="vimcat"
 
 alias type="type -a"
