@@ -57,6 +57,11 @@
 ##     wifi-reconnections.rb        Generate statistics from a log of Wi-Fi
 ##                                  reconnections.
 ##
+## Third-party downloads
+##     easyoptions.rb               Easy option parsing for Bash and Ruby.
+##     easyoptions.sh               Easy option parsing for Bash.
+##     vimcat.sh                    Syntax highlighting for the cat command.
+##
 ## Usage: @script.name [options], where options are:
 ##
 ##     -r, --remove        Remove the scripts instead of installing them.
