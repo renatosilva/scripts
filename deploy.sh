@@ -1,37 +1,58 @@
 #!/bin/bash
 
-ntfs_link() {
-    [[ ! -e "$1" ]] && cmd //c mklink "$1" "$2";
-}
-
-scripts=(
+unix=(
     "backup"
     "bacon-crypt"
     "check-branches"
     "check-tags"
     "colordiff"
-    "colornote-backup-clean"
     "csvt"
     "dcim-organizer"
-    "dosconv"
     "dnsdynamic"
     "greprev"
+    "numpass"
+    "randpass"
+)
+
+windows=(
+    "colornote-backup-clean"
+    "dosconv"
     "ivona-speak"
     "networkmeter-reset"
-    "numpass"
-    "packages"
-    "randpass"
-    "runcrt"
-    "tz-brazil"
     "winclean"
 )
 
-from=$(dirname "$0")
-for script in "${scripts[@]}"; do cp -v "$from"/"$script"* "/usr/local/bin/$script"; done
-cp -v "$from/msys-aliases.sh" "/etc/profile.d/aliases.sh"
+msys1=(
+    "packages"
+    "runcrt"
+    "tz-brazil"
+)
 
-cd /usr/local/bin
-for link in bzr python ruby; do ntfs_link "$link" runcrt; done
-for link in attrib cmd ipconfig net ping reg schtasks shutdown taskkill; do ntfs_link "$link" dosconv; done
-ntfs_link speak ivona-speak
-cd - > /dev/null
+winlink() {
+    cd "$target"
+    [[ ! -e "$1" ]] && cmd //c mklink "$1" "$2"
+    cd - > /dev/null
+}
+
+# Prepare
+target=/usr/local/bin
+scripts="${unix[@]}"
+mkdir -p "$target"
+
+# MSYS or MSYS2
+if [[ $(uname -o) = Msys ]]; then
+    scripts="${scripts[@]} ${windows[@]}"
+    for link in attrib cmd ipconfig net ping reg schtasks shutdown taskkill; do winlink "$link" dosconv; done
+    winlink speak ivona-speak
+
+    # MSYS
+    if [[ $(uname -r) = 1.* ]]; then
+        scripts="${scripts[@]} ${msys1[@]}"
+        for link in bzr python ruby; do winlink "$link" runcrt; done
+    fi
+fi
+
+# Deploy
+from=$(dirname "$0")
+for script in $scripts; do cp -v "$from/$script"* "$target/$script"; done
+cp -v "$from/aliases.sh" /etc/profile.d/aliases.sh
