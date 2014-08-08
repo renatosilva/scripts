@@ -20,6 +20,17 @@ print_name() {
     printf "${green_color}%$2s${normal_color} " "$branch_name:"
 }
 
+# Convert SSH locations to HTTPS
+branch_location() {
+    location="$1"
+    if [[ "$location" = bzr+ssh:* ]]; then
+        location="${location/bzr+ssh/https}"
+        location="${location/\/+branch/}"
+        location="${location/bazaar./}"
+    fi
+    echo "$location"
+}
+
 check() {
     branch="$(dirname "$0")"
     config=".bzr/branch/branch.conf"
@@ -42,12 +53,13 @@ check() {
     echo >> "$parent_tags"
 
     bzr tags >> "$local_tags"
-    bzr tags --directory "$parent" >> "$parent_tags"
+    bzr tags --directory $(branch_location "$parent") >> "$parent_tags"
     cd - > /dev/null
     echo "Done."
 }
 
 eval "$(from="$0" easyoptions.rb "$@" || echo exit 1)"
+export -f branch_location
 export -f print_name
 export -f check
 
