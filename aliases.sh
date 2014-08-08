@@ -5,7 +5,7 @@
 # MSYS
 if [[ $(uname -o) = Msys && $(uname -r) = 1.* ]]; then
     # Aliases
-    alias type="type -a"
+    alias whence="type -a"
     alias grep="grep --color=auto"
     alias ls="ls --color=auto --show-control-chars"
     alias msgrep="msgrep --binary-files=text -d skip --color=auto"
