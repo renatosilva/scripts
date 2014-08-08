@@ -39,7 +39,7 @@ check() {
 
     [[ -f "$config" ]] && parent=$(grep ^parent_location "$config" | awk -F' *= *' '{ print $2 }')
     if [[ -z "$parent" ]]; then
-        echo "No parent branch."
+        echo "No parent."
         return
     fi
 
