@@ -27,11 +27,10 @@ use Getopt::Long qw(:config pass_through no_auto_abbrev);
 use IPC::Open2;
 
 my $app_name     = 'colordiff';
-my $version      = '1.0.13';
-my $author       = 'Dave Ewart';
-my $author_email = 'davee@sungate.co.uk';
+my $version      = '1.0.13-RS2014.8.8';
+my @authors      = ({ years => '2002-2012',  name => 'Dave Ewart',    email => 'davee@sungate.co.uk' },
+                    { years => '2013'     ,  name => 'Renato Silva',  email => 'br.renatosilva@gmail.com' });
 my $app_www      = 'http://www.colordiff.org/';
-my $copyright    = '(C)2002-2012';
 my $show_banner  = 1;
 my $color_patch  = 0;
 my $diff_cmd     = "diff";
@@ -271,7 +270,10 @@ if ((-f STDOUT) && ($color_patch == 0)) {
 
 if ($show_banner == 1) {
     print STDERR "$app_name $version ($app_www)\n";
-    print STDERR "$copyright $author, $author_email\n\n";
+    foreach (@authors) {
+        print STDERR "Copyright (C) $_->{years} $_->{name} ($_->{email})\n";
+    }
+    print "\n"
 }
 
 my $operating_methodology;
