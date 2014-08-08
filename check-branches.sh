@@ -12,6 +12,8 @@
 ##     @script.name [options] [root directory if not current]
 ##
 ##         --no-color         Disable colors in output.
+##         --timestamp=REGEX  Check if commit timestamps match REGEX.
+##         --year=YEAR        Restrict --timestamp check to YEAR.
 ##     -s, --status-only      Do not perform the missing command, only status.
 ##     -u, --purge-uncommits  Actually remove from the branch any commit that
 ##                            has been reverted with the uncommit command. This
@@ -50,6 +52,7 @@ check() {
     branch="$(dirname "$0")"
     status=$(bzr status "$branch")
     config=".bzr/branch/branch.conf"
+    [[ -n "$timestamp" ]] && timestamp=$(bzr log "$branch" | grep ^timestamp: | grep "$year" | grep -vE " $timestamp")
     if [[ -n "$purge_uncommits" ]]; then
         if [[ -z "$status" ]]; then
             branch_old="$branch.$(date +%s.%N).temp"
@@ -72,6 +75,7 @@ check() {
         print_name "$branch" "$padding"
         echo "$branch_output"
         [[ -n "$status" ]] && echo "$status"
+        [[ -n "$timestamp" ]] && echo "$timestamp"
         return
     fi
     print_name "$branch" "-35"
@@ -80,6 +84,7 @@ check() {
     [[ -f "$config" ]] && parent=$(grep ^parent_location "$config")
     [[ -n "$parent" ]] && bzr missing --line | grep -v "parent" || echo
     [[ -n "$status" ]] && echo "$status"
+    [[ -n "$timestamp" ]] && echo "$timestamp"
     cd - > /dev/null
 }
 
