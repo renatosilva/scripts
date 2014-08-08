@@ -12,6 +12,8 @@ unix=(
     "greprev"
     "numpass"
     "randpass"
+    "easyoptions:https://github.com/renatosilva/easyoptions/raw/master/easyoptions.sh"
+    "easyoptions.rb:https://github.com/renatosilva/easyoptions/raw/master/easyoptions.rb"
     "vimcat:https://github.com/renatosilva/vimpager/raw/vimcat-msys2/vimcat"
 )
 
