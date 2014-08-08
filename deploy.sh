@@ -23,6 +23,7 @@ windows=(
 )
 
 msys1=(
+    "msys2-msys.bat"
     "packages"
     "runcrt"
     "tz-brazil"
