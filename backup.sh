@@ -64,12 +64,12 @@ non_reboot_shutdown=$(echo "$shutdown_happening" | grep -iE "<data>(desligado|de
 temp="$TEMP/backup.$(date +%s.%N)"
 trap "rm -rf $temp" EXIT
 mkdir -p "$temp"
-notes="$temp/Anotações"
+notes="$temp/AnotaÃ§Ãµes"
 cp -r "$APPDATA/Microsoft/Sticky Notes" "$notes"
 
 # Application settings
 tools="/c/programs/ferramentas"
-configs="$temp/Configurações"
+configs="$temp/ConfiguraÃ§Ãµes"
 mkdir -p "$configs"
 for config in bashrc inputrc minttyrc profile vimrc colordiffrc wgetrc; do
     [[ -f ~/.$config ]] && cp ~/.$config "$configs"
@@ -91,7 +91,7 @@ cp -r "$profile/chrome/userContent.css" "$firefox"
 # Scheduled tasks
 tasks="$configs/Tarefas"
 mkdir "$tasks"
-for file in "$SYSTEMROOT/System32/Tasks/Usuário/"*; do
+for file in "$SYSTEMROOT/System32/Tasks/UsuÃ¡rio/"*; do
     [[ -f "$file" ]] || continue
     taskname=$(basename "$file")
     cp "$file" "$tasks/$taskname.xml"
