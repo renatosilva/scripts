@@ -45,7 +45,7 @@
 ##
 
 play_sound() {
-    powershell.exe -c "(New-Object Media.SoundPlayer \"C:/Windows/Media/$1.wav\").PlaySync();" < NUL
+    ruby -e "require 'win32/sound'; include Win32; Sound.play('C:/Windows/Media/$1.wav')"
 }
 
 eval "$(from="$0" easyoptions.rb "$@")" || exit 1
