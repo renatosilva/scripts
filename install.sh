@@ -31,7 +31,8 @@ msys1=(
 
 winlink() {
     cd "$target"
-    [[ ! -e "$1" ]] && cmd //c mklink "$1" "$2"
+    [[ -z "$remove" && ! -e "$1" ]] && cmd //c mklink "$1" "$2"
+    [[ -n "$remove" &&   -e "$1" ]] && rm -vf "$1"
     cd - > /dev/null
 }
 
@@ -39,6 +40,7 @@ winlink() {
 target=/usr/local/bin
 scripts="${unix[@]}"
 mkdir -p "$target"
+[[ "$1" = --remove ]] && remove="yes"
 
 # MSYS or MSYS2
 if [[ $(uname -o) = Msys ]]; then
@@ -55,5 +57,12 @@ fi
 
 # Deploy
 from=$(dirname "$0")
-for script in $scripts; do cp -v "$from/$script"* "$target/$script"; done
-cp -v "$from/aliases.sh" /etc/profile.d/aliases.sh
+if [[ -z "$remove" ]]; then
+    for script in $scripts; do cp -v "$from/$script"* "$target/$script"; done
+    cp -v "$from/aliases.sh" /etc/profile.d/aliases.sh
+else
+    cd "$target"
+    rm -vf $scripts
+    rm -vf /etc/profile.d/aliases.sh
+    cd - > /dev/null
+fi
