@@ -15,7 +15,7 @@
 ##         --timestamp=REGEX  Check if commit timestamps match REGEX.
 ##         --year=YEAR        Restrict --timestamp check to YEAR.
 ##     -s, --status-only      Do not perform the missing command, only status.
-##     -u, --purge-uncommits  Actually remove from the branch any commit that
+##         --purge-uncommits  Actually remove from the branch any commit that
 ##                            has been reverted with the uncommit command. This
 ##                            is done by recreating the branch. Branches with
 ##                            pending work are skipped.
