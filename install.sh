@@ -1,5 +1,69 @@
 #!/bin/bash
 
+##
+##     Renato Silva Scripts
+##     Copyright (C) 2099-2010, 2011-2014 Renato Silva
+##     GNU GPLv2 licensed
+##
+## This is a set of useful scripts. Some should work on Unix environments in
+## general but some are specific to MSYS2/MSYS. Most of the scripts can be
+## installed and removed with this install script, which should detect system
+## type and install only the ones compatible. Ruby scripts may require version
+## 1.9. Some scripts may require code adaption.
+##
+## Main scripts
+##     backup.sh                   Secured file backup with 7-Zip.
+##     bacon-crypt.rb              Base Conversion Encryption algorithm.
+##     check-branches.sh           Pending work check for Bazaar branches.
+##     check-tags.sh               Tag synchronization check of Bazaar branches.
+##     dnsdynamic.sh               Update DNSdynamic entries automatically.
+##     dosconv.sh                  Run a CP850 program from a CP1252 terminal.
+##     greprev.rb                  Find out what revision from a Bazaar branch
+##                                 has introduced some specific change.
+##     http-shutdown.py            Shut down Windows from a remote HTTP request.
+##     msys2-msys.bat              Allow using MSYS and MSYS2 together.
+##     packages.sh                 Package management helper for mingw-get.
+##     ppk-add.sh                  Add a PuTTY private key to current SSH agent.
+##     randpass.sh                 Random password generation.
+##     runcrt.sh                   Avoid timezone problems in MSVCRT programs
+##                                 running in MSYS (for example Python).
+##     testonsave.rb               Run JUnit tests automatically when saving
+##                                 files in Eclipse (works with Kepler).
+##     tz-brazil.rb                Brazilian timezone configuration for MSYS.
+##     winclean.sh                 Windows system cleanup.
+##
+## Other scripts
+##     aliases.sh                   Help with SQLite encoding issues and Bazaar
+##                                  hurried commits, among others.
+##     check-bookmarks.sh           Search for Firefox bookmarks that are
+##                                  unorganized or have a description.
+##     colordiff.pl                 Colored diff tool by Dave Ewart.
+##     colornote-backup-clean.sh    Keep only last week for backups of the
+##                                  Android ColorNote application.
+##     csvt.rb                      Transform a CSV file according to a given
+##                                  template (for example HTML conversion).
+##     dcim-organizer.sh            Rename pictures from DCIM-style to
+##                                  sequential enumeration.
+##     homeclean.sh                 Home directory cleanup (Unix environments).
+##     ivona-speak.sh               Read text aloud with IVONA reader.
+##     networkmeter-reset.sh        Reset traffic statistics in Network Meter
+##                                  Windows gadget.
+##     numpass.sh                   Convert an alphanumeric password into
+##                                  numeric-only.
+##     sslcert.sh                   Generate an SSL certificate.
+##     tabela-price                 How specific advances would affect a loan.
+##                                  (specific to Brazil).
+##     termcolors.sh                Testing terminal colors table.
+##     wifi-reconnections.rb        Generate statistics from a log of Wi-Fi
+##                                  reconnections.
+##
+## Usage: @script.name [options], where options are:
+##
+##     -r, --remove       Remove the scripts instead of installing them.
+##
+
+eayoptions_url_base="https://github.com/renatosilva/easyoptions/raw/master/easyoptions"
+
 unix=(
     "backup"
     "bacon-crypt"
@@ -12,8 +76,8 @@ unix=(
     "greprev"
     "numpass"
     "randpass"
-    "easyoptions:https://github.com/renatosilva/easyoptions/raw/master/easyoptions.sh"
-    "easyoptions.rb:https://github.com/renatosilva/easyoptions/raw/master/easyoptions.rb"
+    "easyoptions:$eayoptions_url_base.sh"
+    "easyoptions.rb:$eayoptions_url_base.rb"
     "vimcat:https://github.com/renatosilva/vimpager/raw/vimcat-msys2/vimcat"
 )
 
@@ -50,13 +114,20 @@ download() {
     esac
 }
 
+# EasyOptions
+[[ -t 1 ]] && host_format="\e[38;05;2m%s\e[0m"
+[[ -t 2 ]] && warning_format="\e[38;05;9m%s\e[0m"
+if ! which easyoptions.rb > /dev/null 2>&1; then
+    easyoptions_home=/tmp/
+    download "$eayoptions_url_base.rb" "$easyoptions_home" "easyoptions.rb" > /dev/null
+    [[ $? != 0 ]] && rm "$easyoptions_home/easyoptions.rb"
+fi
+
 # Prepare
+eval "$(from="$0" "${easyoptions_home}easyoptions.rb" "$@" || echo exit 1)"
 target=/usr/local/bin
 scripts="${unix[@]}"
 mkdir -p "$target"
-[[ "$1" = --remove ]] && remove="yes"
-[[ -t 1 ]] && host_format="\e[38;05;2m%s\e[0m"
-[[ -t 2 ]] && warning_format="\e[38;05;9m%s\e[0m"
 
 # MSYS or MSYS2
 if [[ $(uname -o) = Msys ]]; then
