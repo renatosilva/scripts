@@ -61,6 +61,7 @@
 ##     easyoptions.rb               Easy option parsing for Bash and Ruby.
 ##     easyoptions.sh               Easy option parsing for Bash.
 ##     vimcat.sh                    Syntax highlighting for the cat command.
+##     vpaste.sh                    Command-line pastebin (vpaste.net).
 ##
 ## Usage: @script.name [options], where options are:
 ##
@@ -93,6 +94,7 @@ unix=(
     "easyoptions:$eayoptions_url_base.sh"
     "easyoptions.rb:$eayoptions_url_base.rb"
     "vimcat:https://github.com/renatosilva/vimpager/raw/vimcat-msys2/vimcat"
+    "vpaste:http://vpaste.net/vpaste"
 )
 
 windows=(
