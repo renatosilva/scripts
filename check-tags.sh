@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ##
-##     Check Branch Tags 2014.6.17
+##     Check Branch Tags 2014.8.8
 ##     Copyright (c) 2014 Renato Silva
 ##     GNU GPLv2 licensed
 ##
@@ -69,3 +69,4 @@ trap "rm -rf $temp_dir" EXIT
 
 find "${arguments[0]:-.}" -name ".bzr" -type d -print0 | xargs -0 -l -r bash -c check | iconv -f cp850 -t iso-8859-1
 echo; ${diff_command:-diff} -U1000000000 "${local_tags}" "$parent_tags" | sed -E "s/(\e.*)?---.*/--- Local tags/" | sed -E "s/(\e.*)?\+\+\+.*/+++ Parent tags/" | grep -v "@@.*@@"
+exit 0
