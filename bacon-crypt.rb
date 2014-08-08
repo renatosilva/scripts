@@ -2,7 +2,7 @@
 # Encoding: ISO-8859-1
 
 ##
-##     Base Conversion Cryptography 2013.11.26
+##     Base Conversion Cryptography 2014.8.8
 ##     Copyright (c) 2013 Renato Silva
 ##     GNU GPLv2 licensed
 ##
@@ -27,7 +27,7 @@
 ##
 
 require "base64"
-require_relative "parse-options"
+require_relative "easyoptions"
 
 class String
     def scan_digits(length=BiggestBase.length, digit_base=10, leading_zero=false, fixed_length=true)

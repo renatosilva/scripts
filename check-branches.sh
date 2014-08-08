@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ##
-##     Check Branches 2013.11.23
+##     Check Branches 2014.8.8
 ##     Copyright (c) 2012, 2013 Renato Silva
 ##     GNU GPLv2 licensed
 ##
@@ -83,7 +83,7 @@ check() {
     cd - > /dev/null
 }
 
-eval "$(from="$0" parse-options.rb "$@")" || exit 1
+eval "$(from="$0" easyoptions.rb "$@")" || exit 1
 export -f saved_size
 export -f print_name
 export -f check

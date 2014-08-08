@@ -47,7 +47,7 @@ check() {
     echo "Done."
 }
 
-eval "$(from="$0" parse-options.rb "$@")" || exit 1
+eval "$(from="$0" easyoptions.rb "$@")" || exit 1
 export -f print_name
 export -f check
 
