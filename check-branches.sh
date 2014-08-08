@@ -31,7 +31,8 @@ saved_size() {
     if [[ "$size_diff_bytes" -ge 0 ]]; then
         saved_or_spent="Saved"
     else
-        saved_or_spent="Spent"
+        saved_or_spent="${red_color}Spent"
+        color="$red_color"
     fi
     if [[ "$size_diff_bytes" -gt -$((1024**2)) && "$size_diff_bytes" -lt $((1024**2)) ]]; then
         size_diff=$(awk -v diff="$size_diff_bytes" 'BEGIN { printf "%.1f", diff / 1024 }')
@@ -39,8 +40,9 @@ saved_size() {
     else
         size_diff=$(awk -v diff="$size_diff_bytes" 'BEGIN { printf "%.1f", diff / 1024 / 1024 }')
         size_diff="${size_diff} MB"
+        color="${color:-$blue_color}"
     fi
-    printf "$saved_or_spent ${size_diff#-}"
+    printf "${color}$saved_or_spent ${size_diff#-}${normal_color}"
 }
 
 print_name() {
@@ -97,6 +99,8 @@ export -f check
 if [[ -t 1 && -z "$no_color" ]]; then
     export normal_color="\e[0m"
     export green_color="\e[0;32m"
+    export blue_color="\e[38;05;27m"
+    export red_color="\e[38;05;9m"
 fi
 
 find "${arguments[0]:-.}" -name ".bzr" -type d -print0 | xargs -0 -l -r bash -c check | iconv -f cp850 -t iso-8859-1
