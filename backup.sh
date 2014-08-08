@@ -48,7 +48,7 @@ play_sound() {
     ruby -e "require 'win32/sound'; include Win32; Sound.play('C:/Windows/Media/$1.wav')"
 }
 
-eval "$(from="$0" easyoptions.rb "$@")" || exit 1
+eval "$(from="$0" easyoptions.rb "$@" || echo exit 1)"
 
 shutdown_happening=$(wevtutil qe system //c:1 //rd:true //f:xml //q:"*[System[(EventID=1074) and TimeCreated[timediff(@SystemTime) <= 60000]]]")
 non_reboot_shutdown=$(echo "$shutdown_happening" | grep -iE "<data>(desligado|desligar o sistema)</data>")

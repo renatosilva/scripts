@@ -88,7 +88,7 @@ check() {
     cd - > /dev/null
 }
 
-eval "$(from="$0" easyoptions.rb "$@")" || exit 1
+eval "$(from="$0" easyoptions.rb "$@" || echo exit 1)"
 export -f saved_size
 export -f print_name
 export -f check
