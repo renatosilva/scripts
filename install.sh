@@ -40,12 +40,13 @@ winlink() {
 }
 
 download() {
+    file="$2/$3"
     host="${1#*//}"
     host="${host%%/*}"
-    wget -q --no-check-certificate -O "$2/$3" "$1"
+    wget -q --no-check-certificate -O "$file" "$1" && chmod +x "$file"
     case "$?" in
         0) printf "${host_format:-%s} -> $2/$3\n" "$host" ;;
-        *) printf "${warning_format:-%s} failed downloading $3\n" "Warning!" >&2 ;;
+        *) printf "${warning_format:-%s} failed downloading and installing $3\n" "Warning!" >&2 ;;
     esac
 }
 
