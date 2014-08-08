@@ -12,6 +12,7 @@ unix=(
     "greprev"
     "numpass"
     "randpass"
+    "vimcat:https://github.com/renatosilva/vimpager/raw/vimcat-msys2/vimcat"
 )
 
 windows=(
@@ -36,11 +37,23 @@ winlink() {
     cd - > /dev/null
 }
 
+download() {
+    host="${1#*//}"
+    host="${host%%/*}"
+    wget -q --no-check-certificate -O "$2/$3" "$1"
+    case "$?" in
+        0) printf "${host_format:-%s} -> $2/$3\n" "$host" ;;
+        *) printf "${warning_format:-%s} failed downloading $3\n" "Warning!" >&2 ;;
+    esac
+}
+
 # Prepare
 target=/usr/local/bin
 scripts="${unix[@]}"
 mkdir -p "$target"
 [[ "$1" = --remove ]] && remove="yes"
+[[ -t 1 ]] && host_format="\e[38;05;2m%s\e[0m"
+[[ -t 2 ]] && warning_format="\e[38;05;9m%s\e[0m"
 
 # MSYS or MSYS2
 if [[ $(uname -o) = Msys ]]; then
@@ -58,11 +71,16 @@ fi
 # Deploy
 from=$(dirname "$0")
 if [[ -z "$remove" ]]; then
-    for script in $scripts; do cp -v "$from/$script"* "$target/$script"; done
+    for script in $scripts; do
+        case "$script" in
+            *http*) download "${script#*:}" "$target" "${script%%:*}" ;;
+            *) cp -v "$from/$script"* "$target/$script" ;;
+        esac
+    done
     cp -v "$from/aliases.sh" /etc/profile.d/aliases.sh
 else
     cd "$target"
-    rm -vf $scripts
+    for script in $scripts; do rm -vf "${script%%:*}"; done
     rm -vf /etc/profile.d/aliases.sh
     cd - > /dev/null
 fi
