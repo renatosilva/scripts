@@ -1,24 +1,24 @@
 #!/usr/bin/env ruby
-# Encoding: ISO-8859-1
+# Encoding: UTF-8
 
-# AmortizaÁ„o Price  2014.8.8
+# Amortiza√ß√£o Price  2014.7.16
 # Copyright (c) 2013 Renato Silva
 # Licenciado sob os termos da GNU GPLv2
 
 # Texto de ajuda
 
 if [ "--help", "-h", nil ].include? ARGV[0] then puts "
-    Este programa calcula o andamento de um emprÈstimo, feito atravÈs do
-    sistema Price, baseado em amortizaÁıes adicionais especÌficas. Desta forma È
-    possÌvel prever como certos adiantamentos ir„o alterar o pagamento do
-    emprÈstimo, especialmente o qu„o antecipadamente ele poder· ser quitado.\n
+    Este programa calcula o andamento de um empr√©stimo, feito atrav√©s do
+    sistema Price, baseado em amortiza√ß√µes adicionais espec√≠ficas. Desta forma √©
+    poss√≠vel prever como certos adiantamentos ir√£o alterar o pagamento do
+    empr√©stimo, especialmente o qu√£o antecipadamente ele poder√° ser quitado.\n
 Modo de usar: #{File.basename($0)} <arquivo de entrada>\n
 O arquivo de entrada deve ser um texto ISO-8859-1, no seguinte formato:
     Taxa: <taxa de juros>
-    Parcelas: <n˙mero de parcelas>
+    Parcelas: <n√∫mero de parcelas>
     Saldo: <saldo devedor inicial>
-    InÌcio: <mÍs e ano da primeira parcela no formato mm/aaaa>
-    Adiantamento mm/aaaa: <valor do adiantamento para este mÍs e ano>\n\n"
+    In√≠cio: <m√™s e ano da primeira parcela no formato mm/aaaa>
+    Adiantamento mm/aaaa: <valor do adiantamento para este m√™s e ano>\n\n"
     exit
 end
 
@@ -45,12 +45,12 @@ File.readlines(nome_do_arquivo).each do |linha|
         when "parcelas"       then parcelas = valor.to_i
         when "taxa"           then taxa = 1 + (valor.to_f / 100)
         when "saldo"          then saldo = valor.to_f
-        when "inÌcio"         then $inicio = valor
+        when "in√≠cio"         then $inicio = valor
         when /\d+\/\d+/       then adiantamentos[chave] = valor.to_f
     end
 end
 
-# Valor da prestaÁ„o e quitaÁ„o de acordo com os adiantamentos
+# Valor da presta√ß√£o e quita√ß√£o de acordo com os adiantamentos
 
 class Numeric
     def moeda
@@ -83,5 +83,5 @@ printf "%3s%11s%18s%16s\n", "#", "Data", "Saldo devedor", "Amortizado"
     saldo -= amortizacao
 end
 
-puts "\nPrestaÁ„o: #{prestacao.reais}"
-puts "⁄ltimo adiantamento efetivo: #{(amortizacao - prestacao).reais}" if amortizacao > prestacao
+puts "\nPresta√ß√£o: #{prestacao.reais}"
+puts "√öltimo adiantamento efetivo: #{(amortizacao - prestacao).reais}" if amortizacao > prestacao
