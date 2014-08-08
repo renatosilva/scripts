@@ -74,8 +74,12 @@ if [[ $(uname -o) = Msys ]]; then
     wfind() { { command find "$@" 2>&1 >&3 | command grep -v 'Permission denied'; } 3>&1; }
 
     # SSH authentication
+    case $(uname -r) in
+        1.*) agent=/usr/bin/ssh-agent ;;
+        2.*) agent=/bin/ssh-agent ;;
+    esac
     ssh-auth() {
-        [[ -z $(ps | grep ssh-agent) ]] && echo $(ssh-agent) > /tmp/ssh-agent-data.sh
+        [[ -z $(ps | grep $agent) ]] && echo $(ssh-agent) > /tmp/ssh-agent-data.sh
         [[ -z $SSH_AGENT_PID ]] && source /tmp/ssh-agent-data.sh > /dev/null
         [[ -z $(ssh-add -l | grep "/home/$(whoami)/.ssh/id_rsa") ]] && ssh-add
     }
