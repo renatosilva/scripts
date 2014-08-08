@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ##
-##     Backup 2014.4.20
+##     Backup 2014.8.8
 ##     Copyright (c) 2012-2014 Renato Silva
 ##     GNU GPLv2 licensed
 ##
@@ -21,9 +21,11 @@
 ## Usage:
 ##     @script.name [options]
 ##
-##         --delay=SECONDS       How much time to wait after backup is complete,
-##                               will produce a countdown on command line. Not
-##                               applied if system is currently rebooting.
+##         --delay=SECONDS       How much time to wait after backup is complete
+##                               and, if --wait-on-shutdown is specified, after
+##                               the lock file has been released. Will produce a
+##                               countdown on command line. Not applied if
+##                               system is currently rebooting.
 ##         --delay-message=TEXT  What message to show for the countdown.
 ##         --name=FILENAME       Backup file name, will have date and time
 ##                               appended. Any previous backup with same name
@@ -32,6 +34,13 @@
 ##     -s, --silent              Whether to play a sound when backup is complete
 ##                               and after delay time.
 ##         --target=DIR          Custom directory where to store the backup.
+##         --wait-on-shutdown    Wait for a lock file to be released after
+##                               backup is complete, if the system is currently
+##                               shutting down. This is intended for remote
+##                               synchronization tools having enough time to
+##                               save the resulting file. The lock file is
+##                               created in the target directory as NAME.lock,
+##                               where NAME is the backup name.
 ##     -h, --help                This help text.
 ##
 
@@ -105,10 +114,22 @@ tempfile="$temp/$name $(date '+%-d.%-m.%Y %-Hh%M').7z"
 rm "$target/$name "*.7z 2> /dev/null || echo "First backup in this device."
 mv "$temp/"*.7z "$target"
 [[ -z "$silent" ]] && play_sound tada
-[[ "$delay" < 1 ]] && { sleep 3; exit 0; }
+[[ -z "$wait_on_shutdown" && "$delay" < 1 ]] && { sleep 3; exit 0; }
+
+# Wait for the lock to be released
+delay_message="$delay_message %${#delay}s segundos"
+if [[ -n "$non_reboot_shutdown" && -n "$wait_on_shutdown" ]]; then
+    elapsed="0"
+    lock="$target/$name.lock"
+    touch "$lock"
+    while [[ -e "$lock" ]]; do
+        sleep 1
+        elapsed=$((elapsed + 1))
+        printf "\r$delay_message " "$elapsed"
+    done
+fi
 
 # Wait for specified delay time
-delay_message="$delay_message %${#delay}s segundos"
 remaining="$delay"
 while [[ "$remaining" > 0 ]]; do
     printf "\r$delay_message " "$remaining"
