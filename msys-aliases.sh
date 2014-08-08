@@ -1,4 +1,4 @@
-# MinGW MSYS Aliases 2014.6.19
+# MinGW MSYS Aliases 2014.8.8
 # Copyright (c) 2012-2014 Renato Silva
 # GNU GPLv2 licensed
 
@@ -39,6 +39,26 @@ bzr() {
             return;;
     esac
     command bzr "$@"
+}
+
+git() {
+    case "$1" in
+        "commit")
+            printf "Is the version up to date? "
+            read answer
+            if [[ "$answer" != "yes" ]]; then
+                echo "Canceled."
+                return
+            fi;;
+        "diff")
+            if [[ -t 1 ]]; then
+                command git "$@" | colordiff
+            else
+                command git "$@"
+            fi
+            return;;
+    esac
+    command git "$@"
 }
 
 ssh-auth() {
