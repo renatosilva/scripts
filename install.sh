@@ -59,7 +59,16 @@
 ##
 ## Usage: @script.name [options], where options are:
 ##
-##     -r, --remove       Remove the scripts instead of installing them.
+##     -r, --remove        Remove the scripts instead of installing them.
+##
+##         --where=PATH    Install scripts to PATH rather than /usr/local/bin,
+##                         or remove them from there. Requires --system.
+##
+##         --system=NAME   Set system type manually, determining which scripts
+##                         will be installed. Supported systems are "unix",
+##                         "msys" and "msys2".
+##
+##         --to-msys=ROOT  Shorthand for --system=msys --where=ROOT/local/bin.
 ##
 
 eayoptions_url_base="https://github.com/renatosilva/easyoptions/raw/master/easyoptions"
@@ -97,7 +106,7 @@ msys1=(
 )
 
 winlink() {
-    cd "$target"
+    cd "$where"
     [[ -z "$remove" && ! -e "$1" ]] && cmd //c mklink "$1" "$2"
     [[ -n "$remove" &&   -e "$1" ]] && rm -vf "$1"
     cd - > /dev/null
@@ -122,21 +131,48 @@ if ! which easyoptions.rb > /dev/null 2>&1; then
     download "$eayoptions_url_base.rb" "$easyoptions_home" "easyoptions.rb" > /dev/null
     [[ $? != 0 ]] && rm "$easyoptions_home/easyoptions.rb"
 fi
+eval "$(from="$0" "${easyoptions_home}easyoptions.rb" "$@" || echo exit 1)"
+
+# Install to MSYS from a non-MSYS environment
+if [[ -n "$to_msys" ]]; then
+    if [[ -n "$system" || -n "$where" ]]; then
+        [[ -n "$system" ]] && echo "Ambiguous options specified: --to_msys implies --system=msys."
+        [[ -n "$where"  ]] && echo "Ambiguous options specified: --to_msys implies --where=$to_msys."
+        exit 1
+    fi
+    where="$to_msys/local/bin"
+    system="msys"
+fi
+
+# Target system
+if [[ -z "$system" ]]; then
+    if [[ -n "$where" ]]; then
+        echo "No target system specified, see --help."
+        exit 1
+    fi
+    case $(uname -or) in
+        1.*Msys) system="msys" ;;
+        2.*Msys) system="msys2" ;;
+        *) system="unix"
+    esac
+elif [[ "$system" != unix && "$system" != msys && "$system" != msys2 ]]; then
+    echo "Unrecognized system type: \`$system'."
+    exit 1
+fi
 
 # Prepare
-eval "$(from="$0" "${easyoptions_home}easyoptions.rb" "$@" || echo exit 1)"
-target=/usr/local/bin
+where="${where:-/usr/local/bin}"
 scripts="${unix[@]}"
-mkdir -p "$target"
+mkdir -p "$where"
 
 # MSYS or MSYS2
-if [[ $(uname -o) = Msys ]]; then
+if [[ $system = msys* ]]; then
     scripts="${scripts[@]} ${windows[@]}"
     for link in attrib cmd ipconfig net ping reg schtasks shutdown taskkill; do winlink "$link" dosconv; done
     winlink speak ivona-speak
 
     # MSYS
-    if [[ $(uname -r) = 1.* ]]; then
+    if [[ $system = msys ]]; then
         scripts="${scripts[@]} ${msys1[@]}"
         for link in bzr python ruby; do winlink "$link" runcrt; done
     fi
@@ -147,13 +183,13 @@ from=$(dirname "$0")
 if [[ -z "$remove" ]]; then
     for script in $scripts; do
         case "$script" in
-            *http*) download "${script#*:}" "$target" "${script%%:*}" ;;
-            *) cp -v "$from/$script"* "$target/$script" ;;
+            *http*) download "${script#*:}" "$where" "${script%%:*}" ;;
+            *) cp -v "$from/$script"* "$where/$script" ;;
         esac
     done
     cp -v "$from/aliases.sh" /etc/profile.d/aliases.sh
 else
-    cd "$target"
+    cd "$where"
     for script in $scripts; do rm -vf "${script%%:*}"; done
     rm -vf /etc/profile.d/aliases.sh
     cd - > /dev/null
