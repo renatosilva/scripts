@@ -71,7 +71,9 @@ cp -r "$APPDATA/Microsoft/Sticky Notes" "$notes"
 tools="/c/programs/ferramentas"
 configs="$temp/Configurações"
 mkdir -p "$configs"
-cp ~/.profile ~/.inputrc ~/.wgetrc ~/.minttyrc ~/.vimrc ~/.colordiffrc "$configs"
+for config in bashrc inputrc minttyrc profile vimrc colordiffrc wgetrc; do
+    [[ -f ~/.$config ]] && cp ~/.$config "$configs"
+done
 cp "$tools/defraggler/defraggler.ini" "$configs"
 cp "$tools/ccleaner/ccleaner.ini" "$configs"
 cp "$tools/recuva/recuva.ini" "$configs"
