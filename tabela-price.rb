@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 # Encoding: ISO-8859-1
 
-# Amortização Price  2013.10.25
+# Amortização Price  2014.8.8
 # Copyright (c) 2013 Renato Silva
 # Licenciado sob os termos da GNU GPLv2
 

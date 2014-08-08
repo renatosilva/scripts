@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Windows Cleanup 2014.4.19
+# Windows Cleanup 2014.8.8
 # Copyright (c) 2012-2014 Renato Silva
 # GNU GPLv2 licensed
 

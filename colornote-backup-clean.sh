@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# ColorNote Backup Cleanup 2013.10.5
+# ColorNote Backup Cleanup 2014.8.8
 # Copyright (c) 2012, 2013 Renato Silva
 # GNU GPLv2 licensed
 

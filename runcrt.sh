@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Run MSVCRT 2012.12.10
+# Run MSVCRT 2014.8.8
 # Copyright (c) 2012 Renato Silva
 # GNU GPLv2 licensed
 

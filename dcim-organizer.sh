@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# DCIM Organizer 2013.10.16
+# DCIM Organizer 2014.8.8
 # Copyright (c) 2013 Renato Silva
 # GNU GPLv2 licensed
 

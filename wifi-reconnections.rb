@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 # Encoding: ISO-8859-1
 
-# Wi-Fi Reconnections 2014.4.24
+# Wi-Fi Reconnections 2014.8.8
 # Copyright (c) 2013, 2014 Renato Silva
 # GNU GPLv2 licensed
 

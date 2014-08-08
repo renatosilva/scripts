@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 # Encoding: ISO-8859-1
 
-# Grep Revision 2014.6.11
+# Grep Revision 2014.8.8
 # Copyright (C) 2010, 2012-2014 Renato Silva
 # GNU GPLv2 licensed
 

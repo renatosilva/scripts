@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Firefox Check Bookmarks 2012.12.14
+# Firefox Check Bookmarks 2014.8.8
 # Copyright (c) 2012 Renato Silva
 # GNU GPLv2 licensed
 

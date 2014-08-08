@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# MinGW-Get Packages Helper 2013.10.16
+# MinGW-Get Packages Helper 2014.8.8
 # Copyright (c) 2012, 2013 Renato Silva
 # GNU GPLv2 licensed
 

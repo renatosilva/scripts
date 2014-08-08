@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# IVONA Speak 2012.10.14
+# IVONA Speak 2014.8.8
 # Copyright (c) 2012 Renato Silva
 # GNU GPLv2 licensed
 

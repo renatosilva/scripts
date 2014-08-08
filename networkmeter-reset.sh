@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Network Meter Reset 2013.10.16
+# Network Meter Reset 2014.8.8
 # Copyright (c) 2013 Renato Silva
 # GNU GPLv2 licensed
 

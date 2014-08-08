@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 # Encoding: UTF-8
 
-# TZ Configuration for Brazil 2013.10.11
+# TZ Configuration for Brazil 2014.8.8
 # Copyright (c) 2012, 2013 Renato Silva
 # GNU GPLv2 licensed
 

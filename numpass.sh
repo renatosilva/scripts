@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Numeric Password 2012.12.31
+# Numeric Password 2014.8.8
 # Copyright (c) 2012 Renato Silva
 # GNU GPLv2 licensed
 

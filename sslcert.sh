@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# SSL Certificate 2013.10.16
+# SSL Certificate 2014.8.8
 # Copyright (C) 2012, 2013 Renato Silva
 # GNU GPLv2 licensed
 
