@@ -4,6 +4,9 @@
 # Copyright (c) 2012-2014 Renato Silva
 # GNU GPLv2 licensed
 
+# Kill the running SSH agents
+taskkill //f //im ssh-agent.exe > /dev/null 2>&1
+
 # Clean up bash history
 rm -f ~/.bash_history
 touch ~/.bash_history
