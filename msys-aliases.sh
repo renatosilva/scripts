@@ -2,6 +2,8 @@
 # Copyright (c) 2012-2014 Renato Silva
 # GNU GPLv2 licensed
 
+unalias grep 2> /dev/null
+
 find() {
     { command find "$@" 2>&1 >&3 | command grep -v 'Permission denied'; } 3>&1
 }
