@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-# HTTP Shutdown for Windows 2014.3.15
+# HTTP Shutdown for Windows 2014.8.8
 # Copyright (c) 2014 Renato Silva
 # GNU GPLv2 licensed
 
@@ -31,7 +31,7 @@ def application(environment, start_response):
     return ['started']
 
 if len(sys.argv) != 4 or sys.argv[1] in ['-h', '--help']:
-    print "Usage: %s [host] [port] [path to authentication key]" % sys.argv[0]
+    print "Usage: %s <host> <port> <path to authentication key>" % sys.argv[0]
     sys.exit()
 
 with open(sys.argv[3]) as file: AUTHENTICATION_KEY = file.read().strip()
