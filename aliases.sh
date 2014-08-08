@@ -115,3 +115,8 @@ if [[ $(uname -o) = Msys && $(uname -r) = 1.* ]]; then
         command sqlite "${arguments[@]}" | iconv -f "$encoding" -t ISO-8859-1
     }
 fi
+
+# MSYS2
+if [[ $(uname -o) = Msys && $(uname -r) = 2.* ]]; then
+    alias pacman="pacman --color auto"
+fi
