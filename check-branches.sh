@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ##
-##     Check Branches 2014.8.8
+##     Check Branches 2014.8.9
 ##     Copyright (c) 2012, 2013 Renato Silva
 ##     GNU GPLv2 licensed
 ##
@@ -13,7 +13,8 @@
 ##
 ##         --no-color         Disable colors in output.
 ##         --timestamp=REGEX  Check if commit timestamps match REGEX.
-##         --year=YEAR        Restrict --timestamp check to YEAR.
+##         --date=REGEX       Restrict --timestamp to dates matching REGEX.
+##
 ##     -s, --status-only      Do not perform the missing command, only status.
 ##         --purge-uncommits  Actually remove from the branch any commit that
 ##                            has been reverted with the uncommit command. This
@@ -54,7 +55,7 @@ check() {
     branch="$(dirname "$0")"
     status=$(bzr status "$branch")
     config=".bzr/branch/branch.conf"
-    [[ -n "$timestamp" ]] && timestamp=$(bzr log "$branch" | grep ^timestamp: | grep "$year" | grep -vE " $timestamp")
+    [[ -n "$timestamp" ]] && timestamp=$(bzr log "$branch" | grep ^timestamp: | grep -E "$date" | grep -vE " $timestamp")
     if [[ -n "$purge_uncommits" ]]; then
         if [[ -z "$status" ]]; then
             branch_old="$branch.$(date +%s.%N).temp"
