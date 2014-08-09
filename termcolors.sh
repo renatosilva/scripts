@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Terminal Colors 2014.8.8
+# Terminal Colors 2012.10.28
 # Copyright (c) 2010, 2012 Renato Silva
 # GNU GPLv2 licensed
 

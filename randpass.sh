@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Random Password 2014.8.8
+# Random Password 2013.5.7
 # Copyright (c) 2012, 2013 Renato Silva
 # GNU GPLv2 licensed
 
