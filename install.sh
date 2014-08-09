@@ -17,7 +17,7 @@
 ##     check-branches.sh           Pending work check for Bazaar branches.
 ##     check-tags.sh               Tag synchronization check of Bazaar branches.
 ##     dnsdynamic.sh               Update DNSdynamic entries automatically.
-##     dosconv.sh                  Run a CP850 program from a CP1252 terminal.
+##     conconv.sh                  Encoding conversion for console programs.
 ##     greprev.rb                  Find out what revision from a Bazaar branch
 ##                                 has introduced some specific change.
 ##     http-shutdown.py            Shut down Windows from a remote HTTP request.
@@ -99,7 +99,7 @@ unix=(
 
 windows=(
     "colornote-backup-clean"
-    "dosconv"
+    "conconv"
     "ivona-speak"
     "networkmeter-reset"
     "winclean"
@@ -175,7 +175,7 @@ mkdir -p "$where"
 # MSYS or MSYS2
 if [[ $system = msys* ]]; then
     scripts="${scripts[@]} ${windows[@]}"
-    for link in attrib cmd ipconfig net ping reg schtasks shutdown taskkill; do winlink "$link" dosconv; done
+    for link in attrib cmd ipconfig net ping reg schtasks shutdown taskkill; do winlink "$link" conconv.cp850; done
     winlink speak ivona-speak
 
     # MSYS
@@ -191,6 +191,7 @@ if [[ -z "$remove" ]]; then
     for script in $scripts; do
         case "$script" in
             *http*) download "${script#*:}" "$where" "${script%%:*}" ;;
+            conconv) cp -v "$from/conconv.sh" "$where/conconv.cp850" ;;
             *) cp -v "$from/$script"* "$where/$script" ;;
         esac
     done
@@ -199,5 +200,6 @@ else
     cd "$where"
     for script in $scripts; do rm -vf "${script%%:*}"; done
     rm -vf /etc/profile.d/aliases.sh
+    rm -vf conconv.cp850
     cd - > /dev/null
 fi
