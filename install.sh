@@ -127,9 +127,20 @@ unix=(
 )
 
 winlink() {
-    cd "$where"
-    [[ -z "$remove" && ! -e "$1" ]] && cmd //c mklink "$1" "$2"
+    if [[ -z "$remove" && ! -e "$1" ]]; then
+        cmd //c mklink "$1" "$2"
+        hash "$1"
+    fi
     [[ -n "$remove" &&   -e "$1" ]] && rm -vf "$1"
+}
+
+winlinks() {
+    cd "$where"
+    if [[ $system = msys* ]]; then
+        for link in cmd attrib ipconfig net ping reg schtasks shutdown taskkill; do winlink "$link" conconv.cp850; done
+        [[ $system = msys ]] && for link in bzr python ruby; do winlink "$link" runcrt; done
+        winlink speak ivona-speak
+    fi
     cd - > /dev/null
 }
 
@@ -190,13 +201,6 @@ case $system in
     msys2) scripts="${all[@]} ${windows[@]} ${msys2[@]}" ;;
 esac
 
-# MSYS or MSYS2
-if [[ $system = msys* ]]; then
-    for link in attrib cmd ipconfig net ping reg schtasks shutdown taskkill; do winlink "$link" conconv.cp850; done
-    [[ $system = msys ]] && for link in bzr python ruby; do winlink "$link" runcrt; done
-    winlink speak ivona-speak
-fi
-
 # Deploy
 from=$(dirname "$0")
 if [[ -z "$remove" ]]; then
@@ -209,7 +213,9 @@ if [[ -z "$remove" ]]; then
         esac
     done
     cp -v "$from/aliases.sh" "$to_msys/etc/profile.d/aliases.sh"
+    winlinks
 else
+    winlinks
     cd "$where"
     for script in $scripts; do rm -vf "${script%%:*}"; done
     rm -vf "$to_msys/etc/profile.d/aliases.sh"
