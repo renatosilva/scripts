@@ -17,7 +17,8 @@
 ##     check-branches.sh           Pending work check for Bazaar branches.
 ##     check-tags.sh               Tag synchronization check of Bazaar branches.
 ##     dnsdynamic.sh               Update DNSdynamic entries automatically.
-##     conconv.sh                  Encoding conversion for console programs.
+##     conconv-msys.sh             Convert encoding of MSYS console programs.
+##     conconv-msys2.sh            Convert encoding of MSYS2 console programs.
 ##     greprev.rb                  Find out what revision from a Bazaar branch
 ##                                 has introduced some specific change.
 ##     http-shutdown.py            Shut down Windows from a remote HTTP request.
@@ -103,13 +104,13 @@ all=(
 
 windows=(
     "colornote-backup-clean"
-    "conconv"
     "ivona-speak"
     "networkmeter-reset"
     "winclean"
 )
 
 msys1=(
+    "conconv-msys1"
     "msys2-msys.bat"
     "packages"
     "runcrt"
@@ -117,6 +118,7 @@ msys1=(
 )
 
 msys2=(
+    "conconv-msys2"
     "$vpaste"
 )
 
@@ -200,9 +202,10 @@ from=$(dirname "$0")
 if [[ -z "$remove" ]]; then
     for script in $scripts; do
         case "$script" in
-            *http*) download "${script#*:}" "$where" "${script%%:*}" ;;
-            conconv) cp -v "$from/conconv.sh" "$where/conconv.cp850" ;;
-            *) cp -v "$from/$script"* "$where/$script" ;;
+            *http*)         download "${script#*:}" "$where" "${script%%:*}" ;;
+            conconv-msys1)  cp -v "$from/conconv-msys1.sh" "$where/conconv.cp850" ;;
+            conconv-msys2)  cp -v "$from/conconv-msys2.sh" "$where/conconv.cp850" ;;
+            *)              cp -v "$from/$script"* "$where/$script" ;;
         esac
     done
     cp -v "$from/aliases.sh" "$to_msys/etc/profile.d/aliases.sh"
