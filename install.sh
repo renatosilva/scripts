@@ -126,22 +126,32 @@ unix=(
     "$vpaste"
 )
 
+dosconv() {
+    read input
+    msys_encoding="${LANG##*.}"
+    dos_encoding=$(cmd //c chcp)
+    dos_encoding="cp${dos_encoding##*\ }"
+    echo "$input" | iconv -f "$dos_encoding" ${msys_encoding:+-t $msys_encoding}
+}
+
 winlink() {
-    if [[ -z "$remove" && ! -e "$1" ]]; then
-        cmd //c mklink "$1" "$2"
-        hash "$1"
+    if [[ -z "$remove" && ! -e "$where/$1" ]]; then
+        cd "$where"
+        cmd.exe //c mklink "$1" "$2" | dosconv
+        [[ "$1" = cmd ]] && hash cmd
+        cd - > /dev/null
     fi
-    [[ -n "$remove" &&   -e "$1" ]] && rm -vf "$1"
+    [[ -n "$remove" && -e "$where/$1" ]] && rm -vf "$where/$1"
 }
 
 winlinks() {
-    cd "$where"
+
     if [[ $system = msys* ]]; then
         for link in cmd attrib ipconfig net ping reg schtasks shutdown taskkill; do winlink "$link" conconv.cp850; done
         [[ $system = msys ]] && for link in bzr python ruby; do winlink "$link" runcrt; done
         winlink speak ivona-speak
     fi
-    cd - > /dev/null
+
 }
 
 download() {
@@ -216,9 +226,7 @@ if [[ -z "$remove" ]]; then
     winlinks
 else
     winlinks
-    cd "$where"
-    for script in $scripts; do rm -vf "${script%%:*}"; done
+    for script in $scripts; do rm -vf "$where/${script%%:*}"; done
     rm -vf "$to_msys/etc/profile.d/aliases.sh"
-    rm -vf conconv.cp850
-    cd - > /dev/null
+    rm -vf "$where/conconv.cp850"
 fi
