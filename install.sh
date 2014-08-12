@@ -68,13 +68,17 @@
 ##     -r, --remove        Remove the scripts instead of installing them.
 ##
 ##         --where=PATH    Install scripts to PATH rather than /usr/local/bin,
-##                         or remove them from there. Requires --system.
+##                         or remove them from there. This option does not
+##                         affect the aliases script which is still installed to
+##                         /etc/profile.d. Requires --system.
 ##
 ##         --system=NAME   Set system type manually, determining which scripts
 ##                         will be installed. Supported systems are "unix",
 ##                         "msys" and "msys2".
 ##
-##         --to-msys=ROOT  Shorthand for --system=msys --where=ROOT/local/bin.
+##         --to-msys=ROOT  Shorthand for --system=msys --where=ROOT/local/bin,
+##                         except that the aliases script will also be installed
+##                         to ROOT/etc/profile.d.
 ##
 
 eayoptions_url_base="https://github.com/renatosilva/easyoptions/raw/master/easyoptions"
@@ -201,11 +205,11 @@ if [[ -z "$remove" ]]; then
             *) cp -v "$from/$script"* "$where/$script" ;;
         esac
     done
-    cp -v "$from/aliases.sh" /etc/profile.d/aliases.sh
+    cp -v "$from/aliases.sh" "$to_msys/etc/profile.d/aliases.sh"
 else
     cd "$where"
     for script in $scripts; do rm -vf "${script%%:*}"; done
-    rm -vf /etc/profile.d/aliases.sh
+    rm -vf "$to_msys/etc/profile.d/aliases.sh"
     rm -vf conconv.cp850
     cd - > /dev/null
 fi
