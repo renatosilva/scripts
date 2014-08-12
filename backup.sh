@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ##
-##     Backup 2014.8.8
+##     Backup 2014.8.12
 ##     Copyright (c) 2012-2014 Renato Silva
 ##     GNU GPLv2 licensed
 ##
@@ -57,7 +57,7 @@ non_reboot_shutdown=$(echo "$shutdown_happening" | grep -iE "<data>(desligado|de
 [[ -z "$delay" || -n "$rebooting" ]] && delay="0"
 [[ -z "$delay_message" ]] && delay_message="Esperando..."
 [[ -z "$name" ]] && name="Documentos e programas"
-[[ -z "$target" ]] && target="/dados/backup"
+[[ -z "$target" ]] && target="/d/backup"
 [[ -e "$target" ]] || { echo "Target $target not found."; sleep 5; exit 1; }
 
 # Sticky notes
@@ -109,9 +109,9 @@ reg export 'HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Group Po
 
 # Generating compressed file
 [[ -n "$progress" ]] && suffix="G"
-password=$(cat /dados/documentos/privado/chaves/renatosilva.backup)
+password=$(cat /d/documentos/privado/chaves/renatosilva.backup)
 tempfile="$temp/$name $(date '+%-d.%-m.%Y %-Hh%M').7z"
-7z$suffix a "$tempfile" -p"$password" -xr!desktop.ini -mhe "/dados/documentos" "/dados/programas" "$notes" "$configs"
+7z$suffix a "$tempfile" -p"$password" -xr!desktop.ini -mhe "/d/documentos" "/d/programas" "$notes" "$configs"
 [[ -f "$tempfile" ]] || exit
 rm "$target/$name "*.7z 2> /dev/null || echo "First backup in this device."
 mv "$temp/"*.7z "$target"
