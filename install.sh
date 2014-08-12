@@ -78,8 +78,9 @@
 ##
 
 eayoptions_url_base="https://github.com/renatosilva/easyoptions/raw/master/easyoptions"
+vpaste="vpaste:http://vpaste.net/vpaste"
 
-unix=(
+all=(
     "backup"
     "bacon-crypt"
     "check-branches"
@@ -94,7 +95,6 @@ unix=(
     "easyoptions:$eayoptions_url_base.sh"
     "easyoptions.rb:$eayoptions_url_base.rb"
     "vimcat:https://github.com/renatosilva/vimpager/raw/vimcat-msys2/vimcat"
-    "vpaste:http://vpaste.net/vpaste"
 )
 
 windows=(
@@ -110,6 +110,14 @@ msys1=(
     "packages"
     "runcrt"
     "tz-brazil"
+)
+
+msys2=(
+    "$vpaste"
+)
+
+unix=(
+    "$vpaste"
 )
 
 winlink() {
@@ -169,20 +177,18 @@ fi
 
 # Prepare
 where="${where:-/usr/local/bin}"
-scripts="${unix[@]}"
 mkdir -p "$where"
+case $system in
+    unix)  scripts="${all[@]} ${unix[@]}" ;;
+    msys)  scripts="${all[@]} ${windows[@]} ${msys1[@]}" ;;
+    msys2) scripts="${all[@]} ${windows[@]} ${msys2[@]}" ;;
+esac
 
 # MSYS or MSYS2
 if [[ $system = msys* ]]; then
-    scripts="${scripts[@]} ${windows[@]}"
     for link in attrib cmd ipconfig net ping reg schtasks shutdown taskkill; do winlink "$link" conconv.cp850; done
+    [[ $system = msys ]] && for link in bzr python ruby; do winlink "$link" runcrt; done
     winlink speak ivona-speak
-
-    # MSYS
-    if [[ $system = msys ]]; then
-        scripts="${scripts[@]} ${msys1[@]}"
-        for link in bzr python ruby; do winlink "$link" runcrt; done
-    fi
 fi
 
 # Deploy
