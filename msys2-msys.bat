@@ -1,6 +1,6 @@
 @echo off
 
-rem    MSYS2-MSYS 2014.7.16
+rem    MSYS2-MSYS 2014.8.14
 rem    Copyright (c) 2014 Renato Silva
 rem    GNU GPLv2 licensed
 
@@ -23,7 +23,7 @@ sed -Ei "s/^set PATH=[^;]+MSYS2[^;]*;/PATH=/i" %script%
 
 rem Apply new path and start MSYS
 call %script%
-rm %script%
+del %script%
 if not [%1] == [] set location=%1\
 start %location%mintty /usr/bin/bash --login -i
 exit
