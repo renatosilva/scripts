@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ##
-##     Backup 2014.8.12
+##     Backup 2014.8.16
 ##     Copyright (c) 2012-2014 Renato Silva
 ##     GNU GPLv2 licensed
 ##
@@ -111,7 +111,7 @@ reg export 'HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Group Po
 [[ -n "$progress" ]] && suffix="G"
 password=$(cat /d/documentos/privado/chaves/renatosilva.backup)
 tempfile="$temp/$name $(date '+%-d.%-m.%Y %-Hh%M').7z"
-7z$suffix a "$tempfile" -p"$password" -xr!desktop.ini -mhe "/d/documentos" "/d/programas" "$notes" "$configs"
+7z$suffix a "$tempfile" -p"$password" -xr!desktop.ini -x!Programas/Branches/Local -mhe "/d/documentos" "/d/programas" "$notes" "$configs"
 [[ -f "$tempfile" ]] || exit
 rm "$target/$name "*.7z 2> /dev/null || echo "First backup in this device."
 mv "$temp/"*.7z "$target"
