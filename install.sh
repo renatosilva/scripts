@@ -79,7 +79,7 @@
 ##
 ##         --to-msys=ROOT  Shorthand for --system=msys --where=ROOT/local/bin,
 ##                         except that the aliases script will also be installed
-##                         to ROOT/etc/profile.d.
+##                         (to ROOT/etc/profile.d). ROOT is a valid MSYS root.
 ##
 
 eayoptions_url_base="https://github.com/renatosilva/easyoptions/raw/master/easyoptions"
@@ -180,6 +180,10 @@ if [[ -n "$to_msys" ]]; then
     if [[ -n "$system" || -n "$where" ]]; then
         [[ -n "$system" ]] && echo "Ambiguous options specified: --to_msys implies --system=msys."
         [[ -n "$where"  ]] && echo "Ambiguous options specified: --to_msys implies --where=$to_msys."
+        exit 1
+    fi
+    if [[ ! -f "$to_msys/bin/msys-1.0.dll" ]]; then
+        echo "Invalid MSYS root: \`$to_msys'."
         exit 1
     fi
     where="$to_msys/local/bin"
