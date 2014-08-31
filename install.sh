@@ -61,6 +61,7 @@
 ## Third-party downloads
 ##     easyoptions.rb               Easy option parsing for Bash and Ruby.
 ##     easyoptions.sh               Easy option parsing for Bash.
+##     git-bzr.py                   Bridge between Git and Bazaar.
 ##     vimcat.sh                    Syntax highlighting for the cat command.
 ##     vpaste.sh                    Command-line pastebin (vpaste.net).
 ##
@@ -99,6 +100,7 @@ all=(
     "randpass"
     "easyoptions:$eayoptions_url_base.sh"
     "easyoptions.rb:$eayoptions_url_base.rb"
+    "git-bzr:https://github.com/termie/git-bzr-ng/raw/master/git-bzr"
     "vimcat:https://github.com/renatosilva/vimpager/raw/vimcat-msys2/vimcat"
 )
 
