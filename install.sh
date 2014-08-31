@@ -2,7 +2,7 @@
 
 ##
 ##     Renato Silva Scripts
-##     Copyright (C) 2099-2010, 2011-2014 Renato Silva
+##     Copyright (C) 2009-2014 Renato Silva
 ##     GNU GPLv2 licensed
 ##
 ## This is a set of useful scripts. Some should work on Unix environments in
