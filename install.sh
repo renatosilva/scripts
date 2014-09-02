@@ -68,6 +68,7 @@
 ## Usage: @script.name [options], where options are:
 ##
 ##     -r, --remove        Remove the scripts instead of installing them.
+##     -l, --local         Do not install the third-party downloads.
 ##
 ##         --where=PATH    Install scripts to PATH rather than /usr/local/bin,
 ##                         or remove them from there. This option does not
@@ -222,7 +223,7 @@ from=$(dirname "$0")
 if [[ -z "$remove" ]]; then
     for script in $scripts; do
         case "$script" in
-            *http*)         download "${script#*:}" "$where" "${script%%:*}" ;;
+            *http*)         [[ -z "$local" ]] && download "${script#*:}" "$where" "${script%%:*}" ;;
             conconv-msys1)  cp -v "$from/conconv-msys1.sh" "$where/conconv.cp850" ;;
             conconv-msys2)  cp -v "$from/conconv-msys2.sh" "$where/conconv.cp850" ;;
             *)              cp -v "$from/$script"* "$where/$script" ;;
