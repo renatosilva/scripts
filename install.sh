@@ -19,7 +19,7 @@
 ##     dnsdynamic.sh               Update DNSdynamic entries automatically.
 ##     conconv-msys.sh             Convert encoding of MSYS console programs.
 ##     conconv-msys2.sh            Convert encoding of MSYS2 console programs.
-##     greprev.rb                  Find out what revision from a Bazaar branch
+##     bzrgrep.rb                  Find out what revision from a Bazaar branch
 ##                                 has introduced some specific change.
 ##     http-shutdown.py            Shut down Windows from a remote HTTP request.
 ##     msys2-msys.bat              Allow using MSYS and MSYS2 together.
@@ -90,13 +90,13 @@ vpaste="vpaste:http://vpaste.net/vpaste"
 all=(
     "backup"
     "bacon-crypt"
+    "bzrgrep"
     "check-branches"
     "check-tags"
     "colordiff"
     "csvt"
     "dcim-organizer"
     "dnsdynamic"
-    "greprev"
     "numpass"
     "randpass"
     "easyoptions:$eayoptions_url_base.sh"
