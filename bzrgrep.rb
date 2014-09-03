@@ -2,7 +2,7 @@
 # Encoding: ISO-8859-1
 
 ##
-##     Bazaar Grep Revision 2014.9.2
+##     Bazaar Grep Revision 2014.9.3
 ##     Copyright (C) 2010, 2012-2014 Renato Silva
 ##     GNU GPLv2 licensed
 ##
@@ -14,7 +14,7 @@
 ##
 ##     -i, --stdin           Read commit log from standard input. The expected
 ##                           format for the log is that of bzr log --show-diff.
-##         --from=WHERE      Branch location where to search for the pattern
+##         --from=WHERE      Branch or file where to search for the pattern
 ##                           (current directory by default).
 ##     -s, --case-sensitive  PATTERN is case-sensitive.
 ##         --no-color        Disable colors in output.
