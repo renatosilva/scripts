@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ##
-##     Check Branches 2014.8.24
+##     Check Branches 2014.9.3
 ##     Copyright (c) 2012, 2013 Renato Silva
 ##     GNU GPLv2 licensed
 ##
@@ -57,11 +57,7 @@ check() {
     config=".bzr/branch/branch.conf"
     [[ -n "$timestamp" ]] && timestamp=$(bzr log "$branch" | grep ^timestamp: | grep -E "$date" | grep -vE " $timestamp")
     if [[ -n "$purge_uncommits" ]]; then
-        if [[ -n $(grep "check_branches_purge_uncommits\\s*=\\s*False" "$branch/$config") ]]; then
-            branch_output="Uncommit purge disabled, ignoring."
-        elif [[ -n "$status" ]]; then
-            branch_output=$(printf "%-50s" "Pending status, ignoring.")
-        else
+        if [[ -z "$status" ]]; then
             branch_old="$branch.$(date +%s.%N).temp"
             mv "$branch" "$branch_old"
             branch_output=$(bzr branch "$branch_old" "$branch" 2>&1)
@@ -73,6 +69,8 @@ check() {
             saved=$(saved_size "$branch_old" "$branch")
             branch_output=$(printf "%-30s%-20s" "$branch_output" "$saved")
             rm -rf "$branch_old"
+        else
+            branch_output=$(printf "%-50s" "Pending status, ignoring.")
         fi
     fi
     if [ -n "$status_only" ]; then
