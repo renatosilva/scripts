@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ##
-##     Check Branches 2014.9.3
+##     Check Branches 2014.9.5
 ##     Copyright (c) 2012, 2013 Renato Silva
 ##     GNU GPLv2 licensed
 ##
@@ -19,7 +19,7 @@
 ##         --purge-uncommits  Actually remove from the branch any commit that
 ##                            has been reverted with the uncommit command. This
 ##                            is done by recreating the branch. Branches with
-##                            pending work are skipped.
+##                            pending work or without dead heads are skipped.
 ##     -h, --help             This help text.
 ##
 
@@ -57,7 +57,8 @@ check() {
     config=".bzr/branch/branch.conf"
     [[ -n "$timestamp" ]] && timestamp=$(bzr log "$branch" | grep ^timestamp: | grep -E "$date" | grep -vE " $timestamp")
     if [[ -n "$purge_uncommits" ]]; then
-        if [[ -z "$status" ]]; then
+        dead_heads=$(bzr heads --dead-only "$branch")
+        if [[ -n "$dead_heads" && -z "$status" ]]; then
             branch_old="$branch.$(date +%s.%N).temp"
             mv "$branch" "$branch_old"
             branch_output=$(bzr branch "$branch_old" "$branch" 2>&1)
@@ -69,6 +70,8 @@ check() {
             saved=$(saved_size "$branch_old" "$branch")
             branch_output=$(printf "%-30s%-20s" "$branch_output" "$saved")
             rm -rf "$branch_old"
+        elif [[ -z "$dead_heads" ]]; then
+            branch_output=$(printf "%-50s" "No uncommits to purge.")
         else
             branch_output=$(printf "%-50s" "Pending status, ignoring.")
         fi
