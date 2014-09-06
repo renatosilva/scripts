@@ -88,7 +88,6 @@ eayoptions_url_base="https://github.com/renatosilva/easyoptions/raw/master/easyo
 vpaste="vpaste:http://vpaste.net/vpaste"
 
 all=(
-    "backup"
     "bacon-crypt"
     "bzrgrep"
     "check-branches"
@@ -106,6 +105,7 @@ all=(
 )
 
 windows=(
+    "backup"
     "colornote-backup-clean"
     "ivona-speak"
     "networkmeter-reset"
