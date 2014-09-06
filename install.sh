@@ -100,7 +100,6 @@ all=(
     "randpass"
     "easyoptions:$eayoptions_url_base.sh"
     "easyoptions.rb:$eayoptions_url_base.rb"
-    "git-bzr:https://github.com/termie/git-bzr-ng/raw/master/git-bzr"
     "vimcat:https://github.com/renatosilva/vimpager/raw/vimcat-msys2/vimcat"
 )
 
@@ -110,6 +109,7 @@ windows=(
     "ivona-speak"
     "networkmeter-reset"
     "winclean"
+    "git-bzr:https://github.com/termie/git-bzr-ng/raw/master/git-bzr"
 )
 
 msys1=(
