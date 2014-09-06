@@ -14,13 +14,13 @@
 ## Main scripts
 ##     backup.sh                   Secured file backup with 7-Zip.
 ##     bacon-crypt.rb              Base Conversion Encryption algorithm.
+##     bzrgrep.rb                  Find out what revision from a Bazaar branch
+##                                 has introduced some specific change.
 ##     check-branches.sh           Pending work check for Bazaar branches.
 ##     check-tags.sh               Tag synchronization check of Bazaar branches.
 ##     dnsdynamic.sh               Update DNSdynamic entries automatically.
 ##     conconv-msys.sh             Convert encoding of MSYS console programs.
 ##     conconv-msys2.sh            Convert encoding of MSYS2 console programs.
-##     bzrgrep.rb                  Find out what revision from a Bazaar branch
-##                                 has introduced some specific change.
 ##     http-shutdown.py            Shut down Windows from a remote HTTP request.
 ##     msys2-msys.bat              Allow using MSYS and MSYS2 together.
 ##     packages.sh                 Package management helper for mingw-get.
