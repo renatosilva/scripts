@@ -59,6 +59,7 @@
 ##                                  reconnections.
 ##
 ## Third-party downloads
+##     colormake.sh                 Colorized output for Make and GCC.
 ##     easyoptions.rb               Easy option parsing for Bash and Ruby.
 ##     easyoptions.sh               Easy option parsing for Bash.
 ##     git-bzr.py                   Bridge between Git and Bazaar.
@@ -98,6 +99,7 @@ all=(
     "dnsdynamic"
     "numpass"
     "randpass"
+    "colormake:https://github.com/renatosilva/colormake/raw/master/colormake.sh"
     "easyoptions:$eayoptions_url_base.sh"
     "easyoptions.rb:$eayoptions_url_base.rb"
     "vimcat:https://github.com/renatosilva/vimpager/raw/vimcat-msys2/vimcat"
