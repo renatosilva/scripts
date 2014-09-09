@@ -231,6 +231,7 @@ if [[ -z "$remove" ]]; then
             *)              cp -v "$from/$script"* "$where/$script" ;;
         esac
     done
+    mkdir -p "$to_msys/etc/profile.d"
     cp -v "$from/aliases.sh" "$to_msys/etc/profile.d/aliases.sh"
     winlinks
 else
