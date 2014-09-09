@@ -6,9 +6,9 @@
 export PAGER="vimpager"
 alias cat="vimcat"
 alias less="vimpager"
-alias grepi="grep -i"
+alias grepe="grep -rniE"
 alias hl="grep -C 1000000"
-alias hli="hl -i"
+alias hle="hl -iE"
 
 # Colored diff
 diff() {
