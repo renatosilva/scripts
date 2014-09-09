@@ -2,7 +2,7 @@
 # Encoding: ISO-8859-1
 
 ##
-##     Bazaar Grep Revision 2014.9.3
+##     Bazaar Grep Revision 2014.9.9
 ##     Copyright (C) 2010, 2012-2014 Renato Silva
 ##     GNU GPLv2 licensed
 ##
@@ -35,10 +35,13 @@ if not $options[:no_color] and ENV["TERM"] =~ /xterm/ and (system("test -t 1") o
 end
 
 def puts(text=nil, color=nil)
+    pattern = $options[:case_sensitive]?
+        /(#{$arguments[0]})/:
+        /(#{$arguments[0]})/i
     case color
         when nil then    super(text)
-        when $cyan then  super(text.gsub(/(#{$arguments[0]})/, "#{$cyan}\\1#{$normal}"))
-        when $red then   super(text.gsub(/(#{$arguments[0]})/, "#{$red}\\1#{$normal}"))
+        when $cyan then  super(text.gsub(pattern, "#{$cyan}\\1#{$normal}"))
+        when $red then   super(text.gsub(pattern, "#{$red}\\1#{$normal}"))
         else             super("#{color}#{text}#{$normal}")
     end
 end
