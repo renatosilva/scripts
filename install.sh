@@ -64,6 +64,7 @@
 ##     easyoptions.sh               Easy option parsing for Bash.
 ##     git-bzr.py                   Bridge between Git and Bazaar.
 ##     vimcat.sh                    Syntax highlighting for the cat command.
+##     vimpager.sh                  A terminal pager with syntax highlighting.
 ##     vpaste.sh                    Command-line pastebin (vpaste.net).
 ##
 ## Usage: @script.name [options], where options are:
@@ -103,6 +104,7 @@ all=(
     "easyoptions:$eayoptions_url_base.sh"
     "easyoptions.rb:$eayoptions_url_base.rb"
     "vimcat:https://github.com/renatosilva/vimpager/raw/vimcat-msys2/vimcat"
+    "vimpager:https://github.com/rkitover/vimpager/raw/master/vimpager"
 )
 
 windows=(

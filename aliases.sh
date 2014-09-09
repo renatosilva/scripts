@@ -1,9 +1,11 @@
-# Aliases 2014.8.8
+# Aliases 2014.9.9
 # Copyright (c) 2012-2014 Renato Silva
 # GNU GPLv2 licensed
 
-# Aliases
+# Variables and aliases
+export PAGER="vimpager"
 alias cat="vimcat"
+alias less="vimpager"
 alias grepi="grep -i"
 alias hl="grep -C 1000000"
 alias hli="hl -i"
