@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ##
-##     Check Branches 2014.9.5
+##     Check Branches 2014.9.9
 ##     Copyright (c) 2012, 2013 Renato Silva
 ##     GNU GPLv2 licensed
 ##
@@ -43,7 +43,7 @@ saved_size() {
         size_diff="${size_diff} MB"
         color="${color:-$blue_color}"
     fi
-    printf "${color}$saved_or_spent ${size_diff#-}${normal_color}"
+    printf "${color}%$3s${normal_color}" "$saved_or_spent ${size_diff#-}"
 }
 
 print_name() {
@@ -67,8 +67,8 @@ check() {
             else
                 rm -f "$branch/$config"
             fi
-            saved=$(saved_size "$branch_old" "$branch")
-            branch_output=$(printf "%-30s%-20s" "$branch_output" "$saved")
+            saved=$(saved_size "$branch_old" "$branch" "-20")
+            branch_output=$(printf "%-30s${saved}" "$branch_output")
             rm -rf "$branch_old"
         elif [[ -z "$dead_heads" ]]; then
             branch_output=$(printf "%-50s" "No uncommits to purge.")
