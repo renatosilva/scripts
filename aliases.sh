@@ -2,10 +2,8 @@
 # Copyright (c) 2012-2014 Renato Silva
 # GNU GPLv2 licensed
 
-# Variables and aliases
-export PAGER="vimpager"
+# Aliases
 alias cat="vimcat"
-alias less="vimpager"
 alias grepe="grep -rniE"
 alias hl="grep -C 1000000"
 alias hle="hl -iE"
@@ -63,6 +61,13 @@ git() {
     esac
     command git "$@"
 }
+
+# Not MSYS
+if [[ $(uname -o) != Msys || $(uname -r) != 1.* ]]; then
+    # Vimpager
+    export PAGER="vimpager"
+    alias less="vimpager"
+fi
 
 # MSYS and MSYS2
 if [[ $(uname -o) = Msys ]]; then

@@ -87,6 +87,7 @@
 ##
 
 eayoptions_url_base="https://github.com/renatosilva/easyoptions/raw/master/easyoptions"
+vimpager="vimpager:https://github.com/renatosilva/vimpager/raw/master/vimpager"
 vpaste="vpaste:http://vpaste.net/vpaste"
 
 all=(
@@ -104,7 +105,6 @@ all=(
     "easyoptions:$eayoptions_url_base.sh"
     "easyoptions.rb:$eayoptions_url_base.rb"
     "vimcat:https://github.com/renatosilva/vimpager/raw/vimcat-msys2/vimcat"
-    "vimpager:https://github.com/renatosilva/vimpager/raw/master/vimpager"
 )
 
 windows=(
@@ -126,10 +126,12 @@ msys1=(
 
 msys2=(
     "conconv-msys2"
+    "$vimpager"
     "$vpaste"
 )
 
 unix=(
+    "$vimpager"
     "$vpaste"
 )
 
