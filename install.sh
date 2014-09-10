@@ -104,7 +104,7 @@ all=(
     "easyoptions:$eayoptions_url_base.sh"
     "easyoptions.rb:$eayoptions_url_base.rb"
     "vimcat:https://github.com/renatosilva/vimpager/raw/vimcat-msys2/vimcat"
-    "vimpager:https://github.com/rkitover/vimpager/raw/master/vimpager"
+    "vimpager:https://github.com/renatosilva/vimpager/raw/master/vimpager"
 )
 
 windows=(
