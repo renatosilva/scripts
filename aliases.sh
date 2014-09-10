@@ -1,11 +1,11 @@
-# Aliases 2014.9.9
+# Aliases 2014.9.10
 # Copyright (c) 2012-2014 Renato Silva
 # GNU GPLv2 licensed
 
 # Aliases
 alias cat="vimcat"
 alias grepe="grep -iE"
-alias greper="grepe -rn"
+alias greper="grep -rnE"
 alias hl="grep -C 1000000"
 alias hle="hl -iE"
 
