@@ -65,7 +65,7 @@ git() {
 # Not MSYS
 if [[ $(uname -o) != Msys || $(uname -r) != 1.* ]]; then
     # Vimpager
-    export PAGER="vimpager"
+    PAGER="vimpager"
     alias less="vimpager"
 fi
 
