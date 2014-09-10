@@ -4,7 +4,8 @@
 
 # Aliases
 alias cat="vimcat"
-alias grepe="grep -rniE"
+alias grepe="grep -iE"
+alias greper="grepe -rn"
 alias hl="grep -C 1000000"
 alias hle="hl -iE"
 
