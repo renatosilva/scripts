@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ##
-##     Check Branches 2014.9.9
+##     Check Branches 2014.9.12
 ##     Copyright (c) 2012, 2013 Renato Silva
 ##     GNU GPLv2 licensed
 ##
@@ -94,7 +94,8 @@ check() {
     cd - > /dev/null
 }
 
-eval "$(from="$0" easyoptions.rb "$@" || echo exit 1)"
+source easyoptions || exit
+export timestamp date status_only purge_uncommits
 export -f saved_size
 export -f print_name
 export -f check

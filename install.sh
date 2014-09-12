@@ -60,8 +60,7 @@
 ##
 ## Third-party downloads
 ##     colormake.sh                 Colorized output for Make and GCC.
-##     easyoptions.rb               Easy option parsing for Bash and Ruby.
-##     easyoptions.sh               Easy option parsing for Bash.
+##     easyoptions                  Easy option parsing for Bash and Ruby.
 ##     git-bzr.py                   Bridge between Git and Bazaar.
 ##     vimcat.sh                    Syntax highlighting for the cat command.
 ##     vimpager.sh                  A terminal pager with syntax highlighting.
@@ -102,8 +101,9 @@ all=(
     "numpass"
     "randpass"
     "colormake:https://github.com/renatosilva/colormake/raw/master/colormake.sh"
-    "easyoptions:$eayoptions_url_base.sh"
+    "easyoptions:$eayoptions_url_base"
     "easyoptions.rb:$eayoptions_url_base.rb"
+    "easyoptions.sh:$eayoptions_url_base.sh"
     "vimcat:https://github.com/renatosilva/vimpager/raw/vimcat-msys2/vimcat"
 )
 
@@ -177,12 +177,12 @@ download() {
 # EasyOptions
 [[ -t 1 ]] && host_format="\e[38;05;2m%s\e[0m"
 [[ -t 2 ]] && warning_format="\e[38;05;9m%s\e[0m"
-if ! which easyoptions.rb > /dev/null 2>&1; then
-    easyoptions_home=/tmp/
-    download "$eayoptions_url_base.rb" "$easyoptions_home" "easyoptions.rb" > /dev/null
-    [[ $? != 0 ]] && rm "$easyoptions_home/easyoptions.rb"
+if ! which easyoptions > /dev/null 2>&1; then
+    download "$eayoptions_url_base.rb" /tmp "easyoptions.rb" > /dev/null || rm /tmp/easyoptions.rb
+    download "$eayoptions_url_base"    /tmp "easyoptions"    > /dev/null || rm /tmp/easyoptions
+    PATH="/tmp:$PATH"
 fi
-eval "$(from="$0" "${easyoptions_home}easyoptions.rb" "$@" || echo exit 1)"
+source easyoptions || exit
 
 # Install to MSYS from a non-MSYS environment
 if [[ -n "$to_msys" ]]; then

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ##
-##     Check Branch Tags 2014.8.8
+##     Check Branch Tags 2014.9.12
 ##     Copyright (c) 2014 Renato Silva
 ##     GNU GPLv2 licensed
 ##
@@ -58,7 +58,7 @@ check() {
     echo "Done."
 }
 
-eval "$(from="$0" easyoptions.rb "$@" || echo exit 1)"
+source easyoptions || exit
 export -f branch_location
 export -f print_name
 export -f check
