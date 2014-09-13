@@ -156,6 +156,7 @@ winlink() {
 winlinks() {
 
     if [[ $system = msys* ]]; then
+        [[ -z "$remove" && ! -e "$where/cmd" ]] && printf "\n${title_format:-%s}\n" "Creating symlinks"
         for link in cmd attrib ipconfig net ping reg schtasks shutdown taskkill; do winlink "$link" conconv.cp850; done
         [[ $system = msys ]] && for link in bzr python ruby; do winlink "$link" runcrt; done
         winlink speak ivona-speak
@@ -169,14 +170,14 @@ download() {
     host="${host%%/*}"
     wget -q --no-check-certificate -O "$file" "$1" && chmod +x "$file"
     case "$?" in
-        0) printf "${host_format:-%s} -> $2/$3\n" "$host" ;;
-        *) printf "${warning_format:-%s} failed downloading and installing $3\n" "Warning!" >&2 ;;
+        0) printf "%s -> $2/$3\n" "$host" ;;
+        *) printf "${error_format:-%s} failed downloading and installing $3\n" "Error:" >&2 ;;
     esac
 }
 
-# EasyOptions
-[[ -t 1 ]] && host_format="\e[38;05;2m%s\e[0m"
-[[ -t 2 ]] && warning_format="\e[38;05;9m%s\e[0m"
+# Colors and EasyOptions
+[[ -t 1 ]] && title_format="\e[0;32m%s\e[0m"
+[[ -t 2 ]] && error_format="\e[1;31m%s\e[0m"
 if ! which easyoptions > /dev/null 2>&1; then
     download "$eayoptions_url_base.rb" /tmp "easyoptions.rb" > /dev/null || rm /tmp/easyoptions.rb
     download "$eayoptions_url_base"    /tmp "easyoptions"    > /dev/null || rm /tmp/easyoptions
@@ -227,9 +228,10 @@ esac
 # Deploy
 from=$(dirname "$0")
 if [[ -z "$remove" ]]; then
+    printf "${title_format:-%s}\n" "Installing local scripts"
     for script in $scripts; do
         case "$script" in
-            *http*)         [[ -z "$local" ]] && download "${script#*:}" "$where" "${script%%:*}" ;;
+            *http*)         remote_scripts+=("$script") ;;
             conconv-msys1)  cp -v "$from/conconv-msys1.sh" "$where/conconv.cp850" ;;
             conconv-msys2)  cp -v "$from/conconv-msys2.sh" "$where/conconv.cp850" ;;
             *)              cp -v "$from/$script"* "$where/$script" ;;
@@ -237,6 +239,12 @@ if [[ -z "$remove" ]]; then
     done
     mkdir -p "$to_msys/etc/profile.d"
     cp -v "$from/aliases.sh" "$to_msys/etc/profile.d/aliases.sh"
+    if [[ -z "$local" && -n "${remote_scripts[0]}" ]]; then
+        printf "\n${title_format:-%s}\n" "Installing remote scripts"
+        for script in "${remote_scripts[@]}"; do
+            download "${script#*:}" "$where" "${script%%:*}"
+        done
+    fi
     winlinks
 else
     winlinks
