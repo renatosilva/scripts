@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ##
-##     Check Branches 2014.9.12
+##     Bazaar Branches Check 2014.9.12
 ##     Copyright (c) 2012, 2013 Renato Silva
 ##     GNU GPLv2 licensed
 ##

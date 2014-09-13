@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ##
-##     Check Branch Tags 2014.9.12
+##     Bazaar Tags Check 2014.9.12
 ##     Copyright (c) 2014 Renato Silva
 ##     GNU GPLv2 licensed
 ##
@@ -70,7 +70,7 @@ if [[ -t 1 && -z "$no_color" ]]; then
     export diff_command="colordiff"
 fi
 
-temp_dir="/tmp/check-tags.$(date +%s.%N)"
+temp_dir="/tmp/bzrtags.$(date +%s.%N)"
 export local_tags="$temp_dir/tags.local.txt"
 export parent_tags="$temp_dir/tags.parent.txt"
 

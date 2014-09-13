@@ -14,10 +14,10 @@
 ## Main scripts
 ##     backup.sh                   Secured file backup with 7-Zip.
 ##     bacon-crypt.rb              Base Conversion Encryption algorithm.
+##     bzrcheck.sh                 Pending work check for Bazaar branches.
 ##     bzrgrep.rb                  Find out what revision from a Bazaar branch
 ##                                 has introduced some specific change.
-##     check-branches.sh           Pending work check for Bazaar branches.
-##     check-tags.sh               Tag synchronization check of Bazaar branches.
+##     bzrtags.sh                  Tag synchronization check of Bazaar branches.
 ##     dnsdynamic.sh               Update DNSdynamic entries automatically.
 ##     conconv-msys.sh             Convert encoding of MSYS console programs.
 ##     conconv-msys2.sh            Convert encoding of MSYS2 console programs.
@@ -91,9 +91,9 @@ vpaste="vpaste:http://vpaste.net/vpaste"
 
 all=(
     "bacon-crypt"
+    "bzrcheck"
     "bzrgrep"
-    "check-branches"
-    "check-tags"
+    "bzrtags"
     "colordiff"
     "csvt"
     "dcim-organizer"
