@@ -154,14 +154,12 @@ winlink() {
 }
 
 winlinks() {
-
     if [[ $system = msys* ]]; then
         [[ -z "$remove" && ! -e "$where/cmd" ]] && printf "\n${title_format:-%s}\n" "Creating symlinks"
         for link in cmd attrib ipconfig net ping reg schtasks shutdown taskkill; do winlink "$link" conconv.cp850; done
         [[ $system = msys ]] && for link in bzr python ruby; do winlink "$link" runcrt; done
         winlink speak ivona-speak
     fi
-
 }
 
 download() {
