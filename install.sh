@@ -191,7 +191,7 @@ if [[ -n "$to_msys" ]]; then
         exit 1
     fi
     if [[ ! -f "$to_msys/bin/msys-1.0.dll" ]]; then
-        echo "Invalid MSYS root: \`$to_msys'."
+        echo "Invalid MSYS root \"$to_msys\"."
         exit 1
     fi
     where="$to_msys/local/bin"
@@ -210,7 +210,7 @@ if [[ -z "$system" ]]; then
         *) system="unix"
     esac
 elif [[ "$system" != unix && "$system" != msys && "$system" != msys2 ]]; then
-    echo "Unrecognized system type: \`$system'."
+    echo "Unrecognized system type \"$system\"."
     exit 1
 fi
 
