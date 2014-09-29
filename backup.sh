@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ##
-##     Backup 2014.9.12
+##     Backup 2014.9.29
 ##     Copyright (c) 2012-2014 Renato Silva
 ##     GNU GPLv2 licensed
 ##
@@ -45,7 +45,7 @@
 ##
 
 play_sound() {
-    ruby -e "require 'win32/sound'; include Win32; Sound.play('C:/Windows/Media/$1.wav')"
+    ruby -e "require 'win32/sound'; include Win32; Sound.play('C:\\Windows\\Media\\$1.wav')"
 }
 
 source easyoptions || exit
