@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ##
-##     Backup 2014.9.29
+##     Backup 2014.11.18
 ##     Copyright (c) 2012-2014 Renato Silva
 ##     GNU GPLv2 licensed
 ##
@@ -45,7 +45,7 @@
 ##
 
 play_sound() {
-    ruby -e "require 'win32/sound'; include Win32; Sound.play('C:\\Windows\\Media\\$1.wav')"
+    python -c "import winsound; winsound.PlaySound('C:/Windows/Media/$1.wav', winsound.SND_FILENAME)"
 }
 
 source easyoptions || exit
