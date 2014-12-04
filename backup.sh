@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ##
-##     Backup 2014.11.18
+##     Backup 2014.12.4
 ##     Copyright (c) 2012-2014 Renato Silva
 ##     GNU GPLv2 licensed
 ##
@@ -70,7 +70,7 @@ cp -r "$APPDATA/Microsoft/Sticky Notes" "$notes"
 tools="/c/programs/ferramentas"
 configs="$temp/Configurações"
 mkdir -p "$configs"
-for config in bashrc inputrc minttyrc profile vimrc colordiffrc wgetrc; do
+for config in bashrc colordiffrc gitconfig inputrc minttyrc profile rubocop.yml vimrc wgetrc; do
     [[ -f ~/.$config ]] && cp ~/.$config "$configs"
 done
 cp "$tools/defraggler/defraggler.ini" "$configs"
