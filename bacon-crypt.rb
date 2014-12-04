@@ -2,7 +2,7 @@
 # Encoding: ISO-8859-1
 
 ##
-##     Base Conversion Cryptography 2014.12.3
+##     Base Conversion Cryptography 2014.12.4
 ##     Copyright (c) 2013 Renato Silva
 ##     GNU GPLv2 licensed
 ##
@@ -31,16 +31,16 @@ require 'easyoptions'
 options = EasyOptions.options
 
 class String
-    def scan_digits(length=BiggestBase.length, digit_base=10, leading_zero=false, fixed_length=true)
+    def scan_digits(length = BiggestBase.length, digit_base = 10, leading_zero = false, fixed_length = true)
         offset = leading_zero ? 0 : 1
-        length = rand(2..length) if length > 2 and not fixed_length
-        digits = self.scan(/(.{#{length - offset}}|.{1,#{length - offset}}$)/)
+        length = rand(2..length) if length > 2 && !fixed_length
+        digits = scan(/(.{#{length - offset}}|.{1,#{length - offset}}$)/)
         non_zero = leading_zero ? '' : '1'
         digits.map { |item| "#{non_zero}#{item[0]}".to_i(digit_base) }
     end
-    def zerofill(length=nil)
-        length=BiggestBase.length if not length
-        self.rjust(length, '0')
+    def zerofill(length = nil)
+        length = BiggestBase.length unless length
+        rjust(length, '0')
     end
     def decode64
         array = Base64.decode64(self).unpack('U*')
@@ -50,11 +50,11 @@ class String
 end
 
 class Array
-    def zerofill(length=nil)
-        self.map { |item| item.to_s.zerofill(length) }.join
+    def zerofill(length = nil)
+        map { |item| item.to_s.zerofill(length) }.join
     end
     def encode64
-        base64 = EasyOptions.options[:lines].nil? ? Base64.strict_encode64(self.pack('U*')) : Base64.encode64(self.pack('U*'))
+        base64 = EasyOptions.options[:lines].nil? ? Base64.strict_encode64(pack('U*')) : Base64.encode64(pack('U*'))
         Progress.done('Encoded to Base64')
         base64
     end
@@ -66,7 +66,7 @@ class Progress
         @maximum = maximum
         @step = 0
     end
-    def Progress.done(message)
+    def self.done(message)
         $stderr.puts("#{message}.") if EasyOptions.options[:verbose]
     end
     def next
@@ -80,7 +80,7 @@ class Progress
 end
 
 class Base
-    def initialize(base, alphabet=(0..(base - 1)).to_a.shuffle)
+    def initialize(base, alphabet = (0..(base - 1)).to_a.shuffle)
         @value, @alphabet = base, alphabet
     end
     def to_this(integer)
@@ -97,21 +97,21 @@ class Base
         progress = Progress.new('Converting to base 10', digits.length)
         digits.reverse.each_with_index do |digit, index|
             digit_value = @alphabet.index(digit)
-            result += digit_value * (@value ** index)
+            result += digit_value * (@value**index)
             progress.next
         end
         Progress.done('Converted to base 10')
         result
     end
-    def length(base=10)
-        Math.log(self.value, base).ceil
+    def length(base = 10)
+        Math.log(value, base).ceil
     end
     def bitlength
-        Math.log2(self.value)
+        Math.log2(value)
     end
     def to_s
         hexa_alphabet = @alphabet.map { |digit| digit.to_s(16).upcase }
-        "#{@value.to_s.zerofill}=#{hexa_alphabet.zerofill(self.length(16))}"
+        "#{@value.to_s.zerofill}=#{hexa_alphabet.zerofill(length(16))}"
     end
     attr_accessor :value
     attr_accessor :alphabet
@@ -122,8 +122,8 @@ EncodedBases = (2**10)..(2**12) # 1024..4096
 BiggestBase  = Base.new([DecodedBases.max, EncodedBases.max].max)
 
 class EncryptionKey
-    def initialize(file_path=nil)
-        if file_path == nil
+    def initialize(file_path = nil)
+        if file_path.nil?
             @decoded = Base.new(rand(DecodedBases))
             @encoded = Base.new(rand(EncodedBases))
         else
@@ -133,7 +133,7 @@ class EncryptionKey
         end
     end
     def parse_line(line)
-        columns=line.split('=')
+        columns = line.split('=')
         base = Base.new(columns[0].to_i)
         base.alphabet = columns[1].scan_digits(base.length(16), 16, true)
         base
@@ -146,7 +146,7 @@ class EncryptionKey
 end
 
 class BaseCrypt
-    def initialize(file_path=nil)
+    def initialize(file_path = nil)
         @key = EncryptionKey.new(file_path)
     end
     def encode(bytes)
@@ -176,29 +176,29 @@ class BaseCrypt
     attr_accessor :key
 end
 
-if options.empty? then
+if options.empty?
     puts EasyOptions.documentation
     exit
 end
 
-EasyOptions.finish('--key is required') if not options[:key]
-EasyOptions.finish('cannot decode while creating key') if options[:create] and (options[:decode] or options[:decode_file])
-EasyOptions.finish('cannot specify multiple encoding actions') if [:encode, :encode_file].find_all { |option| not options[option].nil? }.length > 1
-EasyOptions.finish('cannot specify multiple decoding actions') if [:decode, :decode_file, :decode_text].find_all { |option| not options[option].nil? }.length > 1
-EasyOptions.finish('encoded file must have the bacon extension') if options[:decode_file] and not options[:decode_file].end_with?('.bacon')
+EasyOptions.finish('--key is required') unless options[:key]
+EasyOptions.finish('cannot decode while creating key') if options[:create] && (options[:decode] || options[:decode_file])
+EasyOptions.finish('cannot specify multiple encoding actions') if [:encode, :encode_file].find_all { |option| !options[option].nil? }.length > 1
+EasyOptions.finish('cannot specify multiple decoding actions') if [:decode, :decode_file, :decode_text].find_all { |option| !options[option].nil? }.length > 1
+EasyOptions.finish('encoded file must have the bacon extension') if options[:decode_file] && !options[:decode_file].end_with?('.bacon')
 
 options[:decode] = options[:decode_text] if options[:decode_text]
 options[:encode] = File.open(options[:encode_file], 'rb') { |io| io.read } if options[:encode_file]
 options[:decode] = File.open(options[:decode_file], 'rb') { |io| io.read } if options[:decode_file]
 
-if options[:create] then
+if options[:create]
     bc = BaseCrypt.new
     file = File.open(options[:key], 'w')
     file.puts(bc.key)
     file.close
 end
 
-if options[:encode] then
+if options[:encode]
     bc = BaseCrypt.new(options[:key])
     options[:encode].force_encoding(options[:encoding]) if options[:encoding]
     ciphertext = bc.encode(options[:encode].bytes)
@@ -206,12 +206,12 @@ if options[:encode] then
     $stdout.puts ciphertext
 end
 
-if options[:decode] then
+if options[:decode]
     bc = BaseCrypt.new(options[:key])
     decoded = bc.decode(options[:decode])
     decoded.force_encoding(options[:encoding]) if options[:encoding]
     $stdout = File.open(options[:decode_file].sub(/\.bacon$/, ''), 'wb') if options[:decode_file]
-    if options[:decode_text] then
+    if options[:decode_text]
         $stdout.puts(decoded)
     else
         $stdout.binmode.write(decoded)

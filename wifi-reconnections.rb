@@ -1,12 +1,12 @@
 #!/usr/bin/env ruby
 # Encoding: ISO-8859-1
 
-# Wi-Fi Reconnections 2014.12.3
+# Wi-Fi Reconnections 2014.12.4
 # Copyright (c) 2013, 2014 Renato Silva
 # GNU GPLv2 licensed
 
 if [nil, '-h', '--help'].include? ARGV[0]
-    puts "Usage: #{File.basename($0)} <log file>"
+    puts "Usage: #{File.basename($PROGRAM_NAME)} <log file>"
     puts 'Log entries should consist of date, time, SSID and uptime, separated by space.'
     exit
 end
@@ -16,8 +16,8 @@ networks = {}
 
 log.readlines.each do |line|
     date, time, network, uptime = line.split
-    networks[network] = {} if networks[network] == nil
-    networks[network][date] = { :uptime => 0, :reconnections => 0 } if networks[network][date] == nil
+    networks[network] = {} if networks[network].nil?
+    networks[network][date] = { uptime: 0, reconnections: 0 } if networks[network][date].nil?
 
     networks[network][date][:uptime] += uptime.to_f
     networks[network][date][:reconnections] += 1

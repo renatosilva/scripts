@@ -1,19 +1,19 @@
 #!/usr/bin/env ruby
 # Encoding: ISO-8859-1
 
-# Eclipse Test On Save 2014.12.3
+# Eclipse Test On Save 2014.12.4
 # Copyright (c) 2009, 2012, 2013 Renato Silva
 # GNU GPLv2 licensed
 
-if ARGV[1] == nil
-    usage = "Usage: #{File.basename($0)} <eclipse home> <class> [additional classpath]"
+if ARGV[1].nil?
+    usage = "Usage: #{File.basename($PROGRAM_NAME)} <eclipse home> <class> [additional classpath]"
     puts "\n\t#{usage}\n\n"
     exit
 end
 
 home = ARGV[0].gsub(/\\/, '/')
 test_class = ARGV[1]
-additional_classpath = File::PATH_SEPARATOR + ARGV[2] unless ARGV[2] == nil
+additional_classpath = File::PATH_SEPARATOR + ARGV[2] unless ARGV[2].nil?
 
 path = "#{home}/plugins/*"
 

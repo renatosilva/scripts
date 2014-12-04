@@ -1,18 +1,18 @@
 #!/usr/bin/env ruby
 # Encoding: UTF-8
 
-# Amortização Price  2014.12.3
+# Amortização Price  2014.12.4
 # Copyright (c) 2013 Renato Silva
 # Licenciado sob os termos da GNU GPLv2
 
 # Texto de ajuda
 
-if [ '--help', '-h', nil ].include? ARGV[0] then puts "
+if ['--help', '-h', nil].include? ARGV[0] then puts "
     Este programa calcula o andamento de um empréstimo, feito através do
     sistema Price, baseado em amortizações adicionais específicas. Desta forma é
     possível prever como certos adiantamentos irão alterar o pagamento do
     empréstimo, especialmente o quão antecipadamente ele poderá ser quitado.\n
-Modo de usar: #{File.basename($0)} <arquivo de entrada>\n
+Modo de usar: #{File.basename($PROGRAM_NAME)} <arquivo de entrada>\n
 O arquivo de entrada deve ser um texto ISO-8859-1, no seguinte formato:
     Taxa: <taxa de juros>
     Parcelas: <número de parcelas>
@@ -31,7 +31,7 @@ adiantamentos = {}
 File.readlines(nome_do_arquivo).each do |linha|
     linha.force_encoding('ISO-8859-1')
     chave, valor = linha.strip.split(':').each { |coluna| coluna.strip! }
-    next if [ chave, valor ].include? nil
+    next if [chave, valor].include? nil
 
     chave.downcase!
     chave.slice!(/adiantamento\s+/)
@@ -69,11 +69,11 @@ class Numeric
 end
 
 amortizacao = 0
-prestacao = ((saldo * (taxa - 1)) / (1 - (1 / taxa ** parcelas))).moeda
+prestacao = ((saldo * (taxa - 1)) / (1 - (1 / taxa**parcelas))).moeda
 printf "%3s%11s%18s%16s\n", '#', 'Data', 'Saldo devedor', 'Amortizado'
 
 (1..parcelas).each do |parcela|
-    amortizacao = prestacao + (adiantamentos[parcela.data] or 0);
+    amortizacao = prestacao + (adiantamentos[parcela.data] || 0)
     saldo = (saldo * taxa).moeda
 
     amortizacao = saldo if amortizacao > saldo

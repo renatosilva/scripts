@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 # Encoding: UTF-8
 
-# TZ Configuration for Brazil 2014.8.8
+# TZ Configuration for Brazil 2014.12.4
 # Copyright (c) 2012, 2013 Renato Silva
 # GNU GPLv2 licensed
 
@@ -16,6 +16,6 @@ require 'rubygems'
 require 'tzinfo'
 
 current = TZInfo::Timezone.get('America/Sao_Paulo').current_period
-dst_end = (current.dst?? current.end_transition : current.start_transition).at.to_datetime
-dst_end_week = (dst_end.day / 7) + (dst_end.day % 7 > 0? 1 : 0)
+dst_end = (current.dst? ? current.end_transition : current.start_transition).at.to_datetime
+dst_end_week = (dst_end.day / 7) + (dst_end.day % 7 > 0 ? 1 : 0)
 puts "export TZ=\"BRT+3BRST,M10.3.0/0,M2.#{dst_end_week}.0/0\""

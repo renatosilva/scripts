@@ -2,7 +2,7 @@
 # Encoding: ISO-8859-1
 
 ##
-##     Bazaar Grep Revision 2014.12.3
+##     Bazaar Grep Revision 2014.12.4
 ##     Copyright (C) 2010, 2012-2014 Renato Silva
 ##     GNU GPLv2 licensed
 ##
@@ -23,12 +23,12 @@
 require 'easyoptions'
 options, arguments = EasyOptions.all
 
-if not arguments[0]
+unless arguments[0]
     puts 'Pattern is required, see --help.'
     exit
 end
 
-if not options[:no_color] and ENV['TERM'] =~ /xterm/ and (system('test -t 1') or STDOUT.tty?)
+if !options[:no_color] && ENV['TERM'] =~ /xterm/ && (system('test -t 1') || STDOUT.tty?)
     $red     = "\e[1;31m"
     $green   = "\e[0;32m"
     $cyan    = "\e[0;36m"
@@ -36,7 +36,7 @@ if not options[:no_color] and ENV['TERM'] =~ /xterm/ and (system('test -t 1') or
     $normal  = "\e[0m"
 end
 
-def puts(text=nil, color=nil)
+def puts(text = nil, color = nil)
     pattern = options[:case_sensitive]?
         /(#{arguments[0]})/:
         /(#{arguments[0]})/i
@@ -52,7 +52,7 @@ pattern = options[:case_sensitive]?
     /^\s*[+\-].*#{arguments[0]}.*$/:
     /^\s*[+\-].*#{arguments[0]}.*$/i
 
-log = options[:stdin]? STDIN : %x[bzr log --show-diff #{options[:from]}]
+log = options[:stdin] ? STDIN : `bzr log --show-diff #{options[:from]}`
 last_rev, last_file = nil
 first_match = true
 output = []
@@ -61,21 +61,21 @@ log.each_line do |line|
     rev = line[/^\s*revno: (.*)/, 1]
     file = line[/^\s*=== .*'(.*)'/, 1]
 
-    last_rev = rev if last_rev == nil or rev != nil
-    last_file = file if last_file == nil or file != nil
+    last_rev = rev if last_rev.nil? || !rev.nil?
+    last_file = file if last_file.nil? || !file.nil?
 
     if line =~ pattern
-        if last_rev != nil
+        unless last_rev.nil?
             puts unless first_match
             puts "revision #{last_rev}", $green
             first_match = false
             last_rev = nil
         end
-        if last_file != nil
+        unless last_file.nil?
             puts "\t#{last_file}", $yellow
             last_file = nil
         end
-        line_color = line.start_with?('+')? $cyan : $red
+        line_color = line.start_with?('+') ? $cyan : $red
         puts "\t\t#{line.gsub(/[\n\r]/, '')}", line_color
     end
 end
