@@ -1,17 +1,17 @@
 #!/usr/bin/env ruby
 # Encoding: ISO-8859-1
 
-# Wi-Fi Reconnections 2014.4.24
+# Wi-Fi Reconnections 2014.12.3
 # Copyright (c) 2013, 2014 Renato Silva
 # GNU GPLv2 licensed
 
-if [nil, "-h", "--help"].include? ARGV[0]
+if [nil, '-h', '--help'].include? ARGV[0]
     puts "Usage: #{File.basename($0)} <log file>"
-    puts "Log entries should consist of date, time, SSID and uptime, separated by space."
+    puts 'Log entries should consist of date, time, SSID and uptime, separated by space.'
     exit
 end
 
-log = File.open(ARGV[0].encode(ARGV[0].encoding, 'ISO-8859-1'), "r")
+log = File.open(ARGV[0].encode(ARGV[0].encoding, 'ISO-8859-1'), 'r')
 networks = {}
 
 log.readlines.each do |line|
@@ -23,8 +23,8 @@ log.readlines.each do |line|
     networks[network][date][:reconnections] += 1
 end
 
-csv = File.open(log.path.sub(/log$/, "csv"), "w")
-csv.puts("Network;Date;Reconnections/hour; Average uptime")
+csv = File.open(log.path.sub(/log$/, 'csv'), 'w')
+csv.puts('Network;Date;Reconnections/hour; Average uptime')
 
 networks.keys.each do |network|
     networks[network].keys.each do |date|

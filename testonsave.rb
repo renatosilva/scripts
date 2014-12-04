@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 # Encoding: ISO-8859-1
 
-# Eclipse Test On Save 2014.8.8
+# Eclipse Test On Save 2014.12.3
 # Copyright (c) 2009, 2012, 2013 Renato Silva
 # GNU GPLv2 licensed
 
@@ -23,7 +23,7 @@ end
 
 plugins << (Dir[path].find_all do |plugin|
     plugin =~ /org.junit_?4/
-end [0] << "/junit.jar")
+end [0] << '/junit.jar')
 
 plugins.map! { |plugin| File::PATH_SEPARATOR + plugin }
 

@@ -20,15 +20,15 @@
 ##         --no-color        Disable colors in output.
 ##
 
-require "easyoptions"
+require 'easyoptions'
 options, arguments = EasyOptions.all
 
 if not arguments[0]
-    puts "Pattern is required, see --help."
+    puts 'Pattern is required, see --help.'
     exit
 end
 
-if not options[:no_color] and ENV["TERM"] =~ /xterm/ and (system("test -t 1") or STDOUT.tty?)
+if not options[:no_color] and ENV['TERM'] =~ /xterm/ and (system('test -t 1') or STDOUT.tty?)
     $red     = "\e[1;31m"
     $green   = "\e[0;32m"
     $cyan    = "\e[0;36m"
@@ -75,7 +75,7 @@ log.each_line do |line|
             puts "\t#{last_file}", $yellow
             last_file = nil
         end
-        line_color = line.start_with?("+")? $cyan : $red
+        line_color = line.start_with?('+')? $cyan : $red
         puts "\t\t#{line.gsub(/[\n\r]/, '')}", line_color
     end
 end

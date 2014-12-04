@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 # Encoding: ISO-8859-1
 
-# CSV Transformation 2014.8.8
+# CSV Transformation 2014.12.3
 # Copyright (c) 2009, 2012-2014 Renato Silva
 # GNU GPLv2 licensed
 
@@ -15,7 +15,7 @@ out = File.open(ARGV[2], 'rb').read
 row_pattern = /(([ \t]*)<csv:row(\s*delimiters=['\"]([^'\"]*)['\"])*>(.*)<\/csv:row>)/
 row_template = out[row_pattern, 1]
 delimiters = (ARGV[3] or out[row_pattern, 4])
-delimiters = ";" if delimiters.nil?
+delimiters = ';' if delimiters.nil?
 
 csv.each_line do |line|
     row = out[row_pattern, 2] + out[row_pattern, 5]

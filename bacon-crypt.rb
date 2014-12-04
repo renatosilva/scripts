@@ -26,8 +26,8 @@
 ##     -h, --help                    This help text.
 ##
 
-require "base64"
-require "easyoptions"
+require 'base64'
+require 'easyoptions'
 options = EasyOptions.options
 
 class String
@@ -35,16 +35,16 @@ class String
         offset = leading_zero ? 0 : 1
         length = rand(2..length) if length > 2 and not fixed_length
         digits = self.scan(/(.{#{length - offset}}|.{1,#{length - offset}}$)/)
-        non_zero = leading_zero ? "" : "1"
+        non_zero = leading_zero ? '' : '1'
         digits.map { |item| "#{non_zero}#{item[0]}".to_i(digit_base) }
     end
     def zerofill(length=nil)
         length=BiggestBase.length if not length
-        self.rjust(length, "0")
+        self.rjust(length, '0')
     end
     def decode64
-        array = Base64.decode64(self).unpack("U*")
-        Progress.done("Decoded from Base64")
+        array = Base64.decode64(self).unpack('U*')
+        Progress.done('Decoded from Base64')
         array
     end
 end
@@ -54,8 +54,8 @@ class Array
         self.map { |item| item.to_s.zerofill(length) }.join
     end
     def encode64
-        base64 = EasyOptions.options[:lines].nil? ? Base64.strict_encode64(self.pack("U*")) : Base64.encode64(self.pack("U*"))
-        Progress.done("Encoded to Base64")
+        base64 = EasyOptions.options[:lines].nil? ? Base64.strict_encode64(self.pack('U*')) : Base64.encode64(self.pack('U*'))
+        Progress.done('Encoded to Base64')
         base64
     end
 end
@@ -75,7 +75,7 @@ class Progress
         percentage = (100 * @step) / @maximum
         previous_percentage = (100 * (@step - 1)) / @maximum
         $stderr.print("\r#{@message}... #{percentage} % ") if percentage != previous_percentage
-        $stderr.print("\r#{" " * (@message.length + 10)}\r") if @step == @maximum
+        $stderr.print("\r#{' ' * (@message.length + 10)}\r") if @step == @maximum
     end
 end
 
@@ -89,18 +89,18 @@ class Base
             result << @alphabet[integer % @value]
             integer = integer / @value
         end until integer == 0
-        Progress.done("Converted from base 10")
+        Progress.done('Converted from base 10')
         result.reverse
     end
     def to_10(digits)
         result = 0
-        progress = Progress.new("Converting to base 10", digits.length)
+        progress = Progress.new('Converting to base 10', digits.length)
         digits.reverse.each_with_index do |digit, index|
             digit_value = @alphabet.index(digit)
             result += digit_value * (@value ** index)
             progress.next
         end
-        Progress.done("Converted to base 10")
+        Progress.done('Converted to base 10')
         result
     end
     def length(base=10)
@@ -133,7 +133,7 @@ class EncryptionKey
         end
     end
     def parse_line(line)
-        columns=line.split("=")
+        columns=line.split('=')
         base = Base.new(columns[0].to_i)
         base.alphabet = columns[1].scan_digits(base.length(16), 16, true)
         base
@@ -159,18 +159,18 @@ class BaseCrypt
         digits = string.decode64
         integer = @key.encoded.to_10(digits)
         digits = @key.decoded.to_this(integer)
-        to_bytes(digits).pack("C*")
+        to_bytes(digits).pack('C*')
     end
     def to_digits(bytes)
         bits = bytes.map { |byte| byte.to_s(2).zerofill(8) }.join
         digits = bits.scan_digits(@key.decoded.bitlength.floor, 2, false, false)
-        Progress.done("Converted from bytes to digits")
+        Progress.done('Converted from bytes to digits')
         digits
     end
     def to_bytes(digits)
         bin_digits = digits.map { |digit| digit.to_s(2)[1..-1] }
         bytes = bin_digits.join.scan_digits(8, 2, true)
-        Progress.done("Converted from digits to bytes")
+        Progress.done('Converted from digits to bytes')
         bytes
     end
     attr_accessor :key
@@ -181,19 +181,19 @@ if options.empty? then
     exit
 end
 
-EasyOptions.finish("--key is required") if not options[:key]
-EasyOptions.finish("cannot decode while creating key") if options[:create] and (options[:decode] or options[:decode_file])
-EasyOptions.finish("cannot specify multiple encoding actions") if [:encode, :encode_file].find_all { |option| not options[option].nil? }.length > 1
-EasyOptions.finish("cannot specify multiple decoding actions") if [:decode, :decode_file, :decode_text].find_all { |option| not options[option].nil? }.length > 1
-EasyOptions.finish("encoded file must have the bacon extension") if options[:decode_file] and not options[:decode_file].end_with?(".bacon")
+EasyOptions.finish('--key is required') if not options[:key]
+EasyOptions.finish('cannot decode while creating key') if options[:create] and (options[:decode] or options[:decode_file])
+EasyOptions.finish('cannot specify multiple encoding actions') if [:encode, :encode_file].find_all { |option| not options[option].nil? }.length > 1
+EasyOptions.finish('cannot specify multiple decoding actions') if [:decode, :decode_file, :decode_text].find_all { |option| not options[option].nil? }.length > 1
+EasyOptions.finish('encoded file must have the bacon extension') if options[:decode_file] and not options[:decode_file].end_with?('.bacon')
 
 options[:decode] = options[:decode_text] if options[:decode_text]
-options[:encode] = File.open(options[:encode_file], "rb") { |io| io.read } if options[:encode_file]
-options[:decode] = File.open(options[:decode_file], "rb") { |io| io.read } if options[:decode_file]
+options[:encode] = File.open(options[:encode_file], 'rb') { |io| io.read } if options[:encode_file]
+options[:decode] = File.open(options[:decode_file], 'rb') { |io| io.read } if options[:decode_file]
 
 if options[:create] then
     bc = BaseCrypt.new
-    file = File.open(options[:key], "w")
+    file = File.open(options[:key], 'w')
     file.puts(bc.key)
     file.close
 end
@@ -202,7 +202,7 @@ if options[:encode] then
     bc = BaseCrypt.new(options[:key])
     options[:encode].force_encoding(options[:encoding]) if options[:encoding]
     ciphertext = bc.encode(options[:encode].bytes)
-    $stdout = File.open("#{options[:encode_file]}.bacon", "w") if options[:encode_file]
+    $stdout = File.open("#{options[:encode_file]}.bacon", 'w') if options[:encode_file]
     $stdout.puts ciphertext
 end
 
@@ -210,7 +210,7 @@ if options[:decode] then
     bc = BaseCrypt.new(options[:key])
     decoded = bc.decode(options[:decode])
     decoded.force_encoding(options[:encoding]) if options[:encoding]
-    $stdout = File.open(options[:decode_file].sub(/\.bacon$/, ""), "wb") if options[:decode_file]
+    $stdout = File.open(options[:decode_file].sub(/\.bacon$/, ''), 'wb') if options[:decode_file]
     if options[:decode_text] then
         $stdout.puts(decoded)
     else
