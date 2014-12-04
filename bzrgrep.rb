@@ -37,9 +37,9 @@ if !options[:no_color] && ENV['TERM'] =~ /xterm/ && (system('test -t 1') || STDO
 end
 
 def puts(text = nil, color = nil)
-    pattern = options[:case_sensitive]?
-        /(#{arguments[0]})/:
-        /(#{arguments[0]})/i
+    pattern = EasyOptions.options[:case_sensitive]?
+        /(#{EasyOptions.arguments[0]})/:
+        /(#{EasyOptions.arguments[0]})/i
     case color
         when nil then    super(text)
         when $cyan then  super(text.gsub(pattern, "#{$cyan}\\1#{$normal}"))
