@@ -2,7 +2,7 @@
 # Encoding: ISO-8859-1
 
 ##
-##     Bazaar Grep Revision 2014.9.9
+##     Bazaar Grep Revision 2014.12.3
 ##     Copyright (C) 2010, 2012-2014 Renato Silva
 ##     GNU GPLv2 licensed
 ##
@@ -20,13 +20,15 @@
 ##         --no-color        Disable colors in output.
 ##
 
-require_relative "easyoptions"
-if not $arguments[0]
+require "easyoptions"
+options, arguments = EasyOptions.all
+
+if not arguments[0]
     puts "Pattern is required, see --help."
     exit
 end
 
-if not $options[:no_color] and ENV["TERM"] =~ /xterm/ and (system("test -t 1") or STDOUT.tty?)
+if not options[:no_color] and ENV["TERM"] =~ /xterm/ and (system("test -t 1") or STDOUT.tty?)
     $red     = "\e[1;31m"
     $green   = "\e[0;32m"
     $cyan    = "\e[0;36m"
@@ -35,9 +37,9 @@ if not $options[:no_color] and ENV["TERM"] =~ /xterm/ and (system("test -t 1") o
 end
 
 def puts(text=nil, color=nil)
-    pattern = $options[:case_sensitive]?
-        /(#{$arguments[0]})/:
-        /(#{$arguments[0]})/i
+    pattern = options[:case_sensitive]?
+        /(#{arguments[0]})/:
+        /(#{arguments[0]})/i
     case color
         when nil then    super(text)
         when $cyan then  super(text.gsub(pattern, "#{$cyan}\\1#{$normal}"))
@@ -46,11 +48,11 @@ def puts(text=nil, color=nil)
     end
 end
 
-pattern = $options[:case_sensitive]?
-    /^\s*[+\-].*#{$arguments[0]}.*$/:
-    /^\s*[+\-].*#{$arguments[0]}.*$/i
+pattern = options[:case_sensitive]?
+    /^\s*[+\-].*#{arguments[0]}.*$/:
+    /^\s*[+\-].*#{arguments[0]}.*$/i
 
-log = $options[:stdin]? STDIN : %x[bzr log --show-diff #{$options[:from]}]
+log = options[:stdin]? STDIN : %x[bzr log --show-diff #{options[:from]}]
 last_rev, last_file = nil
 first_match = true
 output = []

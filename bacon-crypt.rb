@@ -2,7 +2,7 @@
 # Encoding: ISO-8859-1
 
 ##
-##     Base Conversion Cryptography 2014.8.8
+##     Base Conversion Cryptography 2014.12.3
 ##     Copyright (c) 2013 Renato Silva
 ##     GNU GPLv2 licensed
 ##
@@ -27,7 +27,8 @@
 ##
 
 require "base64"
-require_relative "easyoptions"
+require "easyoptions"
+options = EasyOptions.options
 
 class String
     def scan_digits(length=BiggestBase.length, digit_base=10, leading_zero=false, fixed_length=true)
@@ -53,7 +54,7 @@ class Array
         self.map { |item| item.to_s.zerofill(length) }.join
     end
     def encode64
-        base64 = $options[:lines].nil? ? Base64.strict_encode64(self.pack("U*")) : Base64.encode64(self.pack("U*"))
+        base64 = EasyOptions.options[:lines].nil? ? Base64.strict_encode64(self.pack("U*")) : Base64.encode64(self.pack("U*"))
         Progress.done("Encoded to Base64")
         base64
     end
@@ -66,10 +67,10 @@ class Progress
         @step = 0
     end
     def Progress.done(message)
-        $stderr.puts("#{message}.") if $options[:verbose]
+        $stderr.puts("#{message}.") if EasyOptions.options[:verbose]
     end
     def next
-        return unless $options[:verbose]
+        return unless EasyOptions.options[:verbose]
         @step += 1
         percentage = (100 * @step) / @maximum
         previous_percentage = (100 * (@step - 1)) / @maximum
@@ -175,42 +176,42 @@ class BaseCrypt
     attr_accessor :key
 end
 
-if $options.empty? then
-    puts $documentation
+if options.empty? then
+    puts EasyOptions.documentation
     exit
 end
 
-finish("--key is required") if not $options[:key]
-finish("cannot decode while creating key") if $options[:create] and ($options[:decode] or $options[:decode_file])
-finish("cannot specify multiple encoding actions") if [:encode, :encode_file].find_all { |option| not $options[option].nil? }.length > 1
-finish("cannot specify multiple decoding actions") if [:decode, :decode_file, :decode_text].find_all { |option| not $options[option].nil? }.length > 1
-finish("encoded file must have the bacon extension") if $options[:decode_file] and not $options[:decode_file].end_with?(".bacon")
+EasyOptions.finish("--key is required") if not options[:key]
+EasyOptions.finish("cannot decode while creating key") if options[:create] and (options[:decode] or options[:decode_file])
+EasyOptions.finish("cannot specify multiple encoding actions") if [:encode, :encode_file].find_all { |option| not options[option].nil? }.length > 1
+EasyOptions.finish("cannot specify multiple decoding actions") if [:decode, :decode_file, :decode_text].find_all { |option| not options[option].nil? }.length > 1
+EasyOptions.finish("encoded file must have the bacon extension") if options[:decode_file] and not options[:decode_file].end_with?(".bacon")
 
-$options[:decode] = $options[:decode_text] if $options[:decode_text]
-$options[:encode] = File.open($options[:encode_file], "rb") { |io| io.read } if $options[:encode_file]
-$options[:decode] = File.open($options[:decode_file], "rb") { |io| io.read } if $options[:decode_file]
+options[:decode] = options[:decode_text] if options[:decode_text]
+options[:encode] = File.open(options[:encode_file], "rb") { |io| io.read } if options[:encode_file]
+options[:decode] = File.open(options[:decode_file], "rb") { |io| io.read } if options[:decode_file]
 
-if $options[:create] then
+if options[:create] then
     bc = BaseCrypt.new
-    file = File.open($options[:key], "w")
+    file = File.open(options[:key], "w")
     file.puts(bc.key)
     file.close
 end
 
-if $options[:encode] then
-    bc = BaseCrypt.new($options[:key])
-    $options[:encode].force_encoding($options[:encoding]) if $options[:encoding]
-    ciphertext = bc.encode($options[:encode].bytes)
-    $stdout = File.open("#{$options[:encode_file]}.bacon", "w") if $options[:encode_file]
+if options[:encode] then
+    bc = BaseCrypt.new(options[:key])
+    options[:encode].force_encoding(options[:encoding]) if options[:encoding]
+    ciphertext = bc.encode(options[:encode].bytes)
+    $stdout = File.open("#{options[:encode_file]}.bacon", "w") if options[:encode_file]
     $stdout.puts ciphertext
 end
 
-if $options[:decode] then
-    bc = BaseCrypt.new($options[:key])
-    decoded = bc.decode($options[:decode])
-    decoded.force_encoding($options[:encoding]) if $options[:encoding]
-    $stdout = File.open($options[:decode_file].sub(/\.bacon$/, ""), "wb") if $options[:decode_file]
-    if $options[:decode_text] then
+if options[:decode] then
+    bc = BaseCrypt.new(options[:key])
+    decoded = bc.decode(options[:decode])
+    decoded.force_encoding(options[:encoding]) if options[:encoding]
+    $stdout = File.open(options[:decode_file].sub(/\.bacon$/, ""), "wb") if options[:decode_file]
+    if options[:decode_text] then
         $stdout.puts(decoded)
     else
         $stdout.binmode.write(decoded)
