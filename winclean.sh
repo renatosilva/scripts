@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Windows Cleanup 2014.12.1
+# Windows Cleanup 2014.12.4
 # Copyright (c) 2012-2014 Renato Silva
 # GNU GPLv2 licensed
 
@@ -25,12 +25,7 @@ sed -i -E "/^\\s+<(Find|Replace)\\s+name=.*$/d" "$npp_config"
 unix2dos --quiet "$npp_config"
 
 # Clean up recent files list from Word Viewer
-filename="$TEMP/winclean.$(date +%s.%N).reg"
-trap "rm -r $filename" EXIT
-echo 'Windows Registry Editor Version 5.00
-[HKEY_CURRENT_USER\Software\Microsoft\Office\11.0\Wordview\Data]
-"Settings"=-' > "$filename"
-runas //user:Administrator regedit //s "$filename"
+reg delete 'HKEY_CURRENT_USER\Software\Microsoft\Office\11.0\Wordview\Data' //v Settings //f > /dev/null
 
 # Clean up WMP junk
 reg_data=$(reg query 'HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders' //v 'My Music')
