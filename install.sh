@@ -73,19 +73,21 @@
 ##
 ##         --where=PATH    Install scripts to PATH rather than /usr/local/bin,
 ##                         or remove them from there. This option does not
-##                         affect the aliases script which is still installed to
+##                         affect scripts that need to be installed into
 ##                         /etc/profile.d. Requires --system.
 ##
 ##         --system=NAME   Set system type manually, determining which scripts
 ##                         will be installed. Supported systems are "unix",
 ##                         "msys" and "msys2".
 ##
-##         --to-msys=ROOT  Shorthand for --system=msys --where=ROOT/local/bin,
-##                         except that the aliases script will also be installed
-##                         (to ROOT/etc/profile.d). ROOT is a valid MSYS root.
+##         --to-msys=ROOT  Shorthand for --system=msys --where=ROOT/local/bin.
+##                         ROOT is a valid MSYS root.
 ##
 
-eayoptions_url_base="https://github.com/renatosilva/easyoptions/raw/master/easyoptions"
+eayoptions_url_base="https://github.com/renatosilva/easyoptions/raw/master"
+easyoptions_main="easyoptions:$eayoptions_url_base/easyoptions"
+easyoptions_bash="easyoptions.sh:$eayoptions_url_base/bash/easyoptions.sh"
+easyoptions_ruby="easyoptions.rb:$eayoptions_url_base/ruby/easyoptions.rb"
 vimpager="vimpager:https://github.com/renatosilva/vimpager/raw/master/vimpager"
 vpaste="vpaste:http://vpaste.net/vpaste"
 
@@ -101,9 +103,6 @@ all=(
     "numpass"
     "randpass"
     "colormake:https://github.com/renatosilva/colormake/raw/master/colormake.sh"
-    "easyoptions:$eayoptions_url_base"
-    "easyoptions.rb:$eayoptions_url_base.rb"
-    "easyoptions.sh:$eayoptions_url_base.sh"
     "vimcat:https://github.com/renatosilva/vimpager/raw/vimcat-msys2/vimcat"
 )
 
@@ -122,6 +121,9 @@ msys1=(
     "packages"
     "runcrt"
     "tz-brazil"
+    "$easyoptions_main"
+    "$easyoptions_bash"
+    "$easyoptions_ruby"
 )
 
 msys2=(
@@ -133,6 +135,9 @@ msys2=(
 unix=(
     "$vimpager"
     "$vpaste"
+    "$easyoptions_main"
+    "$easyoptions_bash"
+    "$easyoptions_ruby"
 )
 
 dosconv() {
@@ -177,8 +182,8 @@ download() {
 [[ -t 1 ]] && title_format="\e[0;32m%s\e[0m"
 [[ -t 2 ]] && error_format="\e[1;31m%s\e[0m"
 if ! which easyoptions > /dev/null 2>&1; then
-    download "$eayoptions_url_base.rb" /tmp "easyoptions.rb" > /dev/null || rm /tmp/easyoptions.rb
-    download "$eayoptions_url_base"    /tmp "easyoptions"    > /dev/null || rm /tmp/easyoptions
+    download "$eayoptions_url_base/ruby/easyoptions.rb" /tmp "easyoptions.rb" > /dev/null || rm /tmp/easyoptions.rb
+    download "$eayoptions_url_base/easyoptions"         /tmp "easyoptions"    > /dev/null || rm /tmp/easyoptions
     PATH="/tmp:$PATH"
 fi
 source easyoptions || exit
@@ -215,7 +220,8 @@ elif [[ "$system" != unix && "$system" != msys && "$system" != msys2 ]]; then
 fi
 
 # Prepare
-where="${where:-/usr/local/bin}"
+default_location="/usr/local/bin"
+where="${where:-$default_location}"
 mkdir -p "$where"
 case $system in
     unix)  scripts="${all[@]} ${unix[@]}" ;;
@@ -237,6 +243,14 @@ if [[ -z "$remove" ]]; then
     done
     mkdir -p "$to_msys/etc/profile.d"
     cp -v "$from/aliases.sh" "$to_msys/etc/profile.d/aliases.sh"
+    if [[ $system != msys2 ]]; then
+        if [[ -n "$to_msys" || "$where" = "$default_location" ]]; then
+            echo "Adding $default_location to Ruby library path"
+            echo "export RUBYLIB=\"\$RUBYLIB:$default_location\"" > "$to_msys/etc/profile.d/rubylib.sh"
+        else
+            echo "Ignoring configuration of Ruby library path"
+        fi
+    fi
     if [[ -z "$local" && -n "${remote_scripts[0]}" ]]; then
         printf "\n${title_format:-%s}\n" "Installing remote scripts"
         for script in "${remote_scripts[@]}"; do
@@ -247,6 +261,7 @@ if [[ -z "$remove" ]]; then
 else
     winlinks
     for script in $scripts; do rm -vf "$where/${script%%:*}"; done
+    [[ $system != msys2 ]] && rm -vf "$to_msys/etc/profile.d/rubylib.sh"
     rm -vf "$to_msys/etc/profile.d/aliases.sh"
     rm -vf "$where/conconv.cp850"
 fi
