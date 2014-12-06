@@ -8,8 +8,7 @@
 ## This is a set of useful scripts. Some should work on Unix environments in
 ## general but some are specific to MSYS2/MSYS. Most of the scripts can be
 ## installed and removed with this install script, which should detect system
-## type and install only the ones compatible. Ruby scripts may require version
-## 1.9. Some scripts may require code adaption.
+## type and install only the ones compatible. Some scripts may require adaption.
 ##
 ## Main scripts
 ##     backup.sh                   Secured file backup with 7-Zip.

@@ -2,7 +2,7 @@
 # Encoding: ISO-8859-1
 
 ##
-##     Bazaar Grep Revision 2014.12.4
+##     Bazaar Grep Revision 2014.12.6
 ##     Copyright (C) 2010, 2012-2014 Renato Silva
 ##     GNU GPLv2 licensed
 ##
@@ -57,7 +57,7 @@ last_rev, last_file = nil
 first_match = true
 output = []
 
-log.each_line do |line|
+log.scrub.each_line do |line|
     rev = line[/^\s*revno: (.*)/, 1]
     file = line[/^\s*=== .*'(.*)'/, 1]
 
