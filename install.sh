@@ -87,7 +87,7 @@ eayoptions_url_base="https://github.com/renatosilva/easyoptions/raw/master"
 easyoptions_main="easyoptions:$eayoptions_url_base/easyoptions"
 easyoptions_bash="easyoptions.sh:$eayoptions_url_base/bash/easyoptions.sh"
 easyoptions_ruby="easyoptions.rb:$eayoptions_url_base/ruby/easyoptions.rb"
-vimpager="vimpager:https://github.com/renatosilva/vimpager/raw/master/vimpager"
+vimpager="vimpager:https://github.com/rkitover/vimpager/raw/1b7a351/vimpager"
 vpaste="vpaste:http://vpaste.net/vpaste"
 
 all=(
@@ -102,7 +102,7 @@ all=(
     "numpass"
     "randpass"
     "colormake:https://github.com/renatosilva/colormake/raw/master/colormake.sh"
-    "vimcat:https://github.com/renatosilva/vimpager/raw/vimcat-msys2/vimcat"
+    "vimcat:https://github.com/rkitover/vimpager/raw/1b7a351/vimcat"
 )
 
 windows=(
