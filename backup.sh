@@ -67,7 +67,7 @@ notes="$temp/Anotações"
 cp -r "$APPDATA/Microsoft/Sticky Notes" "$notes"
 
 # Application settings
-tools="/c/programs/ferramentas"
+tools="/c/program files/ferramentas"
 configs="$temp/Configurações"
 mkdir -p "$configs/Pidgin"
 for config in bashrc colordiffrc gitconfig inputrc minttyrc profile rubocop.yml vimrc wgetrc; do
