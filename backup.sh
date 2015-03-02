@@ -1,8 +1,8 @@
 #!/bin/bash
 
 ##
-##     Backup 2014.12.4
-##     Copyright (c) 2012-2014 Renato Silva
+##     Backup 2015.3.1
+##     Copyright (c) 2012-2015 Renato Silva
 ##     GNU GPLv2 licensed
 ##
 ## This is my personal backup script on Windows. You may use it as inspiration
@@ -15,7 +15,7 @@
 ##     * Scheduled tasks
 ##     * Registry favorites
 ##     * Firefox bookmarks, search plugins and custom website stylesheets
-##     * Settings from Piriform utilities and IVONA
+##     * Settings from Piriform utilities, IVONA and Pidgin
 ##     * Startup and some other shortcuts
 ##
 ## Usage:
@@ -69,7 +69,7 @@ cp -r "$APPDATA/Microsoft/Sticky Notes" "$notes"
 # Application settings
 tools="/c/programs/ferramentas"
 configs="$temp/Configurações"
-mkdir -p "$configs"
+mkdir -p "$configs/Pidgin"
 for config in bashrc colordiffrc gitconfig inputrc minttyrc profile rubocop.yml vimrc wgetrc; do
     [[ -f ~/.$config ]] && cp ~/.$config "$configs"
 done
@@ -78,6 +78,11 @@ cp "$tools/ccleaner/ccleaner.ini" "$configs"
 cp "$tools/recuva/recuva.ini" "$configs"
 cp "$tools/speccy/speccy.ini" "$configs"
 cp "$APPDATA/IVONA 2 Voice/"*".lex" "$configs"
+cp "$APPDATA/.purple/accounts.xml" "$configs/Pidgin"
+cp "$APPDATA/.purple/blist.xml" "$configs/Pidgin"
+cp "$APPDATA/.purple/prefs.xml" "$configs/Pidgin"
+cp -r "$APPDATA/.purple/pixmaps" "$configs/Pidgin"
+cp -r "$APPDATA/.purple/plugins" "$configs/Pidgin"
 
 # Firefox settings
 profile=("$APPDATA/Mozilla/Firefox/profiles/"*)
