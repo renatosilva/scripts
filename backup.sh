@@ -44,9 +44,9 @@ piriform_dir() {
 }
 
 source easyoptions || exit
-shutdown_happening=$(wevtutil qe system //c:1 //rd:true //f:xml //q:"*[System[(EventID=1074) and TimeCreated[timediff(@SystemTime) <= 60000]]]")
-non_reboot_shutdown=$(echo "$shutdown_happening" | grep -iE "<data>(desligado|desligar o sistema)</data>")
-[[ -n "$shutdown_happening" && -z "$non_reboot_shutdown" ]] && unset wait_lock
+current_shutdown=$(wevtutil qe system //c:1 //rd:true //f:xml //q:"*[System[(EventID=1074) and TimeCreated[timediff(@SystemTime) <= 60000]]]")
+rebooting=$(echo "$current_shutdown" | grep -iE "<data[^<>]*>reiniciar</data>")
+[[ -n "$rebooting" ]] && unset wait_lock
 
 [[ -z "$name" ]] && name="Documentos e programas"
 [[ -z "$target" ]] && target="/d/backup"
