@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ##
-##     Backup 2015.3.1
+##     Backup 2015.3.19
 ##     Copyright (c) 2012-2015 Renato Silva
 ##     GNU GPLv2 licensed
 ##
@@ -48,6 +48,10 @@ play_sound() {
     python -c "import winsound; winsound.PlaySound('C:/Windows/Media/$1.wav', winsound.SND_FILENAME)"
 }
 
+piriform_dir() {
+    reg query "HKEY_LOCAL_MACHINE\\SOFTWARE\\Piriform\\${1}" //ve | awk -F'REG_SZ[[:space:]]*' 'NF>1{print $2}'
+}
+
 source easyoptions || exit
 shutdown_happening=$(wevtutil qe system //c:1 //rd:true //f:xml //q:"*[System[(EventID=1074) and TimeCreated[timediff(@SystemTime) <= 60000]]]")
 non_reboot_shutdown=$(echo "$shutdown_happening" | grep -iE "<data>(desligado|desligar o sistema)</data>")
@@ -67,16 +71,15 @@ notes="$temp/Anotações"
 cp -r "$APPDATA/Microsoft/Sticky Notes" "$notes"
 
 # Application settings
-tools="/c/program files/ferramentas"
 configs="$temp/Configurações"
 mkdir -p "$configs/Pidgin"
 for config in bashrc colordiffrc gitconfig inputrc minttyrc profile rubocop.yml vimrc wgetrc; do
     [[ -f ~/.$config ]] && cp ~/.$config "$configs"
 done
-cp "$tools/defraggler/defraggler.ini" "$configs"
-cp "$tools/ccleaner/ccleaner.ini" "$configs"
-cp "$tools/recuva/recuva.ini" "$configs"
-cp "$tools/speccy/speccy.ini" "$configs"
+cp "$(piriform_dir CCleaner)/ccleaner.ini" "$configs"
+cp "$(piriform_dir Defraggler)/defraggler.ini" "$configs"
+cp "$(piriform_dir Recuva)/recuva.ini" "$configs"
+cp "$(piriform_dir Speccy)/speccy.ini" "$configs"
 cp "$APPDATA/IVONA 2 Voice/"*".lex" "$configs"
 cp "$APPDATA/.purple/accounts.xml" "$configs/Pidgin"
 cp "$APPDATA/.purple/blist.xml" "$configs/Pidgin"
