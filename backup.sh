@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ##
-##     Backup 2015.3.19
+##     Backup 2015.3.21
 ##     Copyright (c) 2012-2015 Renato Silva
 ##     GNU GPLv2 licensed
 ##
@@ -15,7 +15,7 @@
 ##     * Scheduled tasks
 ##     * Registry favorites
 ##     * Firefox bookmarks, search plugins and custom website stylesheets
-##     * Settings from Piriform utilities, IVONA and Pidgin
+##     * Settings from Piriform utilities, IVONA, Pidgin and Eclipse
 ##     * Startup and some other shortcuts
 ##
 ## Usage:
@@ -75,6 +75,7 @@ cp "$APPDATA/.purple/blist.xml" "$configs/Pidgin"
 cp "$APPDATA/.purple/prefs.xml" "$configs/Pidgin"
 cp -r "$APPDATA/.purple/pixmaps" "$configs/Pidgin"
 cp -r "$APPDATA/.purple/plugins" "$configs/Pidgin"
+cp -r "$APPDATA/Eclipse" "$configs/Eclipse"
 
 # Firefox settings
 profile=("$APPDATA/Mozilla/Firefox/profiles/"*)
