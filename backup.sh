@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ##
-##     Backup 2015.3.21
+##     Backup 2015.3.23
 ##     Copyright (c) 2012-2015 Renato Silva
 ##     GNU GPLv2 licensed
 ##
@@ -36,7 +36,7 @@
 ##
 
 play_sound() {
-    python -c "import winsound; winsound.PlaySound('C:/Windows/Media/$1.wav', winsound.SND_FILENAME)"
+    powershell.exe -c "(New-Object Media.SoundPlayer 'C:/Windows/Media/${1}.wav').PlaySync()" > /dev/null
 }
 
 piriform_dir() {
