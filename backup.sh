@@ -112,7 +112,7 @@ tempfile="$temp/$name $(date '+%-d.%-m.%Y %-Hh%M').7z"
 [[ -f "$tempfile" ]] || exit
 rm "$target/$name "*.7z 2> /dev/null || echo "First backup in this device."
 mv "$temp/"*.7z "$target"
-[[ -z "$silent" ]] && play_sound tada
+[[ -z "$silent" ]] && play_sound "Windows Notify System Generic"
 
 # Wait for the lock to be released
 if [[ -n "$wait_lock" ]]; then
@@ -126,7 +126,7 @@ if [[ -n "$wait_lock" ]]; then
         printf "\r${wait_message} " "$elapsed"
     done
     printf "\r%${#wait_message}s\r" ""
-    [[ -z "$silent" ]] && play_sound notify
+    [[ -z "$silent" ]] && play_sound "Windows Unlock"
 else
     sleep 3
 fi
