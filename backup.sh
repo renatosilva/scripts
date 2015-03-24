@@ -1,12 +1,11 @@
 #!/bin/bash
 
 ##
-##     Backup 2015.3.23
+##     Backup 2015.3.24
 ##     Copyright (c) 2012-2015 Renato Silva
 ##     GNU GPLv2 licensed
 ##
-## This is my personal backup script on Windows. You may use it as inspiration
-## for writing your own, since it is not really reusable out of the box.
+## This is a backup script for Windows. You can configure it with ~/.backuprc.
 ## Output is a password protected, 7-Zip compressed file which is going to
 ## replace any previous backup on target directory. Backup will include:
 ##
@@ -16,111 +15,149 @@
 ##     * Registry favorites
 ##     * Firefox bookmarks, search plugins and custom website stylesheets
 ##     * Settings from CCleaner, IVONA, Pidgin and Eclipse
-##     * Startup and some other shortcuts
+##     * Settings from Bash, Git, MinTTY and other tools
+##     * Configured program shortcut folders
+##     * Configured custom files
 ##
 ## Usage:
 ##     @script.name [options]
 ##
-##         --name=FILENAME       Backup file name, will have date and time
-##                               appended. Any previous backup with same name
-##                               will be deleted, right before saving new one.
 ##     -p, --progress            Show backup progress using graphical interface.
 ##     -s, --silent              Do not play sound notifications.
-##         --target=DIR          Custom directory where to store the backup.
-##         --wait-lock=MESSAGE   Wait for FILENAME.lock to be released after
+##         --wait-lock=MESSAGE   Wait for BACKUP_NAME.lock to be released after
 ##                               backup is complete, if the system is currently
-##                               shutting down. This is intended for remote
-##                               synchronization tools having enough time to
-##                               save the resulting file.
+##                               shutting down.
 ##     -h, --help                This help text.
 ##
+## Configuration file:
+##
+##     backup_name        Backup file name, will have date and time appended.
+##     files              Array of custom files and directories to save.
+##     directory          Custom directory where to store the backup.
+##     password           Password for the compressed file.
+##
+##     eclipse_workspace  Custom Eclipse workspace location.
+##     shortcut_folders   Array of program shortcut folders to save.
+##     task_folder        Scheduled tasks subfolder to save instead of root.
+##     reboot_string      Localized string that identifies reboots in event log.
+##     exclude            Array of exclude patterns.
+##
 
-play_sound() {
-    powershell.exe -c "(New-Object Media.SoundPlayer 'C:/Windows/Media/${1}.wav').PlaySync()" > /dev/null
-}
+# Functions
+playsound() { [[ -z "$silent" ]] && powershell -c "(New-Object Media.SoundPlayer 'C:/Windows/Media/${1}.wav').PlaySync()" > /dev/null; }
+registry()  { reg query "$1" ${2:+//v} "${2:-//ve}" | awk -F'REG_SZ[[:space:]]*' 'NF>1{print $2}'; }
+shelldir()  { powershell -c "[Environment]::GetFolderPath('${1}')"; }
+copy()      { test -e "$2" && cp -r "$2" "$1"; }
 
+# Defaults
+backup_name="${USERNAME}"
+directory="${USERPROFILE}"
+shortcut_folders=('Startup')
+exclude=('desktop.ini' 'thumbs.db')
+eclipse_workspace="${USERPROFILE}/workspace"
+files=("$(shelldir MyDocuments)"
+       "$(shelldir MyPictures)")
+
+# Initialization
 source easyoptions || exit
-current_shutdown=$(wevtutil qe system //c:1 //rd:true //f:xml //q:"*[System[(EventID=1074) and TimeCreated[timediff(@SystemTime) <= 60000]]]")
-rebooting=$(echo "$current_shutdown" | grep -iE "<data[^<>]*>reiniciar</data>")
+source ~/.backuprc || exit
+temp="${TEMP}/backup.$(date +%s.%N)"
+lock="${directory}/${backup_name}.lock"
+tempfile="${temp}/${backup_name} $(date '+%-d.%-m.%Y %-Hh%M').7z"
+ccleaner_dir=$(registry 'HKLM\SOFTWARE\Piriform\CCleaner')
+firefox_profile=("$APPDATA/Mozilla/Firefox/profiles/"*)
+configurations="${temp}/${configurations:-Configurations}"
+shortcuts="${configurations}/${shortcuts:-Shortcuts}"
+tasks="${configurations}/${task:-Tasks}"
+notes="${temp}/${notes:-Notes}"
+
+# Exclude flags
+exclude_flags=()
+for pattern in "${exclude[@]}"; do
+    exclude_flags+=("-xr!${pattern}")
+done
+
+# Skip wait lock on reboot
+current_shutdown=$(wevtutil query-events system //c:1 //rd:true //f:xml //q:"*[System[(EventID=1074) and TimeCreated[timediff(@SystemTime) <= 60000]]]")
+rebooting=$(grep -iE "<data[^<>]*>${reboot_string:-restart}</data>" <<<"$current_shutdown")
 [[ -n "$rebooting" ]] && unset wait_lock
 
-[[ -z "$name" ]] && name="Documentos e programas"
-[[ -z "$target" ]] && target="/d/backup"
-[[ -e "$target" ]] || { echo "Target $target not found."; sleep 5; exit 1; }
+# Directories
+cd "$directory" || exit
+trap "rm -rf '$temp'" EXIT
+mkdir -p "${configurations}"
+mkdir -p "${configurations}/Pidgin"
+mkdir -p "${configurations}/Firefox"
+mkdir -p "${shortcuts}"
+mkdir -p "${tasks}"
 
-# Sticky notes
-temp="$TEMP/backup.$(date +%s.%N)"
-trap "rm -rf $temp" EXIT
-mkdir -p "$temp"
-notes="$temp/Anotações"
-cp -r "$APPDATA/Microsoft/Sticky Notes" "$notes"
+# Some applications
+copy "${configurations}"       ~/.backuprc
+copy "${configurations}"       ~/.bashrc
+copy "${configurations}"       ~/.colordiffrc
+copy "${configurations}"       ~/.gitconfig
+copy "${configurations}"       ~/.inputrc
+copy "${configurations}"       ~/.minttyrc
+copy "${configurations}"       ~/.profile
+copy "${configurations}"       ~/.rubocop.yml
+copy "${configurations}"       ~/.vimrc
+copy "${configurations}"       ~/.wgetrc
+copy "${configurations}"       "${ccleaner_dir}/ccleaner.ini"
+copy "${configurations}"       "{eclipse_workspace}"
+copy "${configurations}/IVONA" "${APPDATA}/IVONA 2 Voice"
+copy "${notes}"                "${APPDATA}/Microsoft/Sticky Notes"
 
-# Application settings
-ccleaner_dir=$(reg query "HKEY_LOCAL_MACHINE\\SOFTWARE\\Piriform\\CCleaner" //ve | awk -F'REG_SZ[[:space:]]*' 'NF>1{print $2}')
-configs="$temp/Configurações"
-mkdir -p "$configs/Pidgin"
-for config in bashrc colordiffrc gitconfig inputrc minttyrc profile rubocop.yml vimrc wgetrc; do
-    [[ -f ~/.$config ]] && cp ~/.$config "$configs"
-done
-cp "$ccleaner_dir/ccleaner.ini" "$configs"
-cp "$APPDATA/IVONA 2 Voice/"*".lex" "$configs"
-cp "$APPDATA/.purple/accounts.xml" "$configs/Pidgin"
-cp "$APPDATA/.purple/blist.xml" "$configs/Pidgin"
-cp "$APPDATA/.purple/prefs.xml" "$configs/Pidgin"
-cp -r "$APPDATA/.purple/pixmaps" "$configs/Pidgin"
-cp -r "$APPDATA/.purple/plugins" "$configs/Pidgin"
-cp -r "$APPDATA/Eclipse" "$configs/Eclipse"
+# Pidgin
+copy "${configurations}/Pidgin" "${APPDATA}/.purple/pixmaps"
+copy "${configurations}/Pidgin" "${APPDATA}/.purple/plugins"
+copy "${configurations}/Pidgin" "${APPDATA}/.purple/accounts.xml"
+copy "${configurations}/Pidgin" "${APPDATA}/.purple/blist.xml"
+copy "${configurations}/Pidgin" "${APPDATA}/.purple/prefs.xml"
 
-# Firefox settings
-profile=("$APPDATA/Mozilla/Firefox/profiles/"*)
-firefox="$configs/Firefox"
-mkdir "$firefox"
-cp -r "$profile/bookmarkbackups" "$firefox"
-cp -r "$profile/searchplugins" "$firefox"
-cp -r "$profile/chrome/userContent.css" "$firefox"
+# Firefox
+copy "${configurations}/Firefox" "${firefox_profile}/bookmarkbackups"
+copy "${configurations}/Firefox" "${firefox_profile}/searchplugins"
+copy "${configurations}/Firefox" "${firefox_profile}/chrome/userContent.css"
 
 # Scheduled tasks
-tasks="$configs/Tarefas"
-mkdir "$tasks"
-for file in "$SYSTEMROOT/System32/Tasks/Usuário/"*; do
-    [[ -f "$file" ]] || continue
+for file in "${SYSTEMROOT}/System32/Tasks/${task_folder}/"*; do
+    test -f "$file" || continue
     taskname=$(basename "$file")
-    cp "$file" "$tasks/$taskname.xml"
+    cp "$file" "${tasks}/${taskname}.xml"
 done
 
 # Shortcuts
-startup="$configs/Inicializar"
-mkdir "$startup"
-cp "$APPDATA/Microsoft/Windows/Start Menu/Programs/Startup/"* "$startup"
-cp -r "$APPDATA/Microsoft/Windows/Start Menu/Programs/Ferramentas" "$configs"
+for folder in "${shortcut_folders[@]}"; do
+    copy "${shortcuts}" "${APPDATA}/Microsoft/Windows/Start Menu/Programs/${folder}"
+done
 
 # Registry favorites and logoff scripts
-reg export 'HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Applets\Regedit\Favorites' "$configs/regedit.reg" > /dev/null
-reg export 'HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Group Policy\Scripts\Logoff\0' "$configs/logoff.reg" > /dev/null
+reg export 'HKCU\Software\Microsoft\Windows\CurrentVersion\Applets\Regedit\Favorites'     "${configurations}/regedit.reg" > /dev/null
+reg export 'HKCU\Software\Microsoft\Windows\CurrentVersion\Group Policy\Scripts\Logoff\0' "${configurations}/logoff.reg"  > /dev/null
 
-# Generating compressed file
-[[ -n "$progress" ]] && suffix="G"
-password=$(cat /d/documentos/privado/chaves/renatosilva.backup)
-tempfile="$temp/$name $(date '+%-d.%-m.%Y %-Hh%M').7z"
-7z$suffix a "$tempfile" -p"$password" -xr!desktop.ini -x!Programas/Branches/Local -mhe "/d/documentos" "/d/programas" "$notes" "$configs"
-[[ -f "$tempfile" ]] || exit
-rm "$target/$name "*.7z 2> /dev/null || echo "First backup in this device."
-mv "$temp/"*.7z "$target"
-[[ -z "$silent" ]] && play_sound "Windows Notify System Generic"
+# Compress file
+7z${progress:+g} a "$tempfile" -p"$password" "${exclude_flags[@]}" -mhe "$configurations" "$notes" "${files[@]}"
+test -f "$tempfile" || exit
+rm -f "${directory}/${backup_name} "*.7z
+mv "${temp}/"*.7z "$directory"
+playsound 'Windows Notify System Generic'
 
-# Wait for the lock to be released
+# Wait for lock release
 if [[ -n "$wait_lock" ]]; then
-    wait_message="${wait_lock} %s segundos"
-    elapsed="0"
-    lock="$target/$name.lock"
+    elapsed_seconds='0'
+    elapsed_minutes='0'
     touch "$lock"
     while [[ -e "$lock" ]]; do
+        elapsed=$(printf '%s:%02s' ${elapsed_minutes} ${elapsed_seconds})
+        wait_message="${wait_lock}${elapsed}"
+        printf "\r${wait_message}"
         sleep 1
-        elapsed=$((elapsed + 1))
-        printf "\r${wait_message} " "$elapsed"
+        elapsed_seconds=$((elapsed_seconds + 1))
+        if [[ "$elapsed_seconds" -ge 60 ]]; then
+            elapsed_minutes=$((elapsed_minutes + 1))
+            elapsed_seconds='0'
+        fi
     done
-    printf "\r%${#wait_message}s\r" ""
-    [[ -z "$silent" ]] && play_sound "Windows Unlock"
-else
-    sleep 3
+    printf "\r%${#wait_message}s\r" ''
+    playsound 'Windows Unlock'
 fi
