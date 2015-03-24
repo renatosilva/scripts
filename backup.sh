@@ -15,7 +15,7 @@
 ##     * Scheduled tasks
 ##     * Registry favorites
 ##     * Firefox bookmarks, search plugins and custom website stylesheets
-##     * Settings from Piriform utilities, IVONA, Pidgin and Eclipse
+##     * Settings from CCleaner, IVONA, Pidgin and Eclipse
 ##     * Startup and some other shortcuts
 ##
 ## Usage:
@@ -39,10 +39,6 @@ play_sound() {
     powershell.exe -c "(New-Object Media.SoundPlayer 'C:/Windows/Media/${1}.wav').PlaySync()" > /dev/null
 }
 
-piriform_dir() {
-    reg query "HKEY_LOCAL_MACHINE\\SOFTWARE\\Piriform\\${1}" //ve | awk -F'REG_SZ[[:space:]]*' 'NF>1{print $2}'
-}
-
 source easyoptions || exit
 current_shutdown=$(wevtutil qe system //c:1 //rd:true //f:xml //q:"*[System[(EventID=1074) and TimeCreated[timediff(@SystemTime) <= 60000]]]")
 rebooting=$(echo "$current_shutdown" | grep -iE "<data[^<>]*>reiniciar</data>")
@@ -60,15 +56,13 @@ notes="$temp/Anotações"
 cp -r "$APPDATA/Microsoft/Sticky Notes" "$notes"
 
 # Application settings
+ccleaner_dir=$(reg query "HKEY_LOCAL_MACHINE\\SOFTWARE\\Piriform\\CCleaner" //ve | awk -F'REG_SZ[[:space:]]*' 'NF>1{print $2}')
 configs="$temp/Configurações"
 mkdir -p "$configs/Pidgin"
 for config in bashrc colordiffrc gitconfig inputrc minttyrc profile rubocop.yml vimrc wgetrc; do
     [[ -f ~/.$config ]] && cp ~/.$config "$configs"
 done
-cp "$(piriform_dir CCleaner)/ccleaner.ini" "$configs"
-cp "$(piriform_dir Defraggler)/defraggler.ini" "$configs"
-cp "$(piriform_dir Recuva)/recuva.ini" "$configs"
-cp "$(piriform_dir Speccy)/speccy.ini" "$configs"
+cp "$ccleaner_dir/ccleaner.ini" "$configs"
 cp "$APPDATA/IVONA 2 Voice/"*".lex" "$configs"
 cp "$APPDATA/.purple/accounts.xml" "$configs/Pidgin"
 cp "$APPDATA/.purple/blist.xml" "$configs/Pidgin"
