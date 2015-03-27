@@ -127,6 +127,7 @@ msys1=(
 
 msys2=(
     "conconv-msys2"
+    "http-shutdown"
     "$vimpager"
     "$vpaste"
 )
@@ -234,7 +235,7 @@ if [[ -z "$remove" ]]; then
     printf "${title_format:-%s}\n" "Installing local scripts"
     for script in $scripts; do
         case "$script" in
-            *http*)         remote_scripts+=("$script") ;;
+            *:http*)        remote_scripts+=("$script") ;;
             conconv-msys1)  cp -v "$from/conconv-msys1.sh" "$where/conconv.cp850" ;;
             conconv-msys2)  cp -v "$from/conconv-msys2.sh" "$where/conconv.cp850" ;;
             *)              cp -v "$from/$script"* "$where/$script" ;;
