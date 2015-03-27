@@ -17,7 +17,6 @@
 ##     bzrgrep.rb                  Find out what revision from a Bazaar branch
 ##                                 has introduced some specific change.
 ##     bzrtags.sh                  Tag synchronization check of Bazaar branches.
-##     dnsdynamic.sh               Update DNSdynamic entries automatically.
 ##     conconv-msys.sh             Convert encoding of MSYS console programs.
 ##     conconv-msys2.sh            Convert encoding of MSYS2 console programs.
 ##     http-shutdown.py            Shut down Windows from a remote HTTP request.
@@ -35,22 +34,14 @@
 ## Other scripts
 ##     aliases.sh                   Help with SQLite encoding issues and Bazaar
 ##                                  hurried commits, among others.
-##     check-bookmarks.sh           Search for Firefox bookmarks that are
-##                                  unorganized or have a description.
 ##     colordiff.pl                 Colored diff tool by Dave Ewart.
 ##     colornote-backup-clean.sh    Keep only last week for backups of the
 ##                                  Android ColorNote application.
 ##     csvt.rb                      Transform a CSV file according to a given
 ##                                  template (for example HTML conversion).
-##     dcim-organizer.sh            Rename pictures from DCIM-style to
-##                                  sequential enumeration.
-##     homeclean.sh                 Home directory cleanup (Unix environments).
 ##     ivona-speak.sh               Read text aloud with IVONA reader.
-##     networkmeter-reset.sh        Reset traffic statistics in Network Meter
-##                                  Windows gadget.
 ##     numpass.sh                   Convert an alphanumeric password into
 ##                                  numeric-only.
-##     sslcert.sh                   Generate an SSL certificate.
 ##     tabela-price                 How specific advances would affect a loan.
 ##                                  (specific to Brazil).
 ##     termcolors.sh                Testing terminal colors table.
