@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ##
-##     Backup 2015.3.24
+##     Backup 2015.3.27
 ##     Copyright (c) 2012-2015 Renato Silva
 ##     GNU GPLv2 licensed
 ##
@@ -144,19 +144,17 @@ playsound 'Windows Notify System Generic'
 
 # Wait for lock release
 if [[ -n "$wait_lock" ]]; then
-    elapsed_seconds='0'
-    elapsed_minutes='0'
+    printf "\r${wait_lock}0:00"
+    start=$(date +%s)
     touch "$lock"
     while [[ -e "$lock" ]]; do
+        elapsed_seconds=$(($(date +%s) - start))
+        elapsed_minutes=$((elapsed_seconds / 60))
+        elapsed_seconds=$((elapsed_seconds % 60))
         elapsed=$(printf '%s:%02s' ${elapsed_minutes} ${elapsed_seconds})
         wait_message="${wait_lock}${elapsed}"
         printf "\r${wait_message}"
-        sleep 1
-        elapsed_seconds=$((elapsed_seconds + 1))
-        if [[ "$elapsed_seconds" -ge 60 ]]; then
-            elapsed_minutes=$((elapsed_minutes + 1))
-            elapsed_seconds='0'
-        fi
+        sleep 0.001
     done
     printf "\r%${#wait_message}s\r" ''
     playsound 'Windows Unlock'
