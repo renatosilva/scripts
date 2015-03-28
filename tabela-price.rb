@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 # Encoding: UTF-8
 
-# Amortização Price  2014.12.4
+# Amortização Price  2015.3.27
 # Copyright (c) 2013 Renato Silva
 # Licenciado sob os termos da GNU GPLv2
 
@@ -13,7 +13,7 @@ if ['--help', '-h', nil].include? ARGV[0] then puts "
     possível prever como certos adiantamentos irão alterar o pagamento do
     empréstimo, especialmente o quão antecipadamente ele poderá ser quitado.\n
 Modo de usar: #{File.basename($PROGRAM_NAME)} <arquivo de entrada>\n
-O arquivo de entrada deve ser um texto ISO-8859-1, no seguinte formato:
+O arquivo de entrada deve ser um texto UTF-8 no seguinte formato:
     Taxa: <taxa de juros>
     Parcelas: <número de parcelas>
     Saldo: <saldo devedor inicial>
@@ -24,12 +24,10 @@ end
 
 # Dados de entrada
 
-nome_do_arquivo = ARGV[0].encode(ARGV[0].encoding, 'ISO-8859-1')
 parcelas, taxa, saldo = 0
 adiantamentos = {}
 
-File.readlines(nome_do_arquivo).each do |linha|
-    linha.force_encoding('ISO-8859-1')
+File.readlines(ARGV[0]).each do |linha|
     chave, valor = linha.strip.split(':').each { |coluna| coluna.strip! }
     next if [chave, valor].include? nil
 
