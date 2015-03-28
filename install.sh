@@ -21,7 +21,7 @@
 ##     conconv-msys2.sh            Convert encoding of MSYS2 console programs.
 ##     http-shutdown.py            Shut down Windows from a remote HTTP request.
 ##     msys2-msys.bat              Allow using MSYS and MSYS2 together.
-##     packages.sh                 Package management helper for mingw-get.
+##     minget.sh                   Package management helper for MinGW.
 ##     ppk-add.sh                  Add a PuTTY private key to current SSH agent.
 ##     randpass.sh                 Random password generation.
 ##     runcrt.sh                   Avoid timezone problems in MSVCRT programs
@@ -107,8 +107,8 @@ windows=(
 
 msys1=(
     "conconv-msys1"
+    "minget"
     "msys2-msys.bat"
-    "packages"
     "runcrt"
     "tz-brazil"
     "$easyoptions_main"
