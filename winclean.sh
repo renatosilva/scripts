@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# Windows Cleanup 2014.12.4
-# Copyright (c) 2012-2014 Renato Silva
+# Windows Cleanup 2015.3.31
+# Copyright (c) 2012-2015 Renato Silva
 # GNU GPLv2 licensed
 
 # Kill the running SSH agents
@@ -36,3 +36,7 @@ music=$(echo "$reg_data" | awk -F'REG_SZ[[:space:]]*' 'NF>1{print $2}')
 reg_data=$(reg query 'HKEY_LOCAL_MACHINE\SOFTWARE\Piriform\CCleaner' //ve)
 ccleaner_dir=$(echo "$reg_data" | awk -F'REG_SZ[[:space:]]*' 'NF>1{print $2}')
 "$ccleaner_dir/ccleaner.exe" //auto
+[[ "$1" != --wait ]] && exit
+while [[ -n $(ps --windows | grep -i ccleaner) ]]; do
+    sleep 1
+done
