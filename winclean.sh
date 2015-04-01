@@ -8,9 +8,7 @@
 taskkill //f //im ssh-agent.exe > /dev/null 2>&1
 
 # Clean up bash history
-rm -f ~/.bash_history
-touch ~/.bash_history
-attrib +h ~/.bash_history
+echo > ~/.bash_history
 
 # Firefox bookmarks cleanup: remove unorganized and descriptions
 database=("$APPDATA/Mozilla/Firefox/profiles/"*"/places.sqlite")
