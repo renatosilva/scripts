@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Windows Cleanup 2015.3.31
+# Windows Cleanup 2015.4.1
 # Copyright (c) 2012-2015 Renato Silva
 # GNU GPLv2 licensed
 
@@ -20,7 +20,7 @@ sqlite3 "$database" "delete from moz_items_annos where id in (select i.id from m
 npp_config="$APPDATA/Notepad++/config.xml"
 sed -i -E "/^\\s+<File\\s+filename=.*$/d" "$npp_config"
 sed -i -E "/^\\s+<(Find|Replace)\\s+name=.*$/d" "$npp_config"
-unix2dos --quiet "$npp_config"
+unix2dos --quiet "$npp_config" 2> /dev/null
 
 # Clean up recent files list from Word Viewer
 reg delete 'HKEY_CURRENT_USER\Software\Microsoft\Office\11.0\Wordview\Data' //v Settings //f > /dev/null
