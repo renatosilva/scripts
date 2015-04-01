@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# Encoding Converter For Console Programs 2014.8.12
-# Copyright (c) 2012, 2014 Renato Silva
+# Encoding Converter For Console Programs 2015.4.1
+# Copyright (c) 2012, 2014, 2015 Renato Silva
 # GNU GPLv2 licensed
 
 # In order to convert output of console programs, create one copy of this script
@@ -19,4 +19,6 @@ to="${LANG##*.}"
 files=($(dirname "$BASH_SOURCE")/conconv.*)
 this="${files[0]}"
 
-$(basename "$0").exe "$@" 2>&1 | iconv -f "${this##*.}" ${to:+-t $to}
+original=$($(basename "$0").exe "$@" 2>&1)
+converted=$(iconv -s -f "${this##*.}" ${to:+-t $to} <<<"${original}")
+[[ $? = 0 ]] && echo "${converted}" || echo "${original}"
