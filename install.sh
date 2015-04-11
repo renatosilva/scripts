@@ -24,11 +24,10 @@
 ##
 
 eayoptions_url_base='https://github.com/renatosilva/easyoptions/raw/master'
-vimpager_url_base='https://github.com/rkitover/vimpager/raw/1b7a351'
+vimpager_url_base='https://github.com/rkitover/vimpager/raw/b3bb583'
 vpaste_url_base='http://vpaste.net/vpaste'
 
 all=(colormake::'https://github.com/renatosilva/colormake/raw/master/colormake.sh'
-     vimcat::"${vimpager_url_base}/vimcat"
      bacon-crypt
      bzrcheck
      bzrgrep
@@ -47,20 +46,21 @@ windows=(git-bzr::'https://github.com/termie/git-bzr-ng/raw/master/git-bzr'
 msys1=(easyoptions::"${eayoptions_url_base}/easyoptions"
        easyoptions.rb::"${eayoptions_url_base}/ruby/easyoptions.rb"
        easyoptions.sh::"${eayoptions_url_base}/bash/easyoptions.sh"
+       vimcat::"${vimpager_url_base}/vimcat"
        conconv-msys1
        minget
        msys2-msys.bat
        runcrt
        tz-brazil)
 
-msys2=(vimpager::"${vimpager_url_base}/vimpager"
-       vpaste::"${vpaste_url_base}"
+msys2=(vpaste::"${vpaste_url_base}"
        conconv-msys2
        http-shutdown)
 
 unix=(easyoptions::"${eayoptions_url_base}/easyoptions"
       easyoptions.rb::"${eayoptions_url_base}/ruby/easyoptions.rb"
       easyoptions.sh::"${eayoptions_url_base}/bash/easyoptions.sh"
+      vimcat::"${vimpager_url_base}/vimcat"
       vimpager::"${vimpager_url_base}/vimpager"
       vpaste::"${vpaste_url_base}")
 
