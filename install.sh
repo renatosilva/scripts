@@ -55,14 +55,16 @@ msys1=(easyoptions::"${eayoptions_url_base}/easyoptions"
 
 msys2=(vpaste::"${vpaste_url_base}"
        conconv-msys2
-       http-shutdown)
+       http-shutdown
+       launchtohub)
 
 unix=(easyoptions::"${eayoptions_url_base}/easyoptions"
       easyoptions.rb::"${eayoptions_url_base}/ruby/easyoptions.rb"
       easyoptions.sh::"${eayoptions_url_base}/bash/easyoptions.sh"
       vimcat::"${vimpager_url_base}/vimcat"
       vimpager::"${vimpager_url_base}/vimpager"
-      vpaste::"${vpaste_url_base}")
+      vpaste::"${vpaste_url_base}"
+      launchtohub)
 
 dosconv() {
     read input
