@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ##
-##     Backup 2015.3.27
+##     Backup 2015.6.28
 ##     Copyright (c) 2012-2015 Renato Silva
 ##     GNU GPLv2 licensed
 ##
@@ -14,7 +14,7 @@
 ##     * Scheduled tasks
 ##     * Registry favorites
 ##     * Firefox bookmarks, search plugins and custom website stylesheets
-##     * Settings from CCleaner, IVONA, Pidgin and Eclipse
+##     * Settings from CCleaner, IVONA, Pidgin, Eclipse and WiFi Guard
 ##     * Settings from Bash, Git, MinTTY and other tools
 ##     * Configured program shortcut folders
 ##     * Configured custom files
@@ -104,6 +104,7 @@ copy "${configurations}"       ~/.vimrc
 copy "${configurations}"       ~/.wgetrc
 copy "${configurations}"       "${ccleaner_dir}/ccleaner.ini"
 copy "${configurations}"       "{eclipse_workspace}"
+copy "${configurations}"       "${LOCALAPPDATA}/WiFi Guard"
 copy "${configurations}/IVONA" "${APPDATA}/IVONA 2 Voice"
 copy "${notes}"                "${APPDATA}/Microsoft/Sticky Notes"
 
