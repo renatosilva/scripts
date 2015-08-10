@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Windows Cleanup 2015.4.1
+# Windows Cleanup 2015.8.10
 # Copyright (c) 2012-2015 Renato Silva
 # GNU GPLv2 licensed
 
@@ -8,7 +8,13 @@
 taskkill //f //im ssh-agent.exe > /dev/null 2>&1
 
 # Clean up bash history
-echo > ~/.bash_history
+if [[ $(uname -or) = 1.*Msys ]]; then
+    rm -f ~/.bash_history
+    touch ~/.bash_history
+    attrib +h ~/.bash_history > /dev/null
+else
+    echo -n > ~/.bash_history
+fi
 
 # Firefox bookmarks cleanup: remove unorganized and descriptions
 database=("$APPDATA/Mozilla/Firefox/profiles/"*"/places.sqlite")
@@ -33,8 +39,9 @@ music=$(echo "$reg_data" | awk -F'REG_SZ[[:space:]]*' 'NF>1{print $2}')
 # Let CCleaner do its job
 reg_data=$(reg query 'HKEY_LOCAL_MACHINE\SOFTWARE\Piriform\CCleaner' //ve)
 ccleaner_dir=$(echo "$reg_data" | awk -F'REG_SZ[[:space:]]*' 'NF>1{print $2}')
+test -z "$ccleaner_dir" && ccleaner_dir='/c/Program Files/CCleaner'
 "$ccleaner_dir/ccleaner.exe" //auto
 [[ "$1" != --wait ]] && exit
-while [[ -n $(ps --windows | grep -i ccleaner) ]]; do
+while [[ -n $(tasklist | grep -i ccleaner) ]]; do
     sleep 1
 done

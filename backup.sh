@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ##
-##     Backup 2015.6.28
+##     Backup 2015.8.10
 ##     Copyright (c) 2012-2015 Renato Silva
 ##     GNU GPLv2 licensed
 ##
@@ -44,7 +44,7 @@
 ##
 
 # Functions
-playsound() { [[ -z "$silent" ]] && powershell -c "(New-Object Media.SoundPlayer 'C:/Windows/Media/${1}.wav').PlaySync()" > /dev/null; }
+playsound() { [[ -z "$silent" ]] && powershell -c "(New-Object Media.SoundPlayer 'C:/Windows/Media/${1}.wav').PlaySync();" > /dev/null; }
 registry()  { reg query "$1" ${2:+//v} "${2:-//ve}" | awk -F'REG_SZ[[:space:]]*' 'NF>1{print $2}'; }
 shelldir()  { powershell -c "[Environment]::GetFolderPath('${1}')"; }
 copy()      { test -e "$2" && cp -r "$2" "$1"; }
