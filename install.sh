@@ -39,7 +39,6 @@ all=(colormake::'https://github.com/renatosilva/colormake/raw/master/colormake.s
 
 windows=(git-bzr::'https://github.com/termie/git-bzr-ng/raw/master/git-bzr'
         backup
-        colornote-backup-clean
         ivona-speak
         winclean)
 
