@@ -12,6 +12,7 @@ csvt.rb           | Ruby     | Transform a CSV file based on a given template.
 bzrgrep.rb        | Ruby     | Find out what revision from a Bazaar branch has introduced some specific change.
 bzrcheck.sh       | Unixy    | Pending work check for Bazaar branches.
 bzrtags.sh        | Unixy    | Tag synchronization check of Bazaar branches.
+launchtohub.sh    | Unixy    | Mirror Launchpad branches on GitHub.
 ppk-add.sh        | Unixy    | Add a PuTTY private key to current SSH agent.
 numpass.sh        | Unixy    | Convert an alphanumeric password into numeric-only.
 randpass.sh       | Unixy    | Random password generation.
