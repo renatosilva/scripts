@@ -37,8 +37,7 @@ all=(colormake::'https://github.com/renatosilva/colormake/raw/master/colormake.s
      numpass
      randpass)
 
-windows=(git-bzr::'https://github.com/termie/git-bzr-ng/raw/master/git-bzr'
-        backup
+windows=(backup
         ivona-speak
         winclean)
 
