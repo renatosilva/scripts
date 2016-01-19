@@ -45,6 +45,7 @@ msys1=(easyoptions::"${eayoptions_url_base}/easyoptions"
        easyoptions.rb::"${eayoptions_url_base}/ruby/easyoptions.rb"
        easyoptions.sh::"${eayoptions_url_base}/bash/easyoptions.sh"
        vimcat::"${vimpager_url_base}/vimcat"
+       vimpager::"${vimpager_url_base}/vimpager"
        conconv-msys1
        minget
        msys2-msys.bat
