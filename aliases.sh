@@ -9,6 +9,10 @@ alias mark='grep -C 1000000 -iE'
 alias pacman='pacman --color auto'
 alias ls='ls --color=auto --show-control-chars'
 alias grep='grep --color=auto'
+alias make='colormake'
+alias gcc='COLORMAKE_COMMAND=gcc colormake'
+alias g++='COLORMAKE_COMMAND=g++ colormake'
+alias clang='COLORMAKE_COMMAND=clang colormake'
 
 export PATH="${PATH/:\/bin:\/usr\/bin:/:\/bin:}"
 export PATH="${PATH/:\/opt\/bin:\/usr\/bin:/:\/opt\/bin:}"
