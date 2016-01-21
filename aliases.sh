@@ -13,6 +13,7 @@ alias grep='grep --color=auto'
 export PATH="${PATH/:\/bin:\/usr\/bin:/:\/bin:}"
 export PATH="${PATH/:\/opt\/bin:\/usr\/bin:/:\/opt\/bin:}"
 export PATH="${PATH/:\/c\/MSYS2\/usr\/bin/}"
+export RUBYLIB="${RUBYLIB}:/usr/local/bin"
 export CYGWIN='winsymlinks:native'
 export MSYS='winsymlinks:native'
 export LESSHISTFILE='-'
