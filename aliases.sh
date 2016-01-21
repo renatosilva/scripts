@@ -1,4 +1,4 @@
-# Aliases 2016.1.19
+# Aliases 2016.1.21
 # Copyright (c) 2012-2014, 2016 Renato Silva
 ## GNU GPLv2 licensed
 
@@ -34,6 +34,8 @@ bzrsav()   { find -name '*.~1~'  -exec bash -c "mv -v '{}' \$(sed 's/\.~1~/.${1}
 bzrres()   { find -name "*.${1}" -exec bash -c "mv -v '{}' \$(sed 's/\.${1}$//'    <<<'{}')" \;; }
 wingrep()  { { command grep "$@" 2>&1 >&3 | command grep -v 'Permission denied'; } 3>&1; }
 winfind()  { { command find "$@" 2>&1 >&3 | command grep -v 'Permission denied'; } 3>&1; }
+vpaste()   { test -f "${1}" && local file="${1}" || local parameters="${1}"
+             echo $(curl --silent --form "text=<${file:--}" "http://vpaste.net/?${parameters:-$2}"); }
 ssh-auth() { [[ -z $(ps | grep ssh-agent) ]] && echo $(ssh-agent) > /tmp/ssh-agent-data.sh
              [[ -z $SSH_AGENT_PID ]] && source /tmp/ssh-agent-data.sh > /dev/null
              [[ -z $(ssh-add -l | grep "/home/$(whoami)/.ssh/id_rsa") ]] && ssh-add; }
