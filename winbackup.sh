@@ -1,13 +1,13 @@
 #!/bin/bash
 
 ##
-##     Backup 2015.8.10
+##     Windows Backup 2016.1.23
 ##     Copyright (c) 2012-2015 Renato Silva
 ##     GNU GPLv2 licensed
 ##
-## This is a backup script for Windows. You can configure it with ~/.backuprc.
-## Output is a password protected, 7-Zip compressed file which is going to
-## replace any previous backup on target directory. Backup will include:
+## This is a backup script for Windows. Output is a password protected, 7-Zip
+## compressed file which is going to replace any previous backup on the target
+## directory. The backup can be customized with ~/.winbackuprc and will include:
 ##
 ##     * Sticky notes
 ##     * Logoff scripts
@@ -60,7 +60,7 @@ files=("$(shelldir MyDocuments)"
 
 # Initialization
 source easyoptions || exit
-source ~/.backuprc || exit
+source ~/.winbackuprc || exit
 temp="${TEMP}/backup.$(date +%s.%N)"
 lock="${directory}/${backup_name}.lock"
 tempfile="${temp}/${backup_name} $(date '+%-d.%-m.%Y %-Hh%M').7z"
@@ -92,7 +92,6 @@ mkdir -p "${shortcuts}"
 mkdir -p "${tasks}"
 
 # Some applications
-copy "${configurations}"       ~/.backuprc
 copy "${configurations}"       ~/.bashrc
 copy "${configurations}"       ~/.colordiffrc
 copy "${configurations}"       ~/.gitconfig
@@ -101,6 +100,7 @@ copy "${configurations}"       ~/.minttyrc
 copy "${configurations}"       ~/.profile
 copy "${configurations}"       ~/.rubocop.yml
 copy "${configurations}"       ~/.vimrc
+copy "${configurations}"       ~/.winbackuprc
 copy "${configurations}"       ~/.wgetrc
 copy "${configurations}"       "${ccleaner_dir}/ccleaner.ini"
 copy "${configurations}"       "{eclipse_workspace}"
