@@ -1,8 +1,8 @@
 #!/usr/bin/env ruby
 # Encoding: ISO-8859-1
 
-# CSV Transformation 2014.12.4
-# Copyright (c) 2009, 2012-2014 Renato Silva
+# CSV Transformation 2016.1.23
+# Copyright (c) 2009, 2012, 2014 Renato Silva
 # GNU GPLv2 licensed
 
 unless ARGV[2]

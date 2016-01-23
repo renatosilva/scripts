@@ -2,8 +2,8 @@
 # Encoding: ISO-8859-1
 
 ##
-##     Bazaar Grep Revision 2014.12.6
-##     Copyright (C) 2010, 2012-2014 Renato Silva
+##     Bazaar Grep Revision 2016.1.23
+##     Copyright (C) 2010, 2014 Renato Silva
 ##     GNU GPLv2 licensed
 ##
 ## This script searches for a given pattern in the commit history of a Bazaar
