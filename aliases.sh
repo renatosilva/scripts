@@ -1,4 +1,4 @@
-# Aliases 2016.1.21
+# Aliases 2016.2.25
 # Copyright (c) 2012-2014, 2016 Renato Silva
 ## GNU GPLv2 licensed
 
@@ -32,9 +32,9 @@ export PS1_CYGWIN="\[\e]0;Cygwin\a\e[38;05;35m\]\W\[\e[0m\] \$ "
 
 ssh()      { ssh-auth; command ssh "$@"; }
 scp()      { ssh-auth; command scp "$@"; }
-diff()     { [[ -t 1 ]] && command colordiff "$@" || command diff "$@"; }
 bzr()      { [[ "${1}" = diff ]] && command bzr "$@" | diff || command bzr "$@"; }
 git()      { [[ "${1}" = diff ]] && command git "$@" | diff || command git "$@"; }
+diff()     { local prefix; [[ -t 1 ]] && prefix='color'; command "${prefix}diff" "${@}"; }
 bzrsav()   { find -name '*.~1~'  -exec bash -c "mv -v '{}' \$(sed 's/\.~1~/.${1}/' <<<'{}')" \;; }
 bzrres()   { find -name "*.${1}" -exec bash -c "mv -v '{}' \$(sed 's/\.${1}$//'    <<<'{}')" \;; }
 wingrep()  { { command grep "$@" 2>&1 >&3 | command grep -v 'Permission denied'; } 3>&1; }
