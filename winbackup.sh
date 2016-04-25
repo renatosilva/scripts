@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ##
-##     Windows Backup 2016.1.23
+##     Windows Backup 2016.4.25
 ##     Copyright (c) 2012-2015 Renato Silva
 ##     GNU GPLv2 licensed
 ##
@@ -45,8 +45,8 @@
 
 # Functions
 playsound() { [[ -z "$silent" ]] && powershell -c "(New-Object Media.SoundPlayer 'C:/Windows/Media/${1}.wav').PlaySync();" > /dev/null; }
-registry()  { reg query "$1" ${2:+//v} "${2:-//ve}" | awk -F'REG_SZ[[:space:]]*' 'NF>1{print $2}'; }
 shelldir()  { powershell -c "[Environment]::GetFolderPath('${1}')"; }
+registry()  { cat /proc/registry/"${1}" 2> /dev/null; }
 copy()      { test -e "$2" && cp -r "$2" "$1"; }
 
 # Defaults
@@ -64,7 +64,7 @@ source ~/.winbackuprc || exit
 temp="${TEMP}/backup.$(date +%s.%N)"
 lock="${directory}/${backup_name}.lock"
 tempfile="${temp}/${backup_name} $(date '+%-d.%-m.%Y %-Hh%M').7z"
-ccleaner_dir=$(registry 'HKLM\SOFTWARE\Piriform\CCleaner')
+ccleaner_dir="$(registry HKEY_LOCAL_MACHINE/SOFTWARE/Piriform/CCleaner/@)"
 firefox_profile=("$APPDATA/Mozilla/Firefox/profiles/"*)
 configurations="${temp}/${configurations:-Configurations}"
 shortcuts="${configurations}/${shortcuts:-Shortcuts}"
