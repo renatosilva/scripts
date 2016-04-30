@@ -6,7 +6,7 @@ install script. Some scripts may require source code adaptation.
 Name              | Platform | Description
 :---------------- | :------- | :----------
 winbackup.sh      | Windows  | Secured file backup with 7-Zip.
-conconv-msys2.sh  | MSYS2    | Encoding conversion for console programs in MSYS2.
+winconv.sh        | Windows  | Encoding conversion for console programs.
 csvt.rb           | Ruby     | Transform a CSV file based on a given template.
 bzrgrep.rb        | Ruby     | Find out what revision from a Bazaar branch has introduced some specific change.
 bzrcheck.sh       | Unixy    | Pending work check for Bazaar branches.
