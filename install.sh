@@ -9,8 +9,9 @@ remote=(colormake::'https://github.com/renatosilva/colormake/raw/master/colormak
         vimpager::'https://github.com/rkitover/vimpager/raw/b3bb583/vimpager')
 
 if [[ $(uname -or) = 1.*Msys ]]
-    then local=(minget colordiff)
+    then local=(colordiff minget winconv)
     else local=(bacon-crypt bzrcheck bzrgrep bzrtags colordiff csvt launchtohub numpass randpass)
+         [[ $(uname -o) = Cygwin ]] && local+=(winconv)
 fi
 
 case "${1}" in --remove)
