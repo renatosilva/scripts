@@ -5,6 +5,7 @@ install script. Some scripts may require source code adaptation.
 
 Name              | Platform | Description
 :---------------- | :------- | :----------
+notestopdf.rb     | Windows  | Export Sticky Notes to PDF.
 winbackup.sh      | Windows  | Secured file backup with 7-Zip.
 winconv.sh        | Windows  | Encoding conversion for console programs.
 csvt.rb           | Ruby     | Transform a CSV file based on a given template.
